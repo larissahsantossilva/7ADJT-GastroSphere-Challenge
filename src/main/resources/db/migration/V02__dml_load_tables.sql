@@ -1,0 +1,15 @@
+-- Inserir endereços
+INSERT INTO gastrosphere.addresses (id, country, state, city, zip_code, street) VALUES
+                                                                                    (uuid_generate_v4(), 'Brazil', 'São Paulo', 'São Paulo', '01000-000', 'Rua A'),
+                                                                                    (uuid_generate_v4(), 'Brazil', 'Rio de Janeiro', 'Rio de Janeiro', '20000-000', 'Rua B'),
+                                                                                    (uuid_generate_v4(), 'Canada', 'Ontario', 'Toronto', 'M5H 2N2', 'Main St'),
+                                                                                    (uuid_generate_v4(), 'United States', 'California', 'Los Angeles', '90001', 'Broadway'),
+                                                                                    (uuid_generate_v4(), 'Mexico', NULL, 'Mexico City', '01010', 'Avenida C');
+
+-- Inserir usuários
+INSERT INTO gastrosphere.users (id, name, email, login, password, user_type, cpf, address_id, address_number, address_complement, created_at, last_modified_at) VALUES
+                                                                                                                                                                    (uuid_generate_v4(), 'João Silva', 'joao@email.com', 'joaosilva', 'senha123', 'Owner', '000.000.000-01', (SELECT id FROM gastrosphere.addresses WHERE zip_code = '01000-000'), '123', 'Apto 1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                                                                                                    (uuid_generate_v4(), 'Maria Souza', 'maria@email.com', 'mariasouza', 'senha123', 'Customer', '000.000.000-02', (SELECT id FROM gastrosphere.addresses WHERE zip_code = '20000-000'), '456', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                                                                                                    (uuid_generate_v4(), 'Carlos Pereira', 'carlos@email.com', 'carlosp', 'senha123', 'Owner', '000.000.000-03', (SELECT id FROM gastrosphere.addresses WHERE zip_code = 'M5H 2N2'), '789', 'Suite 100', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                                                                                                    (uuid_generate_v4(), 'Ana Costa', 'ana@email.com', 'anac', 'senha123', 'Customer', '000.000.000-04', (SELECT id FROM gastrosphere.addresses WHERE zip_code = '90001'), '101', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                                                                                                    (uuid_generate_v4(), 'Luiz Mendes', 'luiz@email.com', 'luizm', 'senha123', 'Owner', '000.000.000-05', (SELECT id FROM gastrosphere.addresses WHERE zip_code = '01010'), '202', 'Block B', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
