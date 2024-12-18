@@ -68,6 +68,7 @@
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
+			<version>9.22.1</version>
 		</dependency>
 	</dependencies>
 

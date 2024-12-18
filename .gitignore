@@ -1,5 +1,8 @@
+### Diretórios e arquivos de compilação ###
 HELP.md
 target/
+bin/
+build/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
@@ -18,6 +21,7 @@ target/
 *.iws
 *.iml
 *.ipr
+out/
 
 ### NetBeans ###
 /nbproject/private/
@@ -31,3 +35,36 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Arquivos de log ###
+*.log
+
+### Arquivos do sistema operacional ###
+.DS_Store
+Thumbs.db
+
+### Arquivos de dependências ###
+*.jar
+*.war
+*.ear
+
+### Arquivos gerados pelo Maven ###
+.mvn/
+dependency-reduced-pom.xml
+
+### Arquivos gerados pelo Gradle ###
+.gradle/
+build/
+
+### Arquivos temporários e cache ###
+*.class
+*.swp
+*.swo
+*.tmp
+
+### Configuração específica do ambiente ###
+*.env
+*.properties.local
+
+### Diretórios do cache do Lombok ###
+.lombok/
