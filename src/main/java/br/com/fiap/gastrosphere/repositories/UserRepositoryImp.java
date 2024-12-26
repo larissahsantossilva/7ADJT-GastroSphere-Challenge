@@ -1,10 +1,13 @@
 package br.com.fiap.gastrosphere.repositories;
 
-import br.com.fiap.gastrosphere.entities.User;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import br.com.fiap.gastrosphere.entities.User;
 
 @Repository
 public class UserRepositoryImp implements UserRepository {
@@ -23,4 +26,11 @@ public class UserRepositoryImp implements UserRepository {
                 .query(User.class)
                 .list();
     }
+    
+    public Optional<User> findById(UUID id) {
+		return this.jdbcClient.sql("SELECT * FROM gastrosphere.users WHERE id = :id")
+				.param("id", id)
+				.query(User.class)
+				.optional();
+	}
 }

@@ -5,6 +5,8 @@ import br.com.fiap.gastrosphere.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -17,4 +19,8 @@ public class UserService {
         int offset = (page - 1) * size;
         return this.userRepository.findAll(size, offset);
     }
+    
+	public Optional<User> findById(UUID id) {
+		return this.userRepository.findById(id);
+	}
 }
