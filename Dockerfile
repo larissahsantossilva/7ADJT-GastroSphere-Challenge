@@ -1,15 +1,29 @@
-#Usa a imagem base do OpenJDK 11
-FROM openjdk:21-jdk-slim
+# Usa imagem base do Maven com suporte ao Java 21 para o estágio de build
+FROM maven:3.9.9-eclipse-temurin-21-alpine AS build
 
-#Define o diretório de trabalho dentro do container
-RUN mkdir /app
+# Define o diretório de trabalho para o build
 WORKDIR /app
 
-#Copia o arquivo JAR da aplicação para o container
-COPY /target/gastrosphere-0.0.1-SNAPSHOT.jar /app
+# Copia o arquivo pom.xml para o diretório de trabalho no container
+COPY pom.xml /app/pom.xml
 
-#Comando para executar a aplicação
-ENTRYPOINT ["java", "-jar", "/app/gastrosphere-0.0.1-SNAPSHOT.jar"]
+# Baixa as dependências do Maven para preparar o ambiente offline
+RUN mvn dependency:go-offline
 
-#Expor a porta (se necessário)
-EXPOSE 8080
+# Copia o código-fonte para o container
+COPY src /app/src
+
+# Realiza o build do projeto, criando o pacote JAR sem executar os testes
+RUN mvn clean package -DskipTests
+
+# Usa uma imagem base menor com o Java 21 para o estágio de deploy
+FROM eclipse-temurin:21-alpine AS deploy
+
+# Define o diretório de trabalho para o deploy
+WORKDIR /app
+
+# Copia o JAR gerado no estágio de build para o diretório de trabalho
+COPY --from=build /app/target/*.jar /app/gastrosphere.jar
+
+# Configura o comando de entrada para executar o JAR da aplicação
+ENTRYPOINT ["java", "-jar", "gastrosphere.jar"]
