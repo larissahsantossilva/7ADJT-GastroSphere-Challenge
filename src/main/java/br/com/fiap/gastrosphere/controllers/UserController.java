@@ -19,7 +19,7 @@ import br.com.fiap.gastrosphere.entities.User;
 import br.com.fiap.gastrosphere.services.UserService;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/v1/users")
 public class UserController {
 
 	private static final Logger logger = getLogger(UserController.class);
