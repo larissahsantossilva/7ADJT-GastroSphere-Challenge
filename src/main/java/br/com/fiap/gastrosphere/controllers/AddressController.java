@@ -16,7 +16,7 @@ import br.com.fiap.gastrosphere.entities.Address;
 import br.com.fiap.gastrosphere.services.AddressService;
 
 @RestController
-@RequestMapping("/addresses")
+@RequestMapping("/api/v1/addresses")
 public class AddressController {
 
     private static final Logger logger = getLogger(AddressController.class);
