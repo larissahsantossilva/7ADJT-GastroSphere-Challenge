@@ -16,7 +16,7 @@ COPY src /app/src
 # Realiza o build do projeto, criando o pacote JAR sem executar os testes
 RUN mvn clean package -DskipTests
 
-# Usa uma imagem base menor com o Java 21 para o estágio de deploy
+# Usa imagem alpine do Java 21 para o estágio de deploy
 FROM eclipse-temurin:21-alpine AS deploy
 
 # Define o diretório de trabalho para o deploy
