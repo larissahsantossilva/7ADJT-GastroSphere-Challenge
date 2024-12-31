@@ -33,3 +33,4 @@ CREATE TABLE gastrosphere.users (
 -- Índices para otimização
 CREATE INDEX idx_users_email ON gastrosphere.users(email);
 CREATE INDEX idx_users_type ON gastrosphere.users(user_type);
+CREATE INDEX idx_addresses_zip_code ON gastrosphere.addresses(zip_code);
