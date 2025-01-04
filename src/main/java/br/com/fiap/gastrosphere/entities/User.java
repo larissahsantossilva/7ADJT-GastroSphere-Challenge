@@ -1,9 +1,14 @@
 package br.com.fiap.gastrosphere.entities;
 
-import lombok.*;
-
 import java.time.LocalDate;
 import java.util.UUID;
+
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
@@ -28,6 +33,8 @@ public class User {
     private String cpf;
 
     private String addressId;
+    
+    private Address address;
 
     private String addressNumber;
 
