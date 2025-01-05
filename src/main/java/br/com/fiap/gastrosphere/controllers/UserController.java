@@ -11,14 +11,12 @@ import org.slf4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.gastrosphere.entities.User;
 import br.com.fiap.gastrosphere.services.UserService;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
 @RequestMapping(UserController.V1_USER)
@@ -53,12 +51,12 @@ public class UserController {
 		return ok(user);
 	}
 	
-	@PostMapping
-	public ResponseEntity<User> saveUser(@RequestBody User user) {
-		logger.info("POST | {} | Iniciado saveUser | Documento: {}", V1_USER, user.getCpf());
-//		var user = userService.findById(id);
-		logger.info("POST | {} | Finalizado saveUser | Documento: {} | id: {}", V1_USER, user.getCpf(), user.getId());
-		return ok(user);
-	}
+//    @PostMapping
+//    public ResponseEntity<String> saveUser(@RequestBody User user) {
+//        logger.info("POST | {} | Iniciado saveUser | User: ", V1_USER, user.getCpf());
+//        userService.saveUser(user);
+//        logger.info("POST | {} | Finalizado saveUser", V1_USER);
+//        return status(201).body("Usuário criado com sucesso");
+//    }
 
 }
