@@ -33,4 +33,13 @@ public class UserService {
 			return ofNullable(this.userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Usuário não encontrado")));
 	}
 
+	public Optional<Integer> deleteById(UUID id) {
+		Optional<Integer> result = this.userRepository.deleteById(id);
+		if(result.isPresent()) {
+			if (result.get().equals(0)) {
+				throw new ResourceNotFoundException("Usuário não encontrado");
+			}
+		}
+		return result;
+	}
 }
