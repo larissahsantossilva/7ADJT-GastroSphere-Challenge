@@ -32,9 +32,7 @@ public class User {
 
     private String cpf;
 
-    private String addressId;
-    
-    private Address address;
+    private UUID addressId;
 
     private String addressNumber;
 

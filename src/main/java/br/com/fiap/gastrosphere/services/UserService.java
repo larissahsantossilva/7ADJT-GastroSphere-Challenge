@@ -17,10 +17,7 @@ public class UserService {
 
 	private final UserRepository userRepository;
 
-	private final AddressService addressService;
-
-	public UserService(UserRepository userRepository, AddressService addressService) {
-		this.addressService = addressService;
+	public UserService(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
 
@@ -33,6 +30,20 @@ public class UserService {
 			return ofNullable(this.userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Usuário não encontrado")));
 	}
 
+	public void createUser(User user) {
+		var create = this.userRepository.create(user);
+		if (create == null) {
+			throw new IllegalStateException("Erro ao criar usuário " + user.getCpf());
+		}
+	}
+
+	public void updateUser(User user, UUID id) {
+		var update = this.userRepository.update(user, id);
+		if (update == 0) {
+			throw new RuntimeException("Usuário não encontrado");
+		}
+	}
+
 	public Optional<Integer> deleteById(UUID id) {
 		Optional<Integer> result = this.userRepository.deleteById(id);
 		if(result.isPresent()) {
@@ -42,4 +53,5 @@ public class UserService {
 		}
 		return result;
 	}
+
 }

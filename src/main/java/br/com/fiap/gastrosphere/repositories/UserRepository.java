@@ -12,5 +12,10 @@ public interface UserRepository {
 
     Optional<User> findById(UUID id);
 
+    Integer create(User user);
+
+    Integer update(User user, UUID id);
+
     Optional<Integer> deleteById(UUID id);
+
 }

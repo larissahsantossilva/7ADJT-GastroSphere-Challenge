@@ -3,6 +3,7 @@ package br.com.fiap.gastrosphere.controllers;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.http.ResponseEntity.status;
 
 import java.util.List;
 import java.util.Optional;
@@ -48,20 +49,29 @@ public class UserController {
 		return ok(user);
 	}
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<?>  deleteUserById(@PathVariable("id") UUID id) {
-		logger.info("DELETE | {} | Iniciado deleteUserById | id: {}", V1_USER, id);
-		userService.deleteById(id);
-		logger.info("DELETE | {} | Finalizado deleteUserByUd | id: {}", V1_USER, id);
-		return ResponseEntity.noContent().build();
+    @PostMapping
+    public ResponseEntity<String> createUser(@RequestBody User user) {
+        logger.info("POST | {} | Iniciado createUser | User: ", V1_USER, user.getCpf());
+        userService.createUser(user);
+        logger.info("POST | {} | Finalizado createUser", V1_USER);
+        return status(201).body("Usuário criado com sucesso");
+    }
+
+	@PutMapping("/{id}")
+	public ResponseEntity<Void> updateUser(@PathVariable("id") UUID id,
+											 @RequestBody User user) {
+		logger.info("PUT | {} | Iniciado updateUser | id: {}", V1_USER, id);
+		userService.updateUser(user, id);
+		logger.info("PUT | {} | Finalizado updateUser", V1_USER);
+		return ok().build();
 	}
-	
-//    @PostMapping
-//    public ResponseEntity<String> saveUser(@RequestBody User user) {
-//        logger.info("POST | {} | Iniciado saveUser | User: ", V1_USER, user.getCpf());
-//        userService.saveUser(user);
-//        logger.info("POST | {} | Finalizado saveUser", V1_USER);
-//        return status(201).body("Usuário criado com sucesso");
-//    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?>  deleteUserById(@PathVariable("id") UUID id) {
+        logger.info("DELETE | {} | Iniciado deleteUserById | id: {}", V1_USER, id);
+        userService.deleteById(id);
+        logger.info("DELETE | {} | Finalizado deleteUserByUd | id: {}", V1_USER, id);
+        return noContent().build();
+    }
 
 }
