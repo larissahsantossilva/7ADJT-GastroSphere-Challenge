@@ -6,11 +6,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import br.com.fiap.gastrosphere.controllers.UserController;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
 import br.com.fiap.gastrosphere.entities.Address;
 import br.com.fiap.gastrosphere.entities.User;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 @Repository
 public class UserRepositoryImp implements UserRepository {
@@ -84,6 +89,14 @@ public class UserRepositoryImp implements UserRepository {
 				.param("id", id)
 				.query(this::buildUser)
 				.optional();
+	}
+
+	@Override
+	public Optional<Integer> deleteById(UUID id) {
+		int result = this.jdbcClient.sql("DELETE FROM gastrosphere.users WHERE id = :id")
+				.param("id", id)
+				.update();
+		return Optional.of(result);
 	}
 
 	private User buildUser(ResultSet rs, int rowNum) throws SQLException {

@@ -1,6 +1,7 @@
 package br.com.fiap.gastrosphere.controllers;
 
 import static org.slf4j.LoggerFactory.getLogger;
+import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.http.ResponseEntity.ok;
 
 import java.util.List;
@@ -9,11 +10,7 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import br.com.fiap.gastrosphere.entities.User;
 import br.com.fiap.gastrosphere.services.UserService;
@@ -49,6 +46,14 @@ public class UserController {
 		var user = userService.findById(id);
 		logger.info("GET | {} | Finalizado findUserByUd | id: {}", V1_USER, id);
 		return ok(user);
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?>  deleteUserById(@PathVariable("id") UUID id) {
+		logger.info("DELETE | {} | Iniciado deleteUserById | id: {}", V1_USER, id);
+		userService.deleteById(id);
+		logger.info("DELETE | {} | Finalizado deleteUserByUd | id: {}", V1_USER, id);
+		return ResponseEntity.noContent().build();
 	}
 	
 //    @PostMapping
