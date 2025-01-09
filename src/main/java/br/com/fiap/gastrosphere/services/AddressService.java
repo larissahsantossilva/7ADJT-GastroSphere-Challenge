@@ -39,14 +39,14 @@ public class AddressService {
 
     public void updateAddress(UUID id, Address address) {
         var update = this.addressRepository.update(id, address);
-        if(update == 0){
+        if (update == 0) {
             throw new RuntimeException("Endereço não encontrado");
         }
     }
 
     public void deleteAddress(UUID id) {
         var delete = this.addressRepository.delete(id);
-        if(delete == 0){
+        if (delete == 0) {
             throw new RuntimeException("Endereço não encontrado");
         }
     }
