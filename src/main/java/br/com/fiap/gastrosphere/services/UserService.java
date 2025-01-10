@@ -1,6 +1,7 @@
 package br.com.fiap.gastrosphere.services;
 
 import static java.util.Optional.ofNullable;
+import static java.util.regex.Pattern.matches;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +17,8 @@ import br.com.fiap.gastrosphere.repositories.UserRepository;
 @Service
 public class UserService {
 
+	private static final String REGEX_UUID = "^[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$";
+	
 	private final UserRepository userRepository;
 
 	public UserService(UserRepository userRepository) {
@@ -28,6 +31,7 @@ public class UserService {
 	}
 
 	public Optional<UserDto> findById(UUID id) {
+        uuidValidator(id);
 		return ofNullable(this.userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Usuário não encontrado")));
 	}
 
@@ -55,4 +59,9 @@ public class UserService {
 		return result;
 	}
 
+	private void uuidValidator(UUID id) {
+		if (!matches(REGEX_UUID, id.toString())) {
+			throw new ResourceNotFoundException("ID de usuário inválido");
+		}
+	}
 }
