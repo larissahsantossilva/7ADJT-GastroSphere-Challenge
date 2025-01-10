@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import br.com.fiap.gastrosphere.dtos.UserDto;
 import br.com.fiap.gastrosphere.entities.User;
 import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
 import br.com.fiap.gastrosphere.repositories.UserRepository;
@@ -21,13 +22,13 @@ public class UserService {
 		this.userRepository = userRepository;
 	}
 
-	public List<User> findAllUsers(int page, int size) {
+	public List<UserDto> findAllUsers(int page, int size) {
 		int offset = (page - 1) * size;
 		return this.userRepository.findAll(size, offset) ;
 	}
 
-	public Optional<User> findById(UUID id) {
-			return ofNullable(this.userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Usuário não encontrado")));
+	public Optional<UserDto> findById(UUID id) {
+		return ofNullable(this.userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Usuário não encontrado")));
 	}
 
 	public void createUser(User user) {
