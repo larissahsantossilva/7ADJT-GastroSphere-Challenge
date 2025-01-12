@@ -78,7 +78,7 @@ public class UserController {
 	)
 	@PostMapping
 	public ResponseEntity<String> createUser(@RequestBody User user) {
-		logger.info("POST | {} | Iniciado createUser | User: ", V1_USER, user.getCpf());
+		logger.info("POST | {} | Iniciado createUser | User: {}", V1_USER, user.getCpf());
 		userService.createUser(user);
 		logger.info("POST | {} | Finalizado createUser", V1_USER);
 		return status(201).body("Usuário criado com sucesso");
@@ -107,7 +107,7 @@ public class UserController {
 		}
 	)
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteUserById(@PathVariable("id") UUID id) {
+	public ResponseEntity<Void> deleteUserById(@PathVariable("id") UUID id) {
 		logger.info("DELETE | {} | Iniciado deleteUserById | id: {}", V1_USER, id);
 		userService.deleteById(id);
 		logger.info("DELETE | {} | Finalizado deleteUserByUd | id: {}", V1_USER, id);

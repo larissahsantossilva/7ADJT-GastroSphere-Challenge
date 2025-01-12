@@ -116,9 +116,9 @@ public class AddressController {
     )
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteAddress(@PathVariable("id") UUID id) {
-    	logger.info("DELETE | {} | Iniciado deleteAddress | Id: {} | Dados: {}", V1_ADDRESS, id);
+    	logger.info("DELETE | {} | Iniciado deleteAddress | Id: {}", V1_ADDRESS, id);
         addressService.deleteAddress(id);
-        logger.info("DELETE | {} | Finalizado deleteAddress | Id: {} | Dados: {}", V1_ADDRESS, id);
+        logger.info("DELETE | {} | Finalizado deleteAddress | Id: {}", V1_ADDRESS, id);
         return status(204).body("Endereço deletado com sucesso");
     }
 }
