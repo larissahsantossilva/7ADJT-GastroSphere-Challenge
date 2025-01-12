@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +22,7 @@ import br.com.fiap.gastrosphere.services.UserService;
 
 @RestController
 @RequestMapping(UserController.V1_USER)
+@Tag(name = "UserController", description = "Controller para CRUD de usuários.")
 public class UserController {
 
 	public static final String V1_USER = "/api/v1/users";
@@ -31,7 +35,13 @@ public class UserController {
 		this.userService = userService;
 	}
 
-	// Exemplo: http://localhost:8080/api/v1/users?page=1&size=10
+	@Operation(
+		description = "Busca todos os usuários de forma paginada.",
+		summary = "Busca todos os usuários de forma paginada.",
+		responses = {
+			@ApiResponse(description = "OK", responseCode = "200")
+		}
+	)
 	@GetMapping
 	public ResponseEntity<List<UserDto>> findAllUsers(@RequestParam(value = "page", defaultValue = "1") int page,
 			@RequestParam(value = "size", defaultValue = "10") int size) {
@@ -41,6 +51,13 @@ public class UserController {
 		return ok(users);
 	}
 
+	@Operation(
+		description = "Busca todos os usuários por id.",
+		summary = "Busca todos os usuários por id.",
+		responses = {
+			@ApiResponse(description = "OK", responseCode = "200")
+		}
+	)
 	@GetMapping("/{id}")
 	public ResponseEntity<Optional<UserDto>> findUserById(@PathVariable("id") UUID id) {
 		logger.info("GET | {} | Iniciado findUserById | id: {}", V1_USER, id);
@@ -49,6 +66,13 @@ public class UserController {
 		return ok(user);
 	}
 
+	@Operation(
+		description = "Cria usuário.",
+		summary = "Cria usuário.",
+		responses = {
+			@ApiResponse(description = "OK", responseCode = "201")
+		}
+	)
 	@PostMapping
 	public ResponseEntity<String> createUser(@RequestBody User user) {
 		logger.info("POST | {} | Iniciado createUser | User: ", V1_USER, user.getCpf());
@@ -57,6 +81,13 @@ public class UserController {
 		return status(201).body("Usuário criado com sucesso");
 	}
 
+	@Operation(
+		description = "Atualiza usuário por id.",
+		summary = "Atualiza usuário por id.",
+		responses = {
+			@ApiResponse(description = "OK", responseCode = "200")
+		}
+	)
 	@PutMapping("/{id}")
 	public ResponseEntity<Void> updateUser(@PathVariable("id") UUID id, @RequestBody User user) {
 		logger.info("PUT | {} | Iniciado updateUser | id: {}", V1_USER, id);
@@ -65,6 +96,13 @@ public class UserController {
 		return ok().build();
 	}
 
+	@Operation(
+		description = "Exclui usuário por id.",
+		summary = "Exclui usuário por id.",
+		responses = {
+			@ApiResponse(description = "OK", responseCode = "200")
+		}
+	)
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteUserById(@PathVariable("id") UUID id) {
 		logger.info("DELETE | {} | Iniciado deleteUserById | id: {}", V1_USER, id);

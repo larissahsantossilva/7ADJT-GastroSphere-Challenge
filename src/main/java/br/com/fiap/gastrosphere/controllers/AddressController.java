@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +20,7 @@ import br.com.fiap.gastrosphere.services.AddressService;
 
 @RestController
 @RequestMapping(AddressController.V1_ADDRESS)
+@Tag(name = "AddressController", description = "Controller para CRUD de endereços.")
 public class AddressController {
 
     static final String V1_ADDRESS = "/api/v1/addresses";
@@ -29,7 +33,13 @@ public class AddressController {
         this.addressService = addressService;
     }
 
-    // Exemplo: http://localhost:8080/addresses?page=1&size=10
+    @Operation(
+        description = "Busca todos os endereços de forma paginada.",
+        summary = "Busca todos os endereços de forma paginada.",
+        responses = {
+            @ApiResponse(description = "OK", responseCode = "200")
+        }
+    )
     @GetMapping
     public ResponseEntity<List<Address>> findAllAddresses(
             @RequestParam(value = "page", defaultValue = "1") int page,
@@ -52,6 +62,13 @@ public class AddressController {
         }
     }
 
+    @Operation(
+        description = "Busca endereço por id.",
+        summary = "Busca endereço por id.",
+        responses = {
+            @ApiResponse(description = "OK", responseCode = "200")
+        }
+    )
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Address>> findAddressById(@PathVariable("id") UUID id) {
         logger.info("GET | {} | Iniciado findAddressById | id: {}", V1_ADDRESS, id);
@@ -60,6 +77,13 @@ public class AddressController {
         return ok(address);
     }
 
+    @Operation(
+        description = "Cria endereço.",
+        summary = "Cria endereço.",
+        responses = {
+            @ApiResponse(description = "OK", responseCode = "201") //avaliar content depois
+        }
+    )
     @PostMapping
     public ResponseEntity<String> createAddress(@RequestBody Address address) {
         logger.info("POST | {} | Iniciado createAddress ", V1_ADDRESS);
@@ -68,6 +92,13 @@ public class AddressController {
         return status(201).body("Endereço criado com sucesso");
     }
 
+    @Operation(
+        description = "Atualiza endereço por id.",
+        summary = "Atualiza endereço por id.",
+        responses = {
+            @ApiResponse(description = "OK", responseCode = "200") //avaliar content depois
+        }
+    )
     @PutMapping("/{id}")
     public ResponseEntity<String> updateAddress(@PathVariable("id") UUID id, @RequestBody Address address) {
         logger.info("PUT | {} | Iniciado updateAddress | Id: {} | Dados: {}", V1_ADDRESS, id, address);
@@ -76,6 +107,13 @@ public class AddressController {
         return ok("Endereço atualizado com sucesso");
     }
 
+    @Operation(
+        description = "Exclui endereço por id.",
+        summary = "Exclui endereço por id.",
+        responses = {
+            @ApiResponse(description = "OK", responseCode = "200") //avaliar content depois
+        }
+    )
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteAddress(@PathVariable("id") UUID id) {
     	logger.info("DELETE | {} | Iniciado deleteAddress | Id: {} | Dados: {}", V1_ADDRESS, id);
