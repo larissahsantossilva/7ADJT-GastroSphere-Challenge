@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +40,8 @@ public class UserController {
 		description = "Busca todos os usuários de forma paginada.",
 		summary = "Busca todos os usuários de forma paginada.",
 		responses = {
-			@ApiResponse(description = "OK", responseCode = "200")
+			@ApiResponse(description = "OK", responseCode = "200"),
+			@ApiResponse(description = "No content", responseCode = "204")
 		}
 	)
 	@GetMapping
@@ -52,10 +54,11 @@ public class UserController {
 	}
 
 	@Operation(
-		description = "Busca todos os usuários por id.",
-		summary = "Busca todos os usuários por id.",
+		description = "Busca usuários por id.",
+		summary = "Busca usuários por id.",
 		responses = {
-			@ApiResponse(description = "OK", responseCode = "200")
+			@ApiResponse(description = "OK", responseCode = "200"),
+			@ApiResponse(description = "Not found", responseCode = "404")
 		}
 	)
 	@GetMapping("/{id}")
