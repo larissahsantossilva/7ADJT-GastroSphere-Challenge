@@ -60,7 +60,7 @@ public class UserService {
 	}
 
 	private void uuidValidator(UUID id) {
-		if (!matches(REGEX_UUID, id.toString())) {
+	if (!matches(REGEX_UUID, id.toString())) {
 			throw new ResourceNotFoundException("ID de usuário inválido");
 		}
 	}
