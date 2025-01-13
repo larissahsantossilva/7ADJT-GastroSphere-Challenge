@@ -22,7 +22,7 @@ CREATE TABLE gastrosphere.users (
                                     login VARCHAR(100) UNIQUE NOT NULL, -- Login único para acesso
                                     password VARCHAR(255) NOT NULL, -- Senha do usuário (hash)
                                     user_type VARCHAR(50) NOT NULL CHECK (user_type IN ('Owner', 'Customer')), -- Tipo de usuário: Owner ou Customer
-                                    cpf VARCHAR(14) UNIQUE NOT NULL, -- CPF do usuário (formato 000.000.000-00)
+                                    document VARCHAR(20) UNIQUE NOT NULL, -- Documento do usuário
                                     address_id UUID NOT NULL REFERENCES gastrosphere.addresses(id) ON DELETE SET NULL, -- Relacionamento com endereço
                                     address_number VARCHAR(10) NOT NULL, -- Número do endereço
                                     address_complement VARCHAR(255), -- Complemento do endereço

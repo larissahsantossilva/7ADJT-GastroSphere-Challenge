@@ -78,7 +78,7 @@ public class UserController {
 	)
 	@PostMapping
 	public ResponseEntity<String> createUser(@RequestBody User user) {
-		logger.info("POST | {} | Iniciado createUser | User: {}", V1_USER, user.getCpf());
+		logger.info("POST | {} | Iniciado createUser | User: {}", V1_USER, user.getDocument());
 		userService.createUser(user);
 		logger.info("POST | {} | Finalizado createUser", V1_USER);
 		return status(201).body("Usuário criado com sucesso");

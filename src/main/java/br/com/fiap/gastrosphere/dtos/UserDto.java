@@ -12,7 +12,7 @@ public record UserDto(
 		String login,
 		String password,
 		String userType,
-		String cpf,
+		String document,
 		String addressNumber,
 		String addressComplement, 
 		LocalDate createdAt, 
