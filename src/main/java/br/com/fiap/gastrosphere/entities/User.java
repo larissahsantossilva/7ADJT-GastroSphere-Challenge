@@ -30,7 +30,7 @@ public class User {
 
     private String userType;
 
-    private String cpf;
+    private String document;
 
     private UUID addressId;
 

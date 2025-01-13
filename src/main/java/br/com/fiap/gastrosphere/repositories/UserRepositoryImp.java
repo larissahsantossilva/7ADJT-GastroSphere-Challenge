@@ -35,7 +35,7 @@ public class UserRepositoryImp implements UserRepository {
 				u.login,
 				u."password",
 				u.user_type,
-				u.cpf,
+				u.document,
 				u.created_at,
 				u.last_modified_at,
 				u.address_number,
@@ -67,7 +67,7 @@ public class UserRepositoryImp implements UserRepository {
 						u.login,
 						u."password",
 						u.user_type,
-						u.cpf,
+						u.document,
 						u.created_at,
 						u.last_modified_at,
 						u.address_number,
@@ -99,15 +99,15 @@ public class UserRepositoryImp implements UserRepository {
 	@Override
 	public Integer create(User user) {
 		return this.jdbcClient.sql("INSERT INTO gastrosphere.users " +
-						"(name, email, login, password, user_type, cpf, address_id, address_number, address_complement, created_at, last_modified_at) " +
-						"VALUES (:name, :email, :login, :password, :user_type, :cpf, :address_id, :address_number, :address_complement," +
+						"(name, email, login, password, user_type, document, address_id, address_number, address_complement, created_at, last_modified_at) " +
+						"VALUES (:name, :email, :login, :password, :user_type, :document, :address_id, :address_number, :address_complement," +
 						":created_at, :last_modified_at)")
 				.param("name", user.getName())
 				.param("email", user.getEmail())
 				.param("login", user.getLogin())
 				.param("password", user.getPassword())
 				.param("user_type", user.getUserType())
-				.param("cpf", user.getCpf())
+				.param("document", user.getDocument())
 				.param("address_id", user.getAddressId())
 				.param("address_number", user.getAddressNumber())
 				.param("address_complement", user.getAddressComplement())
@@ -120,7 +120,7 @@ public class UserRepositoryImp implements UserRepository {
 	public Integer update(User user, UUID id) {
 		return this.jdbcClient.sql("UPDATE gastrosphere.users " +
 						"SET name = :name, email = :email, login = :login, password = :password, user_type = :user_type, " +
-						"cpf = :cpf, address_id = :address_id, address_number = :address_number, address_complement = :address_complement, " +
+						"document = :document, address_id = :address_id, address_number = :address_number, address_complement = :address_complement, " +
 						"last_modified_at = :last_modified_at " +
 						"WHERE id = :id")
 				.param("id", id)
@@ -129,7 +129,7 @@ public class UserRepositoryImp implements UserRepository {
 				.param("login", user.getEmail())
 				.param("password", user.getPassword())
 				.param("user_type", user.getUserType())
-				.param("cpf", user.getCpf())
+				.param("document", user.getDocument())
 				.param("address_id", user.getAddressId() != null ? user.getAddressId() : null)
 				.param("address_number", user.getAddressNumber())
 				.param("address_complement", user.getAddressComplement())
@@ -145,7 +145,7 @@ public class UserRepositoryImp implements UserRepository {
 				rs.getString("login"),
 				rs.getString("password"), 
 				rs.getString("user_type"), 
-				rs.getString("cpf"), 
+				rs.getString("document"),
 				rs.getString("address_number"),
 				rs.getString("address_complement"), 
 				rs.getDate("created_at").toLocalDate(), 
