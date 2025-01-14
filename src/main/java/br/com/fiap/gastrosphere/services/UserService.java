@@ -64,4 +64,21 @@ public class UserService {
 			throw new ResourceNotFoundException("ID de usuário inválido");
 		}
 	}
+
+	public void updatePassword(UUID id, String oldPassword, String newPassword) {
+		uuidValidator(id);
+	
+		UserDto userDto = userRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+	
+		if (!oldPassword.equals(userDto.password())) {
+			throw new IllegalArgumentException("Senha antiga incorreta.");
+		}
+	
+		int updatedRows = userRepository.updatePassword(id, newPassword);
+		if (updatedRows == 0) {
+			throw new RuntimeException("Erro ao atualizar a senha.");
+		}
+	}
+
 }
