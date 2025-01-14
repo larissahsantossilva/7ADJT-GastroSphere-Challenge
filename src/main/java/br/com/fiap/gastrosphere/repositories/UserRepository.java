@@ -19,4 +19,6 @@ public interface UserRepository {
 
     Optional<Integer> deleteById(UUID id);
 
+    Integer updatePassword(UUID id, String newPassword);
+
 }

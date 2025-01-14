@@ -164,4 +164,18 @@ public class UserRepositoryImp implements UserRepository {
 		address.setStreet(rs.getString("street"));
 		return address;
 	}
+
+	@Override
+	public Integer updatePassword(UUID id, String newPassword) {
+		return this.jdbcClient.sql("""
+						    UPDATE gastrosphere.users
+						    SET password = :newPassword, last_modified_at = :lastModifiedAt
+						    WHERE id = :id
+						""")
+				.param("id", id)
+				.param("newPassword", newPassword)
+				.param("lastModifiedAt", LocalDate.now())
+				.update();
+	}
+
 }
