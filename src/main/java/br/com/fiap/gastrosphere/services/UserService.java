@@ -38,7 +38,7 @@ public class UserService {
 	public void createUser(User user) {
 		var create = this.userRepository.create(user);
 		if (create == null) {
-			throw new IllegalStateException("Erro ao criar usuário " + user.getCpf());
+			throw new IllegalStateException("Erro ao criar usuário " + user.getDocument());
 		}
 	}
 
