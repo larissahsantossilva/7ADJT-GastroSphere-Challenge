@@ -130,10 +130,10 @@ public class UserController {
             @PathVariable("id") UUID id,
             @RequestBody LoginUserDto user
     ) {
-        logger.info("PATCH | {} | Iniciado updatePassword | id: {}", V1_USER, id);
+        logger.info("PUT | {} | Iniciado updatePassword | id: {}", V1_USER, id);
         try {
             userService.updatePassword(id, user.oldPassword(), user.newPassword());
-            logger.info("PATCH | {} | Finalizado updatePassword | id: {}", V1_USER, id);
+            logger.info("PUT | {} | Finalizado updatePassword | id: {}", V1_USER, id);
             return ok("Senha atualizada com sucesso.");
         } catch (IllegalArgumentException e) {
             logger.error("Erro ao atualizar a senha | id: {}", id);
