@@ -2,11 +2,15 @@ package br.com.fiap.gastrosphere.services;
 
 import static java.util.Optional.ofNullable;
 import static java.util.regex.Pattern.matches;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import br.com.fiap.gastrosphere.controllers.UserController;
+import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import br.com.fiap.gastrosphere.dtos.UserDto;
@@ -18,7 +22,7 @@ import br.com.fiap.gastrosphere.repositories.UserRepository;
 public class UserService {
 
 	private static final String REGEX_UUID = "^[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$";
-	
+	private static final Logger logger = getLogger(UserService.class);
 	private final UserRepository userRepository;
 
 	public UserService(UserRepository userRepository) {
@@ -36,17 +40,11 @@ public class UserService {
 	}
 
 	public void createUser(User user) {
-		var create = this.userRepository.create(user);
-		if (create == null) {
-			throw new IllegalStateException("Erro ao criar usuário " + user.getDocument());
-		}
+		this.userRepository.create(user);
 	}
 
 	public void updateUser(User user, UUID id) {
-		var update = this.userRepository.update(user, id);
-		if (update == 0) {
-			throw new RuntimeException("Usuário não encontrado");
-		}
+		this.userRepository.update(user, id);
 	}
 
 	public Optional<Integer> deleteById(UUID id) {

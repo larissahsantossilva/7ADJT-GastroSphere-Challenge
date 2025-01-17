@@ -29,9 +29,7 @@ import br.com.fiap.gastrosphere.services.UserService;
 public class UserController {
 
     public static final String V1_USER = "/api/v1/users";
-
     private static final Logger logger = getLogger(UserController.class);
-
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -39,12 +37,12 @@ public class UserController {
     }
 
     @Operation(
-            description = "Busca todos os usuários de forma paginada.",
-            summary = "Busca todos os usuários de forma paginada.",
-            responses = {
-                    @ApiResponse(description = "OK", responseCode = "200"),
-                    @ApiResponse(description = "No content", responseCode = "204")
-            }
+        description = "Busca todos os usuários de forma paginada.",
+        summary = "Busca todos os usuários de forma paginada.",
+        responses = {
+            @ApiResponse(description = "OK", responseCode = "200"),
+            @ApiResponse(description = "No content", responseCode = "204")
+        }
     )
     @GetMapping
     public ResponseEntity<List<UserDto>> findAllUsers(@RequestParam(value = "page", defaultValue = "1") int page,
@@ -56,12 +54,12 @@ public class UserController {
     }
 
     @Operation(
-            description = "Busca usuários por id.",
-            summary = "Busca usuários por id.",
-            responses = {
-                    @ApiResponse(description = "OK", responseCode = "200"),
-                    @ApiResponse(description = "Not found", responseCode = "404")
-            }
+        description = "Busca usuários por id.",
+        summary = "Busca usuários por id.",
+        responses = {
+            @ApiResponse(description = "OK", responseCode = "200"),
+            @ApiResponse(description = "No Content", responseCode = "204")
+        }
     )
     @GetMapping("/{id}")
     public ResponseEntity<Optional<UserDto>> findUserById(@PathVariable("id") UUID id) {
@@ -76,11 +74,11 @@ public class UserController {
     }
 
     @Operation(
-            description = "Cria usuário.",
-            summary = "Cria usuário.",
-            responses = {
-                    @ApiResponse(description = "OK", responseCode = "201")
-            }
+        description = "Cria usuário.",
+        summary = "Cria usuário.",
+        responses = {
+            @ApiResponse(description = "OK", responseCode = "201")
+        }
     )
     @PostMapping
     public ResponseEntity<String> createUser(@RequestBody User user) {
@@ -91,11 +89,11 @@ public class UserController {
     }
 
     @Operation(
-            description = "Atualiza usuário por id.",
-            summary = "Atualiza usuário por id.",
-            responses = {
-                    @ApiResponse(description = "OK", responseCode = "200")
-            }
+        description = "Atualiza usuário por id.",
+        summary = "Atualiza usuário por id.",
+        responses = {
+            @ApiResponse(description = "OK", responseCode = "200")
+        }
     )
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateUser(@PathVariable("id") UUID id, @RequestBody User user) {
@@ -106,13 +104,13 @@ public class UserController {
     }
 
     @Operation(
-            description = "Troca a senha de um usuário.",
-            summary = "Troca a senha do usuário.",
-            responses = {
-                    @ApiResponse(description = "Senha atualizada com sucesso.", responseCode = "200"),
-                    @ApiResponse(description = "Usuário não encontrado.", responseCode = "404"),
-                    @ApiResponse(description = "Senha antiga incorreta.", responseCode = "400")
-            }
+        description = "Troca a senha de um usuário.",
+        summary = "Troca a senha do usuário.",
+        responses = {
+            @ApiResponse(description = "Senha atualizada com sucesso.", responseCode = "200"),
+            @ApiResponse(description = "Usuário não encontrado.", responseCode = "404"),
+            @ApiResponse(description = "Senha antiga incorreta.", responseCode = "400")
+        }
     )
     @PutMapping("/{id}/password")
     public ResponseEntity<String> updatePassword(

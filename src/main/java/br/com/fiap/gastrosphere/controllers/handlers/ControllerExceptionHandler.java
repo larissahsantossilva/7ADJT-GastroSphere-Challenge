@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import br.com.fiap.gastrosphere.dtos.UnprocessableEntityDTO;
+import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,8 +17,12 @@ import br.com.fiap.gastrosphere.dtos.ResourceNotFoundDTO;
 import br.com.fiap.gastrosphere.dtos.ValidationErrorDTO;
 import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 @ControllerAdvice
 public class ControllerExceptionHandler {
+
+	private static final Logger logger = getLogger(ControllerExceptionHandler.class);
 
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<ResourceNotFoundDTO> handlerResourceNotFoundException(ResourceNotFoundException e) {
@@ -41,4 +47,11 @@ public class ControllerExceptionHandler {
         }
         return ResponseEntity.internalServerError().body(new ResourceNotFoundDTO("Erro interno do servidor", 500));
     }
+
+	@ExceptionHandler(RuntimeException.class)
+	public ResponseEntity<UnprocessableEntityDTO> handlerUnprocessableEntityException(RuntimeException e) {
+		logger.error("Exception ", e);
+		var status = HttpStatus.UNPROCESSABLE_ENTITY;
+		return ResponseEntity.status(status.value()).body(new UnprocessableEntityDTO(status.value(), e.getMessage()));
+	}
 }
