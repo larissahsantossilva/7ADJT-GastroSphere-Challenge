@@ -90,15 +90,15 @@ public class UserRepositoryImp implements UserRepository {
 
 	@Override
 	public Optional<Integer> deleteById(UUID id) {
-		int result = this.jdbcClient.sql("DELETE FROM gastrosphere.users WHERE id = :id")
+		 return Optional.of(this.jdbcClient.sql("DELETE FROM gastrosphere.users WHERE id = :id")
 				.param("id", id)
-				.update();
-		return Optional.of(result);
+			.update());
 	}
 
 	@Override
-	public Integer create(User user) {
-		return this.jdbcClient.sql("INSERT INTO gastrosphere.users " +
+	public Optional<Integer> create(User user) {
+		return Optional.of(
+			this.jdbcClient.sql("INSERT INTO gastrosphere.users " +
 						"(name, email, login, password, user_type, document, address_id, address_number, address_complement, created_at, last_modified_at) " +
 						"VALUES (:name, :email, :login, :password, :user_type, :document, :address_id, :address_number, :address_complement," +
 						":created_at, :last_modified_at)")
@@ -113,7 +113,7 @@ public class UserRepositoryImp implements UserRepository {
 				.param("address_complement", user.getAddressComplement())
 				.param("created_at", LocalDate.now())
 				.param("last_modified_at", LocalDate.now())
-				.update();
+			.update());
 	}
 
 	@Override

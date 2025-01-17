@@ -13,7 +13,7 @@ public interface UserRepository {
 
     Optional<UserDto> findById(UUID id);
 
-    Integer create(User user);
+    Optional<Integer> create(User user);
 
     Integer update(User user, UUID id);
 

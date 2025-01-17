@@ -1,9 +1,7 @@
 package br.com.fiap.gastrosphere.controllers;
 
 import static org.slf4j.LoggerFactory.getLogger;
-import static org.springframework.http.ResponseEntity.noContent;
-import static org.springframework.http.ResponseEntity.ok;
-import static org.springframework.http.ResponseEntity.status;
+import static org.springframework.http.ResponseEntity.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -132,19 +130,17 @@ public class UserController {
     }
 
     @Operation(
-            description = "Exclui usuário por id.",
-            summary = "Exclui usuário por id.",
-            responses = {
-                    @ApiResponse(description = "OK", responseCode = "200")
-            }
+        description = "Exclui usuário por id.",
+        summary = "Exclui usuário por id.",
+        responses = {
+                @ApiResponse(description = "OK", responseCode = "200")
+        }
     )
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUserById(@PathVariable("id") UUID id) {
         logger.info("DELETE | {} | Iniciado deleteUserById | id: {}", V1_USER, id);
         userService.deleteById(id);
         logger.info("DELETE | {} | Finalizado deleteUserByUd | id: {}", V1_USER, id);
-        return noContent().build();
+        return ok().build();
     }
-
-
 }

@@ -11,6 +11,7 @@ import java.util.UUID;
 import br.com.fiap.gastrosphere.controllers.UserController;
 import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
 import org.slf4j.Logger;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import br.com.fiap.gastrosphere.dtos.UserDto;
@@ -40,21 +41,30 @@ public class UserService {
 	}
 
 	public void createUser(User user) {
-		this.userRepository.create(user);
+		Optional<Integer> result;
+		try {
+			result = this.userRepository.create(user);
+			if (result.isPresent() && result.get() != 1) {
+				logger.error("Erro ao criar usuário");
+				throw new UnprocessableEntityException("Erro ao criar usuário");
+			}
+		} catch (DataAccessException e) {
+			logger.error("Erro ao criar usuário", e);
+			throw new UnprocessableEntityException("Erro ao criar usuário");
+		}
 	}
 
 	public void updateUser(User user, UUID id) {
 		this.userRepository.update(user, id);
 	}
 
-	public Optional<Integer> deleteById(UUID id) {
-		Optional<Integer> result = this.userRepository.deleteById(id);
-		if(result.isPresent()) {
-			if (result.get().equals(0)) {
-				throw new ResourceNotFoundException("Usuário não encontrado");
-			}
-		}
-		return result;
+	public void deleteById(UUID id) {
+		Optional<Integer> result;
+		 result = this.userRepository.deleteById(id);
+		 if(result.isPresent() && result.get() != 1) {
+			 logger.error("Usuário não encontrado");
+			 throw new ResourceNotFoundException("Usuário não encontrado");
+		 }
 	}
 
 	private void uuidValidator(UUID id) {
