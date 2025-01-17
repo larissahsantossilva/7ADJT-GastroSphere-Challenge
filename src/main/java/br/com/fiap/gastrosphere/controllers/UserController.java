@@ -67,8 +67,12 @@ public class UserController {
     public ResponseEntity<Optional<UserDto>> findUserById(@PathVariable("id") UUID id) {
         logger.info("GET | {} | Iniciado findUserById | id: {}", V1_USER, id);
         var user = userService.findById(id);
-        logger.info("GET | {} | Finalizado findUserByUd | id: {}", V1_USER, id);
-        return ok(user);
+        if(user.isPresent()){
+            logger.info("GET | {} | Finalizado findUserById | id: {}", V1_USER, id);
+            return ok(user);
+        }
+        logger.info("GET | {} | Sem retorno", V1_USER);
+        return status(HttpStatus.NO_CONTENT).build();
     }
 
     @Operation(
@@ -102,21 +106,6 @@ public class UserController {
     }
 
     @Operation(
-            description = "Exclui usuário por id.",
-            summary = "Exclui usuário por id.",
-            responses = {
-                    @ApiResponse(description = "OK", responseCode = "200")
-            }
-    )
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUserById(@PathVariable("id") UUID id) {
-        logger.info("DELETE | {} | Iniciado deleteUserById | id: {}", V1_USER, id);
-        userService.deleteById(id);
-        logger.info("DELETE | {} | Finalizado deleteUserByUd | id: {}", V1_USER, id);
-        return noContent().build();
-    }
-
-    @Operation(
             description = "Troca a senha de um usuário.",
             summary = "Troca a senha do usuário.",
             responses = {
@@ -143,5 +132,21 @@ public class UserController {
             return status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
+    @Operation(
+            description = "Exclui usuário por id.",
+            summary = "Exclui usuário por id.",
+            responses = {
+                    @ApiResponse(description = "OK", responseCode = "200")
+            }
+    )
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUserById(@PathVariable("id") UUID id) {
+        logger.info("DELETE | {} | Iniciado deleteUserById | id: {}", V1_USER, id);
+        userService.deleteById(id);
+        logger.info("DELETE | {} | Finalizado deleteUserByUd | id: {}", V1_USER, id);
+        return noContent().build();
+    }
+
 
 }

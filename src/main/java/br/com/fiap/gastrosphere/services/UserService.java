@@ -32,7 +32,7 @@ public class UserService {
 
 	public Optional<UserDto> findById(UUID id) {
         uuidValidator(id);
-		return ofNullable(this.userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Usuário não encontrado")));
+		return this.userRepository.findById(id);
 	}
 
 	public void createUser(User user) {
