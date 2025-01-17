@@ -15,7 +15,7 @@ public interface UserRepository {
 
     Optional<Integer> create(User user);
 
-    Integer update(User user, UUID id);
+    Optional<Integer> update(User user, UUID id);
 
     Optional<Integer> deleteById(UUID id);
 

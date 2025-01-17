@@ -55,7 +55,17 @@ public class UserService {
 	}
 
 	public void updateUser(User user, UUID id) {
-		this.userRepository.update(user, id);
+		Optional<Integer> result;
+		try {
+			result = this.userRepository.update(user, id);
+			if (result.isPresent() && result.get() != 1) {
+				logger.error("Erro ao alterar usuário");
+				throw new UnprocessableEntityException("Erro ao alterar usuário");
+			}
+		} catch (DataAccessException e) {
+			logger.error("Erro ao criar alterar", e);
+			throw new UnprocessableEntityException("Erro ao alterar usuário");
+		}
 	}
 
 	public void deleteById(UUID id) {

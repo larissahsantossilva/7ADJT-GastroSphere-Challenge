@@ -117,8 +117,8 @@ public class UserRepositoryImp implements UserRepository {
 	}
 
 	@Override
-	public Integer update(User user, UUID id) {
-		return this.jdbcClient.sql("UPDATE gastrosphere.users " +
+	public Optional<Integer> update(User user, UUID id) {
+		return Optional.of(this.jdbcClient.sql("UPDATE gastrosphere.users " +
 						"SET name = :name, email = :email, login = :login, password = :password, user_type = :user_type, " +
 						"document = :document, address_id = :address_id, address_number = :address_number, address_complement = :address_complement, " +
 						"last_modified_at = :last_modified_at " +
@@ -134,7 +134,7 @@ public class UserRepositoryImp implements UserRepository {
 				.param("address_number", user.getAddressNumber())
 				.param("address_complement", user.getAddressComplement())
 				.param("last_modified_at", LocalDate.now())
-				.update();
+			.update());
 	}
 
 	private UserDto buildUser(ResultSet rs, int rowNum) throws SQLException {
