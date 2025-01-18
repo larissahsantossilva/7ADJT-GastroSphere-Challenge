@@ -1,11 +1,11 @@
-package br.com.fiap.gastrosphere.dtos;
+package br.com.fiap.gastrosphere.dtos.responses;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
 import br.com.fiap.gastrosphere.entities.Address;
 
-public record UserResponse(
+public record UserBodyResponse(
 		UUID id,
 		String name,
 		String email,

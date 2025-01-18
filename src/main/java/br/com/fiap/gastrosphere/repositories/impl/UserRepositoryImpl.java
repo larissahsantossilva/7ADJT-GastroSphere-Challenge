@@ -1,4 +1,4 @@
-package br.com.fiap.gastrosphere.repositories;
+package br.com.fiap.gastrosphere.repositories.impl;
 
 import static java.util.UUID.fromString;
 
@@ -9,24 +9,25 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import br.com.fiap.gastrosphere.repositories.UserRepository;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
-import br.com.fiap.gastrosphere.dtos.UserResponse;
+import br.com.fiap.gastrosphere.dtos.responses.UserBodyResponse;
 import br.com.fiap.gastrosphere.entities.Address;
 import br.com.fiap.gastrosphere.entities.User;
 
 @Repository
-public class UserRepositoryImp implements UserRepository {
+public class UserRepositoryImpl implements UserRepository {
 
 	private final JdbcClient jdbcClient;
 
-	public UserRepositoryImp(JdbcClient jdbcClient) {
+	public UserRepositoryImpl(JdbcClient jdbcClient) {
 		this.jdbcClient = jdbcClient;
 	}
 
 	@Override
-	public List<UserResponse> findAll(int size, int offset) {
+	public List<UserBodyResponse> findAll(int size, int offset) {
 		return this.jdbcClient.sql(""" 
 			SELECT
 				u.id AS user_id,
@@ -57,7 +58,7 @@ public class UserRepositoryImp implements UserRepository {
 	}
 
 	@Override
-	public Optional<UserResponse> findById(UUID id) {
+	public Optional<UserBodyResponse> findById(UUID id) {
 		return this.jdbcClient
 				.sql("""
 						SELECT
@@ -89,7 +90,7 @@ public class UserRepositoryImp implements UserRepository {
 	}
 
 	@Override
-	public Optional<UserResponse> findByAddressId(UUID id) {
+	public Optional<UserBodyResponse> findByAddressId(UUID id) {
 		return this.jdbcClient
 				.sql("""
 						SELECT
@@ -169,8 +170,8 @@ public class UserRepositoryImp implements UserRepository {
 			.update());
 	}
 
-	private UserResponse buildUser(ResultSet rs, int rowNum) throws SQLException {
-		UserResponse user = new UserResponse(
+	private UserBodyResponse buildUser(ResultSet rs, int rowNum) throws SQLException {
+		UserBodyResponse user = new UserBodyResponse(
 				fromString(rs.getString("user_id")),
 				rs.getString("name"), 
 				rs.getString("email"),

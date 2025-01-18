@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import br.com.fiap.gastrosphere.dtos.AddressRequest;
+import br.com.fiap.gastrosphere.dtos.requests.AddressBodyRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,7 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import br.com.fiap.gastrosphere.entities.Address;
-import br.com.fiap.gastrosphere.services.AddressService;
+import br.com.fiap.gastrosphere.services.AddressServiceImpl;
 
 @RestController
 @RequestMapping(AddressController.V1_ADDRESS)
@@ -31,9 +31,9 @@ public class AddressController {
 
     static final String V1_ADDRESS = "/api/v1/addresses";
 	private static final Logger logger = getLogger(AddressController.class);
-    private final AddressService addressService;
+    private final AddressServiceImpl addressService;
 
-    public AddressController(AddressService addressService) {
+    public AddressController(AddressServiceImpl addressService) {
         this.addressService = addressService;
     }
 
@@ -91,7 +91,7 @@ public class AddressController {
         }
     )
     @PostMapping
-    public ResponseEntity<String> createAddress(@Valid @RequestBody AddressRequest addressDto) {
+    public ResponseEntity<String> createAddress(@Valid @RequestBody AddressBodyRequest addressDto) {
         logger.info("POST | {} | Iniciado createAddress. ", V1_ADDRESS);
 
         logger.info("addressDto.country() {}", addressDto.getCountry());
@@ -117,7 +117,7 @@ public class AddressController {
         }
     )
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateAddress(@PathVariable("id") UUID id, @Valid @RequestBody AddressRequest addressDto) {
+    public ResponseEntity<String> updateAddress(@PathVariable("id") UUID id, @Valid @RequestBody AddressBodyRequest addressDto) {
         logger.info("PUT | {} | Iniciado updateAddress | Id: {} | Dados: {}", V1_ADDRESS, id, addressDto);
 
         Address address = convertToAddress(addressDto);

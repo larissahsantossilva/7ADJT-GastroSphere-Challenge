@@ -1,6 +1,6 @@
 package br.com.fiap.gastrosphere.services;
 
-import br.com.fiap.gastrosphere.dtos.UserResponse;
+import br.com.fiap.gastrosphere.dtos.responses.UserBodyResponse;
 import br.com.fiap.gastrosphere.entities.Address;
 import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
 import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
@@ -19,12 +19,12 @@ import static br.com.fiap.gastrosphere.utils.GastroSphereUtils.uuidValidator;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @Service
-public class AddressService {
-    private static final Logger logger = getLogger(AddressService.class);
+public class AddressServiceImpl {
+    private static final Logger logger = getLogger(AddressServiceImpl.class);
     private final AddressRepository addressRepository;
     private final UserRepository userRepository;
 
-    public AddressService(AddressRepository addressRepository, UserRepository userRepository) {
+    public AddressServiceImpl(AddressRepository addressRepository, UserRepository userRepository) {
         this.addressRepository = addressRepository;
         this.userRepository = userRepository;
     }
@@ -73,7 +73,7 @@ public class AddressService {
 
     public void deleteAddressById(UUID id) {
         Optional<Integer> result;
-        Optional<UserResponse> user = this.userRepository.findByAddressId(id);
+        Optional<UserBodyResponse> user = this.userRepository.findByAddressId(id);
         if(user.isPresent()){
             logger.error(ENDERECO_ASSOCIADO_A_USUARIO);
             throw new UnprocessableEntityException(ENDERECO_ASSOCIADO_A_USUARIO);

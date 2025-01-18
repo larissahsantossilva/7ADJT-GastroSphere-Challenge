@@ -1,4 +1,4 @@
-package br.com.fiap.gastrosphere.dtos;
+package br.com.fiap.gastrosphere.dtos.requests;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
@@ -15,7 +14,7 @@ import java.util.UUID;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRequest {
+public class UserBodyRequest {
     @Schema(description = "Nome do usuário.")
     @NotNull(message = "Nome do usuário não pode ser nulo.")
     @NotBlank(message = "Nome do usuário não pode ser vazio.")

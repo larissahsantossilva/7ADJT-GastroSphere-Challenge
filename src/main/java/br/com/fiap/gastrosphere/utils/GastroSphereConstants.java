@@ -16,7 +16,6 @@ public class GastroSphereConstants {
     public static final String HTTP_STATUS_CODE_404 = "404";
     public static final String HTTP_STATUS_CODE_422 = "422";
 
-    public static final String SENHA_ATUALIZADA_COM_SUCESSO = "Senha atualizada com sucesso.";
     public static final String SENHA_ANTIGA_INCORRETA = "Senha antiga incorreta.";
     public static final String SENHA_NOVA_DEVE_SER_DIFERENTE = "Senha nova deve ser diferente.";
     public static final String ERRO_AO_ATUALIZAR_SENHA = "Erro ao atualizar senha.";

@@ -1,4 +1,4 @@
-package br.com.fiap.gastrosphere.dtos;
+package br.com.fiap.gastrosphere.dtos.requests;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -12,7 +12,7 @@ import lombok.*;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddressRequest {
+public class AddressBodyRequest {
 
     @Schema(description = "País do endereço.")
     @NotNull(message = "País do endereço não pode ser nulo.")
