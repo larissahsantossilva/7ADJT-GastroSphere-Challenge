@@ -36,5 +36,5 @@ public class GastroSphereConstants {
 
     public static final String ID_USUARIO_INVALIDO = "ID de usuário inválido.";
 
-
+    public static final String ENDERECO_ASSOCIADO_A_USUARIO = "Endereço associado a usuário.";
 }

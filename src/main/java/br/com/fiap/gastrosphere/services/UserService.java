@@ -29,12 +29,18 @@ public class UserService {
 
 	public List<UserDto> findAllUsers(int page, int size) {
 		int offset = (page - 1) * size;
+		logger.info("size {}, offset {}", size, offset);
 		return this.userRepository.findAll(size, offset);
 	}
 
 	public Optional<UserDto> findById(UUID id) {
         uuidValidator(id);
 		return this.userRepository.findById(id);
+	}
+
+	public Optional<UserDto> findByAddressId(UUID id) {
+		uuidValidator(id);
+		return this.userRepository.findByAddressId(id);
 	}
 
 	public void createUser(User user) {

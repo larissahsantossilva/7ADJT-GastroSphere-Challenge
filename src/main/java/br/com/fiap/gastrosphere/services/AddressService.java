@@ -1,9 +1,11 @@
 package br.com.fiap.gastrosphere.services;
 
+import br.com.fiap.gastrosphere.dtos.UserDto;
 import br.com.fiap.gastrosphere.entities.Address;
 import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
 import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
 import br.com.fiap.gastrosphere.repositories.AddressRepository;
+import br.com.fiap.gastrosphere.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -20,9 +22,11 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class AddressService {
     private static final Logger logger = getLogger(AddressService.class);
     private final AddressRepository addressRepository;
+    private final UserRepository userRepository;
 
-    public AddressService(AddressRepository addressRepository) {
+    public AddressService(AddressRepository addressRepository, UserRepository userRepository) {
         this.addressRepository = addressRepository;
+        this.userRepository = userRepository;
     }
 
     public List<Address> findAllAddresses(int page, int size) {
@@ -69,9 +73,13 @@ public class AddressService {
 
     public void deleteAddressById(UUID id) {
         Optional<Integer> result;
+        Optional<UserDto> user = this.userRepository.findByAddressId(id);
+        if(user.isPresent()){
+            logger.error(ENDERECO_ASSOCIADO_A_USUARIO);
+            throw new UnprocessableEntityException(ENDERECO_ASSOCIADO_A_USUARIO);
+        }
         try {
             result = this.addressRepository.deleteById(id);
-            logger.info("Result " + result);
             if (result.isPresent() && result.get() != 1) {
                 throw new ResourceNotFoundException(ENDERECO_NAO_ENCONTRADO);
             }
