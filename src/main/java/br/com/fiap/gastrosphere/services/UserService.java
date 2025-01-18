@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
-import br.com.fiap.gastrosphere.dtos.UserDto;
+import br.com.fiap.gastrosphere.dtos.UserDTO1;
 import br.com.fiap.gastrosphere.entities.User;
 import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
 import br.com.fiap.gastrosphere.repositories.UserRepository;
@@ -27,18 +27,18 @@ public class UserService {
 		this.userRepository = userRepository;
 	}
 
-	public List<UserDto> findAllUsers(int page, int size) {
+	public List<UserDTO1> findAllUsers(int page, int size) {
 		int offset = (page - 1) * size;
 		logger.info("size {}, offset {}", size, offset);
 		return this.userRepository.findAll(size, offset);
 	}
 
-	public Optional<UserDto> findById(UUID id) {
+	public Optional<UserDTO1> findById(UUID id) {
         uuidValidator(id);
 		return this.userRepository.findById(id);
 	}
 
-	public Optional<UserDto> findByAddressId(UUID id) {
+	public Optional<UserDTO1> findByAddressId(UUID id) {
 		uuidValidator(id);
 		return this.userRepository.findByAddressId(id);
 	}
@@ -73,7 +73,7 @@ public class UserService {
 
 	public void updatePassword(UUID id, String oldPassword, String newPassword) {
 		uuidValidator(id);
-		UserDto userDto = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(USUARIO_NAO_ENCONTRADO));
+		UserDTO1 userDto = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(USUARIO_NAO_ENCONTRADO));
 		if (!oldPassword.equals(userDto.password())) {
 			logger.error(SENHA_ANTIGA_INCORRETA);
 			throw new IllegalArgumentException(SENHA_ANTIGA_INCORRETA);

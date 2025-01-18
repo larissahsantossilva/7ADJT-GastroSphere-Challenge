@@ -11,12 +11,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import br.com.fiap.gastrosphere.dtos.AddressDTO;
+import br.com.fiap.gastrosphere.dtos.AddressRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -92,7 +91,7 @@ public class AddressController {
         }
     )
     @PostMapping
-    public ResponseEntity<String> createAddress(@Valid @RequestBody AddressDTO addressDto) {
+    public ResponseEntity<String> createAddress(@Valid @RequestBody AddressRequest addressDto) {
         logger.info("POST | {} | Iniciado createAddress. ", V1_ADDRESS);
 
         logger.info("addressDto.country() {}", addressDto.getCountry());
@@ -118,7 +117,7 @@ public class AddressController {
         }
     )
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateAddress(@PathVariable("id") UUID id, @Valid @RequestBody AddressDTO addressDto) {
+    public ResponseEntity<String> updateAddress(@PathVariable("id") UUID id, @Valid @RequestBody AddressRequest addressDto) {
         logger.info("PUT | {} | Iniciado updateAddress | Id: {} | Dados: {}", V1_ADDRESS, id, addressDto);
 
         Address address = convertToAddress(addressDto);

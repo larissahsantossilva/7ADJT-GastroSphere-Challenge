@@ -1,6 +1,7 @@
 package br.com.fiap.gastrosphere.controllers;
 
 import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.*;
+import static br.com.fiap.gastrosphere.utils.GastroSphereUtils.convertToUser;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.ResponseEntity.*;
 
@@ -8,6 +9,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import br.com.fiap.gastrosphere.dtos.UserDTO1;
+import br.com.fiap.gastrosphere.dtos.UserRequest;
+import br.com.fiap.gastrosphere.utils.GastroSphereUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,7 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import br.com.fiap.gastrosphere.dtos.LoginUserDto;
-import br.com.fiap.gastrosphere.dtos.UserDto;
 import br.com.fiap.gastrosphere.entities.User;
 import br.com.fiap.gastrosphere.services.UserService;
 
@@ -43,8 +46,8 @@ public class UserController {
         }
     )
     @GetMapping
-    public ResponseEntity<List<UserDto>> findAllUsers(@RequestParam(value = "page", defaultValue = "1") int page,
-                                                      @RequestParam(value = "size", defaultValue = "10") int size) {
+    public ResponseEntity<List<UserDTO1>> findAllUsers(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                       @RequestParam(value = "size", defaultValue = "10") int size) {
         logger.info("GET | {} | Iniciado findAllUsers", V1_USER);
         var users = this.userService.findAllUsers(page, size);
         logger.info("GET | {} | Finalizado findAllUsers", V1_USER);
@@ -60,7 +63,7 @@ public class UserController {
         }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<UserDto>> findUserById(@PathVariable("id") UUID id) {
+    public ResponseEntity<Optional<UserDTO1>> findUserById(@PathVariable("id") UUID id) {
         logger.info("GET | {} | Iniciado findUserById | id: {}", V1_USER, id);
         var user = userService.findById(id);
         if(user.isPresent()){
@@ -80,9 +83,9 @@ public class UserController {
         }
     )
     @PostMapping
-    public ResponseEntity<String> createUser(@RequestBody User user) {
-        logger.info("POST | {} | Iniciado createUser | User: {}", V1_USER, user.getDocument());
-        userService.createUser(user);
+    public ResponseEntity<String> createUser(@Valid @RequestBody UserRequest userRequestBody) {
+        logger.info("POST | {} | Iniciado createUser | User: {}", V1_USER, userRequestBody.getDocument());
+        userService.createUser(convertToUser(userRequestBody));
         logger.info("POST | {} | Finalizado createUser", V1_USER);
         return status(201).body(USUARIO_CRIADO_COM_SUCESSO);
     }
@@ -98,9 +101,9 @@ public class UserController {
     )
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateUser(@PathVariable("id") UUID id,
-                                           @RequestBody User user) {
+                                           @Valid @RequestBody UserRequest userRequestBody) {
         logger.info("PUT | {} | Iniciado updateUser | id: {}", V1_USER, id);
-        userService.updateUser(user, id);
+        userService.updateUser(convertToUser(userRequestBody), id);
         logger.info("PUT | {} | Finalizado updateUser", V1_USER);
         return status(HttpStatus.OK).build();
     }

@@ -12,7 +12,7 @@ import lombok.*;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddressDTO {
+public class AddressRequest {
 
     @Schema(description = "País do endereço.")
     @NotNull(message = "País do endereço não pode ser nulo.")

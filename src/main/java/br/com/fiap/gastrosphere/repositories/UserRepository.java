@@ -4,16 +4,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import br.com.fiap.gastrosphere.dtos.UserDto;
+import br.com.fiap.gastrosphere.dtos.UserDTO1;
 import br.com.fiap.gastrosphere.entities.User;
 
 public interface UserRepository {
 	
-    List<UserDto> findAll(int size, int offset);
+    List<UserDTO1> findAll(int size, int offset);
 
-    Optional<UserDto> findById(UUID id);
+    Optional<UserDTO1> findById(UUID id);
 
-    Optional<UserDto> findByAddressId(UUID id);
+    Optional<UserDTO1> findByAddressId(UUID id);
 
     Optional<Integer> create(User user);
 

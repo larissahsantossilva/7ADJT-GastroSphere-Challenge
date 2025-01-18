@@ -1,7 +1,9 @@
 package br.com.fiap.gastrosphere.utils;
 
-import br.com.fiap.gastrosphere.dtos.AddressDTO;
+import br.com.fiap.gastrosphere.dtos.AddressRequest;
+import br.com.fiap.gastrosphere.dtos.UserRequest;
 import br.com.fiap.gastrosphere.entities.Address;
+import br.com.fiap.gastrosphere.entities.User;
 import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 
@@ -18,8 +20,12 @@ public class GastroSphereUtils {
             throw new ResourceNotFoundException(ID_USUARIO_INVALIDO);
         }
     }
-    public static Address convertToAddress(AddressDTO addressDto) {
+    public static Address convertToAddress(AddressRequest addressDto) {
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(addressDto, Address.class);
+    }
+    public static User convertToUser(UserRequest userRequest) {
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(userRequest, User.class);
     }
 }
