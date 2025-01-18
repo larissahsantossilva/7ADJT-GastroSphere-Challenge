@@ -2,6 +2,7 @@ package br.com.fiap.gastrosphere.controllers;
 
 import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.*;
 import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.HTTP_STATUS_CODE_204;
+import static br.com.fiap.gastrosphere.utils.GastroSphereUtils.convertToAddress;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.http.ResponseEntity.status;
@@ -10,9 +11,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import br.com.fiap.gastrosphere.dtos.AddressDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +31,7 @@ import br.com.fiap.gastrosphere.services.AddressService;
 public class AddressController {
 
     static final String V1_ADDRESS = "/api/v1/addresses";
-
 	private static final Logger logger = getLogger(AddressController.class);
-
     private final AddressService addressService;
 
     public AddressController(AddressService addressService) {
@@ -90,8 +92,17 @@ public class AddressController {
         }
     )
     @PostMapping
-    public ResponseEntity<String> createAddress(@RequestBody Address address) {
-        logger.info("POST | {} | Iniciado createAddress ", V1_ADDRESS);
+    public ResponseEntity<String> createAddress(@Valid @RequestBody AddressDTO addressDto) {
+        logger.info("POST | {} | Iniciado createAddress. ", V1_ADDRESS);
+
+        logger.info("addressDto.country() {}", addressDto.getCountry());
+        logger.info("addressDto.state() {}", addressDto.getState());
+        logger.info("addressDto.city() {}", addressDto.getCity());
+        logger.info("addressDto.zipCode() {}", addressDto.getZipCode());
+        logger.info("addressDto.street() {}", addressDto.getStreet());
+
+        Address address = convertToAddress(addressDto);
+
         addressService.createAddress(address);
         logger.info("POST | {} | Finalizado createAddress ", V1_ADDRESS);
         return status(201).body(ENDERECO_CRIADO_COM_SUCESSO);
@@ -107,8 +118,10 @@ public class AddressController {
         }
     )
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateAddress(@PathVariable("id") UUID id, @RequestBody Address address) {
-        logger.info("PUT | {} | Iniciado updateAddress | Id: {} | Dados: {}", V1_ADDRESS, id, address);
+    public ResponseEntity<String> updateAddress(@PathVariable("id") UUID id, @Valid @RequestBody AddressDTO addressDto) {
+        logger.info("PUT | {} | Iniciado updateAddress | Id: {} | Dados: {}", V1_ADDRESS, id, addressDto);
+
+        Address address = convertToAddress(addressDto);
         addressService.updateAddress(id, address);
         logger.info("PUT | {} | Finalizado updateAddress | Id: {}", V1_ADDRESS, id);
         return ok("Endereço atualizado com sucesso");
