@@ -13,6 +13,8 @@ import java.util.UUID;
 
 import br.com.fiap.gastrosphere.dtos.requests.AddressBodyRequest;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -41,7 +43,11 @@ public class AddressController {
         description = "Busca todos os endereços de forma paginada.",
         summary = "Busca todos os endereços de forma paginada.",
         responses = {
-            @ApiResponse(description = OK, responseCode = HTTP_STATUS_CODE_200)
+            @ApiResponse(
+                description = OK,
+                responseCode = HTTP_STATUS_CODE_200,
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = Address.class))
+            )
         }
     )
     @GetMapping
@@ -66,8 +72,16 @@ public class AddressController {
         description = "Busca endereço por id.",
         summary = "Busca endereço por id.",
         responses = {
-            @ApiResponse(description = OK, responseCode = HTTP_STATUS_CODE_200),
-            @ApiResponse(description = NO_CONTENT, responseCode = HTTP_STATUS_CODE_204)
+            @ApiResponse(
+                description = OK,
+                responseCode = HTTP_STATUS_CODE_200,
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = Address.class))
+            ),
+            @ApiResponse(
+                description = NO_CONTENT,
+                responseCode = HTTP_STATUS_CODE_204,
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))
+            )
         }
     )
     @GetMapping("/{id}")
@@ -86,23 +100,22 @@ public class AddressController {
         description = "Cria endereço.",
         summary = "Cria endereço.",
         responses = {
-            @ApiResponse(description = ENDERECO_CRIADO_COM_SUCESSO, responseCode = HTTP_STATUS_CODE_201),
-            @ApiResponse(description = ERRO_AO_CRIAR_ENDERECO, responseCode = HTTP_STATUS_CODE_422),
+            @ApiResponse(
+                description = ENDERECO_CRIADO_COM_SUCESSO,
+                responseCode = HTTP_STATUS_CODE_201,
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+            ),
+            @ApiResponse(
+                description = ERRO_AO_CRIAR_ENDERECO,
+                responseCode = HTTP_STATUS_CODE_422,
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+            )
         }
     )
     @PostMapping
     public ResponseEntity<String> createAddress(@Valid @RequestBody AddressBodyRequest addressDto) {
         logger.info("POST | {} | Iniciado createAddress. ", V1_ADDRESS);
-
-        logger.info("addressDto.country() {}", addressDto.getCountry());
-        logger.info("addressDto.state() {}", addressDto.getState());
-        logger.info("addressDto.city() {}", addressDto.getCity());
-        logger.info("addressDto.zipCode() {}", addressDto.getZipCode());
-        logger.info("addressDto.street() {}", addressDto.getStreet());
-
-        Address address = convertToAddress(addressDto);
-
-        addressService.createAddress(address);
+        addressService.createAddress(convertToAddress(addressDto));
         logger.info("POST | {} | Finalizado createAddress ", V1_ADDRESS);
         return status(201).body(ENDERECO_CRIADO_COM_SUCESSO);
     }
@@ -111,17 +124,27 @@ public class AddressController {
         description = "Atualiza endereço por id.",
         summary = "Atualiza endereço por id.",
         responses = {
-            @ApiResponse(description = OK, responseCode = HTTP_STATUS_CODE_200),
-            @ApiResponse(description = ENDERECO_NAO_ENCONTRADO, responseCode = HTTP_STATUS_CODE_404),
-            @ApiResponse(description = ERRO_AO_ALTERAR_ENDERECO, responseCode = HTTP_STATUS_CODE_422),
+            @ApiResponse(
+                description = OK,
+                responseCode = HTTP_STATUS_CODE_200,
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))
+            ),
+            @ApiResponse(
+                description = ENDERECO_NAO_ENCONTRADO,
+                responseCode = HTTP_STATUS_CODE_404,
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+            ),
+            @ApiResponse(
+                description = ERRO_AO_ALTERAR_ENDERECO,
+                responseCode = HTTP_STATUS_CODE_422,
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+            )
         }
     )
     @PutMapping("/{id}")
     public ResponseEntity<String> updateAddress(@PathVariable("id") UUID id, @Valid @RequestBody AddressBodyRequest addressDto) {
         logger.info("PUT | {} | Iniciado updateAddress | Id: {} | Dados: {}", V1_ADDRESS, id, addressDto);
-
-        Address address = convertToAddress(addressDto);
-        addressService.updateAddress(id, address);
+        addressService.updateAddress(id, convertToAddress(addressDto));
         logger.info("PUT | {} | Finalizado updateAddress | Id: {}", V1_ADDRESS, id);
         return ok("Endereço atualizado com sucesso");
     }
@@ -130,8 +153,16 @@ public class AddressController {
         description = "Exclui endereço por id.",
         summary = "Exclui endereço por id.",
         responses = {
-            @ApiResponse(description = OK, responseCode = HTTP_STATUS_CODE_200),
-            @ApiResponse(description = ENDERECO_NAO_ENCONTRADO, responseCode = HTTP_STATUS_CODE_404)
+            @ApiResponse(
+                description = OK,
+                responseCode = HTTP_STATUS_CODE_200,
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))
+            ),
+            @ApiResponse(
+                description = ENDERECO_NAO_ENCONTRADO,
+                responseCode = HTTP_STATUS_CODE_404,
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+            )
         }
     )
     @DeleteMapping("/{id}")
