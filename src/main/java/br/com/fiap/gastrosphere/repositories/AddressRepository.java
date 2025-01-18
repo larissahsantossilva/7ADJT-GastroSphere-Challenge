@@ -16,7 +16,7 @@ public interface AddressRepository {
 
     Optional<Integer> create(Address address);
 
-    Optional<Integer> update(UUID id, Address address);
+    Optional<Integer> updateById(UUID id, Address address);
 
-    Integer delete(UUID id);
+    Optional<Integer> deleteById(UUID id);
 }

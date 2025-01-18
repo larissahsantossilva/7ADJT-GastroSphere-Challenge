@@ -2,15 +2,12 @@ package br.com.fiap.gastrosphere.services;
 
 import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.*;
 import static br.com.fiap.gastrosphere.utils.GastroSphereUtils.uuidValidator;
-import static java.util.Optional.ofNullable;
-import static java.util.regex.Pattern.matches;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import br.com.fiap.gastrosphere.controllers.UserController;
 import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
 import org.slf4j.Logger;
 import org.springframework.dao.DataAccessException;
@@ -86,12 +83,17 @@ public class UserService {
 		}
 	}
 
-	public void deleteById(UUID id) {
+	public void deleteUserById(UUID id) {
 		Optional<Integer> result;
-		 result = this.userRepository.deleteById(id);
-		 if(result.isPresent() && result.get() != 1) {
-			 logger.error(USUARIO_NAO_ENCONTRADO);
-			 throw new ResourceNotFoundException(USUARIO_NAO_ENCONTRADO);
+		try {
+			result = this.userRepository.deleteById(id);
+			if (result.isPresent() && result.get() != 1) {
+				logger.error(USUARIO_NAO_ENCONTRADO);
+				throw new ResourceNotFoundException(USUARIO_NAO_ENCONTRADO);
+			}
+		} catch (DataAccessException e) {
+			 logger.error(ERRO_AO_DELETAR_USUARIO, e);
+			 throw new UnprocessableEntityException(ERRO_AO_DELETAR_USUARIO);
 		 }
 	}
 

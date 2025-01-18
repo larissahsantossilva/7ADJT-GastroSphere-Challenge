@@ -4,6 +4,7 @@ import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
 
 import java.util.UUID;
 
+import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.ID_USUARIO_INVALIDO;
 import static java.util.regex.Pattern.matches;
 
 public class GastroSphereUtils {
@@ -11,7 +12,7 @@ public class GastroSphereUtils {
 
     public static void uuidValidator(UUID id) {
         if (!matches(REGEX_UUID, id.toString())) {
-            throw new ResourceNotFoundException("ID de usuário inválido");
+            throw new ResourceNotFoundException(ID_USUARIO_INVALIDO);
         }
     }
 

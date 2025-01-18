@@ -47,7 +47,7 @@ public class UserRepositoryImp implements UserRepository {
 				a.zip_code,
 				a.street
 				FROM gastrosphere.users u
-				INNER JOIN gastrosphere.addresses a
+				LEFT JOIN gastrosphere.addresses a
 				ON u.address_id  = a.id
 				LIMIT :size OFFSET :offset
 			""")
@@ -79,7 +79,7 @@ public class UserRepositoryImp implements UserRepository {
 						a.zip_code,
 						a.street
 						FROM gastrosphere.users u
-						INNER JOIN gastrosphere.addresses a
+						LEFT JOIN gastrosphere.addresses a
 						ON u.address_id  = a.id
 					WHERE u.id = :id
 					    		""")

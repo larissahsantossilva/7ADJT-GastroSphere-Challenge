@@ -92,7 +92,8 @@ public class UserController {
         summary = "Atualiza usuário por id.",
         responses = {
             @ApiResponse(description = OK, responseCode = HTTP_STATUS_CODE_200),
-            @ApiResponse(description = ERRO_AO_ALTERAR_USUARIO, responseCode = HTTP_STATUS_CODE_422),
+            @ApiResponse(description = USUARIO_NAO_ENCONTRADO, responseCode = HTTP_STATUS_CODE_404),
+            @ApiResponse(description = ERRO_AO_ALTERAR_USUARIO, responseCode = HTTP_STATUS_CODE_422)
         }
     )
     @PutMapping("/{id}")
@@ -135,7 +136,7 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUserById(@PathVariable("id") UUID id) {
         logger.info("DELETE | {} | Iniciado deleteUserById | id: {}", V1_USER, id);
-        userService.deleteById(id);
+        userService.deleteUserById(id);
         logger.info("DELETE | {} | Finalizado deleteUserByUd | id: {}", V1_USER, id);
         return ok().build();
     }

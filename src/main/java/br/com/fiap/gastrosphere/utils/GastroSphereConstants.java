@@ -30,4 +30,11 @@ public class GastroSphereConstants {
 
     public static final String ERRO_AO_ALTERAR_ENDERECO = "Erro ao alterar endereço.";
     public static final String ENDERECO_NAO_ENCONTRADO = "Endereço não encontrado.";
+
+    public static final String ERRO_AO_DELETAR_ENDERECO = "Erro ao deletar endereço.";
+    public static final String ERRO_AO_DELETAR_USUARIO = "Erro ao deletar usuário.";
+
+    public static final String ID_USUARIO_INVALIDO = "ID de usuário inválido.";
+
+
 }

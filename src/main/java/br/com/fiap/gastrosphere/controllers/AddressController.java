@@ -102,6 +102,7 @@ public class AddressController {
         summary = "Atualiza endereço por id.",
         responses = {
             @ApiResponse(description = OK, responseCode = HTTP_STATUS_CODE_200),
+            @ApiResponse(description = ENDERECO_NAO_ENCONTRADO, responseCode = HTTP_STATUS_CODE_404),
             @ApiResponse(description = ERRO_AO_ALTERAR_ENDERECO, responseCode = HTTP_STATUS_CODE_422),
         }
     )
@@ -117,14 +118,15 @@ public class AddressController {
         description = "Exclui endereço por id.",
         summary = "Exclui endereço por id.",
         responses = {
-            @ApiResponse(description = "OK", responseCode = "200") //avaliar content depois
+            @ApiResponse(description = OK, responseCode = HTTP_STATUS_CODE_200),
+            @ApiResponse(description = ENDERECO_NAO_ENCONTRADO, responseCode = HTTP_STATUS_CODE_404)
         }
     )
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteAddress(@PathVariable("id") UUID id) {
-    	logger.info("DELETE | {} | Iniciado deleteAddress | Id: {}", V1_ADDRESS, id);
-        addressService.deleteAddress(id);
-        logger.info("DELETE | {} | Finalizado deleteAddress | Id: {}", V1_ADDRESS, id);
-        return status(204).body("Endereço deletado com sucesso");
+    	logger.info("DELETE | {} | Iniciado deleteAddressById | Id: {}", V1_ADDRESS, id);
+        addressService.deleteAddressById(id);
+        logger.info("DELETE | {} | Finalizado deleteAddressById | Id: {}", V1_ADDRESS, id);
+        return ok().build();
     }
 }

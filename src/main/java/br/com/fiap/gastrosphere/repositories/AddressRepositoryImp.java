@@ -56,7 +56,7 @@ public class AddressRepositoryImp implements AddressRepository {
     }
 
     @Override
-    public Optional<Integer> update(UUID id, Address address) {
+    public Optional<Integer> updateById(UUID id, Address address) {
         return Optional.of(this.jdbcClient.sql("UPDATE gastrosphere.addresses SET country = :country, state = :state, city = :city, zip_code = :zipCode, street = :street WHERE id = :id")
                 .param("id", id)
                 .param("country", address.getCountry())
@@ -68,9 +68,9 @@ public class AddressRepositoryImp implements AddressRepository {
     }
 
     @Override
-    public Integer delete(UUID id) {
-        return this.jdbcClient.sql("DELETE FROM gastrosphere.addresses WHERE id = :id")
+    public Optional<Integer> deleteById(UUID id) {
+        return Optional.of(this.jdbcClient.sql("DELETE FROM gastrosphere.addresses WHERE id = :id")
                 .param("id", id)
-                .update();
+            .update());
     }
 }

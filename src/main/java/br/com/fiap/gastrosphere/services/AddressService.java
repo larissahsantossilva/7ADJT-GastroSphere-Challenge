@@ -13,7 +13,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.*;
-import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.ERRO_AO_ALTERAR_USUARIO;
 import static br.com.fiap.gastrosphere.utils.GastroSphereUtils.uuidValidator;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -57,7 +56,7 @@ public class AddressService {
     public void updateAddress(UUID id, Address address) {
         Optional<Integer> result;
         try {
-            result = this.addressRepository.update(id, address);
+            result = this.addressRepository.updateById(id, address);
             if (result.isPresent() && result.get() != 1) {
                 logger.error(ENDERECO_NAO_ENCONTRADO);
                 throw new ResourceNotFoundException(ENDERECO_NAO_ENCONTRADO);
@@ -68,10 +67,17 @@ public class AddressService {
         }
     }
 
-    public void deleteAddress(UUID id) {
-        var delete = this.addressRepository.delete(id);
-        if (delete == 0) {
-            throw new RuntimeException("Endereço não encontrado");
+    public void deleteAddressById(UUID id) {
+        Optional<Integer> result;
+        try {
+            result = this.addressRepository.deleteById(id);
+            logger.info("Result " + result);
+            if (result.isPresent() && result.get() != 1) {
+                throw new ResourceNotFoundException(ENDERECO_NAO_ENCONTRADO);
+            }
+        } catch (DataAccessException e) {
+            logger.error(ERRO_AO_DELETAR_ENDERECO, e);
+            throw new UnprocessableEntityException(ERRO_AO_DELETAR_ENDERECO);
         }
     }
 }
