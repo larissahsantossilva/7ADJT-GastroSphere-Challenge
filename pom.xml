@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>br.com.fiap.gastrosphere</groupId>
 	<artifactId>gastrosphere</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>gastrosphere</name>
 	<description>Este projeto foi desenvolvido como parte do Tech Challenge, com
 		o objetivo de unificar a administração de múltiplos estabelecimentos

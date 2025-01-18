@@ -1,12 +1,16 @@
 package br.com.fiap.gastrosphere.services;
 
-import static java.util.Optional.ofNullable;
-import static java.util.regex.Pattern.matches;
+import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.*;
+import static br.com.fiap.gastrosphere.utils.GastroSphereUtils.uuidValidator;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
+import org.slf4j.Logger;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import br.com.fiap.gastrosphere.dtos.UserDto;
@@ -16,9 +20,7 @@ import br.com.fiap.gastrosphere.repositories.UserRepository;
 
 @Service
 public class UserService {
-
-	private static final String REGEX_UUID = "^[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$";
-	
+	private static final Logger logger = getLogger(UserService.class);
 	private final UserRepository userRepository;
 
 	public UserService(UserRepository userRepository) {
@@ -27,58 +29,73 @@ public class UserService {
 
 	public List<UserDto> findAllUsers(int page, int size) {
 		int offset = (page - 1) * size;
-		return this.userRepository.findAll(size, offset) ;
+		return this.userRepository.findAll(size, offset);
 	}
 
 	public Optional<UserDto> findById(UUID id) {
         uuidValidator(id);
-		return ofNullable(this.userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Usuário não encontrado")));
+		return this.userRepository.findById(id);
 	}
 
 	public void createUser(User user) {
-		var create = this.userRepository.create(user);
-		if (create == null) {
-			throw new IllegalStateException("Erro ao criar usuário " + user.getDocument());
+		Optional<Integer> result;
+		try {
+			result = this.userRepository.create(user);
+			if (result.isPresent() && result.get() != 1) {
+				logger.error(ERRO_AO_CRIAR_USUARIO);
+				throw new UnprocessableEntityException(ERRO_AO_CRIAR_USUARIO);
+			}
+		} catch (DataAccessException e) {
+			logger.error(ERRO_AO_CRIAR_USUARIO, e);
+			throw new UnprocessableEntityException(ERRO_AO_CRIAR_USUARIO);
 		}
 	}
 
 	public void updateUser(User user, UUID id) {
-		var update = this.userRepository.update(user, id);
-		if (update == 0) {
-			throw new RuntimeException("Usuário não encontrado");
-		}
-	}
-
-	public Optional<Integer> deleteById(UUID id) {
-		Optional<Integer> result = this.userRepository.deleteById(id);
-		if(result.isPresent()) {
-			if (result.get().equals(0)) {
-				throw new ResourceNotFoundException("Usuário não encontrado");
+		Optional<Integer> result;
+		try {
+			result = this.userRepository.update(user, id);
+			if (result.isPresent() && result.get() != 1) {
+				logger.error(USUARIO_NAO_ENCONTRADO);
+				throw new ResourceNotFoundException(USUARIO_NAO_ENCONTRADO);
 			}
-		}
-		return result;
-	}
-
-	private void uuidValidator(UUID id) {
-	if (!matches(REGEX_UUID, id.toString())) {
-			throw new ResourceNotFoundException("ID de usuário inválido");
+		} catch (DataAccessException e) {
+			logger.error(ERRO_AO_ALTERAR_USUARIO, e);
+			throw new UnprocessableEntityException(ERRO_AO_ALTERAR_USUARIO);
 		}
 	}
 
 	public void updatePassword(UUID id, String oldPassword, String newPassword) {
 		uuidValidator(id);
-	
-		UserDto userDto = userRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
-	
+		UserDto userDto = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(USUARIO_NAO_ENCONTRADO));
 		if (!oldPassword.equals(userDto.password())) {
-			throw new IllegalArgumentException("Senha antiga incorreta.");
+			logger.error(SENHA_ANTIGA_INCORRETA);
+			throw new IllegalArgumentException(SENHA_ANTIGA_INCORRETA);
 		}
-	
-		int updatedRows = userRepository.updatePassword(id, newPassword);
-		if (updatedRows == 0) {
-			throw new RuntimeException("Erro ao atualizar a senha.");
+		if (newPassword.equals(userDto.password())) {
+			logger.error(SENHA_NOVA_DEVE_SER_DIFERENTE);
+			throw new IllegalArgumentException(SENHA_NOVA_DEVE_SER_DIFERENTE);
+		}
+		int result = userRepository.updatePassword(id, newPassword);
+		if (result == 0) {
+			logger.error(ERRO_AO_ATUALIZAR_SENHA);
+			throw new UnprocessableEntityException(ERRO_AO_ATUALIZAR_SENHA);
 		}
 	}
+
+	public void deleteUserById(UUID id) {
+		Optional<Integer> result;
+		try {
+			result = this.userRepository.deleteById(id);
+			if (result.isPresent() && result.get() != 1) {
+				logger.error(USUARIO_NAO_ENCONTRADO);
+				throw new ResourceNotFoundException(USUARIO_NAO_ENCONTRADO);
+			}
+		} catch (DataAccessException e) {
+			 logger.error(ERRO_AO_DELETAR_USUARIO, e);
+			 throw new UnprocessableEntityException(ERRO_AO_DELETAR_USUARIO);
+		 }
+	}
+
 
 }

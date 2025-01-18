@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import br.com.fiap.gastrosphere.dtos.IllegalArgumentDTO;
+import br.com.fiap.gastrosphere.dtos.UnprocessableEntityDTO;
+import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
+import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,11 +19,16 @@ import br.com.fiap.gastrosphere.dtos.ResourceNotFoundDTO;
 import br.com.fiap.gastrosphere.dtos.ValidationErrorDTO;
 import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 @ControllerAdvice
 public class ControllerExceptionHandler {
 
+	private static final Logger logger = getLogger(ControllerExceptionHandler.class);
+
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<ResourceNotFoundDTO> handlerResourceNotFoundException(ResourceNotFoundException e) {
+		logger.error("ResourceNotFoundException ", e);
 		var status = HttpStatus.NOT_FOUND;
 		return ResponseEntity.status(status.value()).body(new ResourceNotFoundDTO(e.getMessage(), status.value()));
 	}
@@ -41,4 +50,18 @@ public class ControllerExceptionHandler {
         }
         return ResponseEntity.internalServerError().body(new ResourceNotFoundDTO("Erro interno do servidor", 500));
     }
+
+	@ExceptionHandler(UnprocessableEntityException.class)
+	public ResponseEntity<UnprocessableEntityDTO> handlerUnprocessableEntityException(UnprocessableEntityException e) {
+		logger.error("UnprocessableEntityException ", e);
+		var status = HttpStatus.UNPROCESSABLE_ENTITY;
+		return ResponseEntity.status(status.value()).body(new UnprocessableEntityDTO(status.value(), e.getMessage()));
+	}
+
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<IllegalArgumentDTO> handlerIllegalArgumentException(IllegalArgumentException e) {
+		logger.error("IllegalArgumentException ", e);
+		var status = HttpStatus.BAD_REQUEST;
+		return ResponseEntity.status(status.value()).body(new IllegalArgumentDTO(status.value(), e.getMessage()));
+	}
 }

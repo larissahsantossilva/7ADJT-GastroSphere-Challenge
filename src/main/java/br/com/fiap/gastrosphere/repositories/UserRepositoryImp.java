@@ -47,7 +47,7 @@ public class UserRepositoryImp implements UserRepository {
 				a.zip_code,
 				a.street
 				FROM gastrosphere.users u
-				INNER JOIN gastrosphere.addresses a
+				LEFT JOIN gastrosphere.addresses a
 				ON u.address_id  = a.id
 				LIMIT :size OFFSET :offset
 			""")
@@ -79,7 +79,7 @@ public class UserRepositoryImp implements UserRepository {
 						a.zip_code,
 						a.street
 						FROM gastrosphere.users u
-						INNER JOIN gastrosphere.addresses a
+						LEFT JOIN gastrosphere.addresses a
 						ON u.address_id  = a.id
 					WHERE u.id = :id
 					    		""")
@@ -90,15 +90,15 @@ public class UserRepositoryImp implements UserRepository {
 
 	@Override
 	public Optional<Integer> deleteById(UUID id) {
-		int result = this.jdbcClient.sql("DELETE FROM gastrosphere.users WHERE id = :id")
+		 return Optional.of(this.jdbcClient.sql("DELETE FROM gastrosphere.users WHERE id = :id")
 				.param("id", id)
-				.update();
-		return Optional.of(result);
+			.update());
 	}
 
 	@Override
-	public Integer create(User user) {
-		return this.jdbcClient.sql("INSERT INTO gastrosphere.users " +
+	public Optional<Integer> create(User user) {
+		return Optional.of(
+			this.jdbcClient.sql("INSERT INTO gastrosphere.users " +
 						"(name, email, login, password, user_type, document, address_id, address_number, address_complement, created_at, last_modified_at) " +
 						"VALUES (:name, :email, :login, :password, :user_type, :document, :address_id, :address_number, :address_complement," +
 						":created_at, :last_modified_at)")
@@ -113,12 +113,12 @@ public class UserRepositoryImp implements UserRepository {
 				.param("address_complement", user.getAddressComplement())
 				.param("created_at", LocalDate.now())
 				.param("last_modified_at", LocalDate.now())
-				.update();
+			.update());
 	}
 
 	@Override
-	public Integer update(User user, UUID id) {
-		return this.jdbcClient.sql("UPDATE gastrosphere.users " +
+	public Optional<Integer> update(User user, UUID id) {
+		return Optional.of(this.jdbcClient.sql("UPDATE gastrosphere.users " +
 						"SET name = :name, email = :email, login = :login, password = :password, user_type = :user_type, " +
 						"document = :document, address_id = :address_id, address_number = :address_number, address_complement = :address_complement, " +
 						"last_modified_at = :last_modified_at " +
@@ -134,7 +134,7 @@ public class UserRepositoryImp implements UserRepository {
 				.param("address_number", user.getAddressNumber())
 				.param("address_complement", user.getAddressComplement())
 				.param("last_modified_at", LocalDate.now())
-				.update();
+			.update());
 	}
 
 	private UserDto buildUser(ResultSet rs, int rowNum) throws SQLException {

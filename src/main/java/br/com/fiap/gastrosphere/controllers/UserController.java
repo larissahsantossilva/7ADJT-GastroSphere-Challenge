@@ -1,9 +1,8 @@
 package br.com.fiap.gastrosphere.controllers;
 
+import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.*;
 import static org.slf4j.LoggerFactory.getLogger;
-import static org.springframework.http.ResponseEntity.noContent;
-import static org.springframework.http.ResponseEntity.ok;
-import static org.springframework.http.ResponseEntity.status;
+import static org.springframework.http.ResponseEntity.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +11,7 @@ import java.util.UUID;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import br.com.fiap.gastrosphere.dtos.LoginUserDto;
 import br.com.fiap.gastrosphere.dtos.UserDto;
 import br.com.fiap.gastrosphere.entities.User;
-import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
 import br.com.fiap.gastrosphere.services.UserService;
 
 @RestController
@@ -29,9 +28,7 @@ import br.com.fiap.gastrosphere.services.UserService;
 public class UserController {
 
     public static final String V1_USER = "/api/v1/users";
-
     private static final Logger logger = getLogger(UserController.class);
-
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -39,12 +36,11 @@ public class UserController {
     }
 
     @Operation(
-            description = "Busca todos os usuários de forma paginada.",
-            summary = "Busca todos os usuários de forma paginada.",
-            responses = {
-                    @ApiResponse(description = "OK", responseCode = "200"),
-                    @ApiResponse(description = "No content", responseCode = "204")
-            }
+        description = "Busca todos os usuários de forma paginada.",
+        summary = "Busca todos os usuários de forma paginada.",
+        responses = {
+            @ApiResponse(description = OK, responseCode = HTTP_STATUS_CODE_200)
+        }
     )
     @GetMapping
     public ResponseEntity<List<UserDto>> findAllUsers(@RequestParam(value = "page", defaultValue = "1") int page,
@@ -56,92 +52,92 @@ public class UserController {
     }
 
     @Operation(
-            description = "Busca usuários por id.",
-            summary = "Busca usuários por id.",
-            responses = {
-                    @ApiResponse(description = "OK", responseCode = "200"),
-                    @ApiResponse(description = "Not found", responseCode = "404")
-            }
+        description = "Busca usuários por id.",
+        summary = "Busca usuários por id.",
+        responses = {
+            @ApiResponse(description = OK, responseCode = HTTP_STATUS_CODE_200),
+            @ApiResponse(description = NO_CONTENT, responseCode = HTTP_STATUS_CODE_204)
+        }
     )
     @GetMapping("/{id}")
     public ResponseEntity<Optional<UserDto>> findUserById(@PathVariable("id") UUID id) {
         logger.info("GET | {} | Iniciado findUserById | id: {}", V1_USER, id);
         var user = userService.findById(id);
-        logger.info("GET | {} | Finalizado findUserByUd | id: {}", V1_USER, id);
-        return ok(user);
+        if(user.isPresent()){
+            logger.info("GET | {} | Finalizado findUserById | id: {}", V1_USER, id);
+            return ok(user);
+        }
+        logger.info("GET | {} | Finalizado findUserById No Content | id: {}", V1_USER, id);
+        return status(HttpStatus.NO_CONTENT).build();
     }
 
     @Operation(
-            description = "Cria usuário.",
-            summary = "Cria usuário.",
-            responses = {
-                    @ApiResponse(description = "OK", responseCode = "201")
-            }
+        description = "Cria usuário.",
+        summary = "Cria usuário.",
+        responses = {
+            @ApiResponse(description = USUARIO_CRIADO_COM_SUCESSO, responseCode = HTTP_STATUS_CODE_201),
+            @ApiResponse(description = ERRO_AO_CRIAR_USUARIO, responseCode = HTTP_STATUS_CODE_422),
+        }
     )
     @PostMapping
     public ResponseEntity<String> createUser(@RequestBody User user) {
         logger.info("POST | {} | Iniciado createUser | User: {}", V1_USER, user.getDocument());
         userService.createUser(user);
         logger.info("POST | {} | Finalizado createUser", V1_USER);
-        return status(201).body("Usuário criado com sucesso");
+        return status(201).body(USUARIO_CRIADO_COM_SUCESSO);
     }
 
     @Operation(
-            description = "Atualiza usuário por id.",
-            summary = "Atualiza usuário por id.",
-            responses = {
-                    @ApiResponse(description = "OK", responseCode = "200")
-            }
+        description = "Atualiza usuário por id.",
+        summary = "Atualiza usuário por id.",
+        responses = {
+            @ApiResponse(description = OK, responseCode = HTTP_STATUS_CODE_200),
+            @ApiResponse(description = USUARIO_NAO_ENCONTRADO, responseCode = HTTP_STATUS_CODE_404),
+            @ApiResponse(description = ERRO_AO_ALTERAR_USUARIO, responseCode = HTTP_STATUS_CODE_422)
+        }
     )
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateUser(@PathVariable("id") UUID id, @RequestBody User user) {
+    public ResponseEntity<Void> updateUser(@PathVariable("id") UUID id,
+                                           @RequestBody User user) {
         logger.info("PUT | {} | Iniciado updateUser | id: {}", V1_USER, id);
         userService.updateUser(user, id);
         logger.info("PUT | {} | Finalizado updateUser", V1_USER);
-        return ok().build();
+        return status(HttpStatus.OK).build();
     }
 
     @Operation(
-            description = "Exclui usuário por id.",
-            summary = "Exclui usuário por id.",
-            responses = {
-                    @ApiResponse(description = "OK", responseCode = "200")
-            }
+        description = "Troca a senha de um usuário.",
+        summary = "Troca a senha do usuário.",
+        responses = {
+            @ApiResponse(description = OK, responseCode = HTTP_STATUS_CODE_200),
+            @ApiResponse(description = SENHA_ANTIGA_INCORRETA, responseCode = HTTP_STATUS_CODE_400),
+            @ApiResponse(description = SENHA_NOVA_DEVE_SER_DIFERENTE, responseCode = HTTP_STATUS_CODE_400),
+            @ApiResponse(description = USUARIO_NAO_ENCONTRADO, responseCode = HTTP_STATUS_CODE_404),
+            @ApiResponse(description = ERRO_AO_ATUALIZAR_SENHA, responseCode = HTTP_STATUS_CODE_422)
+        }
+    )
+    @PutMapping("/{id}/password")
+    public ResponseEntity<String> updatePassword(@PathVariable("id") UUID id,
+                                                 @Valid @RequestBody LoginUserDto user) {
+        logger.info("PUT | {} | Iniciado updatePassword | id: {}", V1_USER, id);
+        userService.updatePassword(id, user.oldPassword(), user.newPassword());
+        logger.info("PUT | {} | Finalizado updatePassword | id: {}", V1_USER, id);
+        return ok("Senha atualizada com sucesso.");
+    }
+
+    @Operation(
+        description = "Exclui usuário por id.",
+        summary = "Exclui usuário por id.",
+        responses = {
+            @ApiResponse(description = OK, responseCode = HTTP_STATUS_CODE_200),
+            @ApiResponse(description = USUARIO_NAO_ENCONTRADO, responseCode = HTTP_STATUS_CODE_404)
+        }
     )
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUserById(@PathVariable("id") UUID id) {
         logger.info("DELETE | {} | Iniciado deleteUserById | id: {}", V1_USER, id);
-        userService.deleteById(id);
+        userService.deleteUserById(id);
         logger.info("DELETE | {} | Finalizado deleteUserByUd | id: {}", V1_USER, id);
-        return noContent().build();
+        return ok().build();
     }
-
-    @Operation(
-            description = "Troca a senha de um usuário.",
-            summary = "Troca a senha do usuário.",
-            responses = {
-                    @ApiResponse(description = "Senha atualizada com sucesso.", responseCode = "200"),
-                    @ApiResponse(description = "Usuário não encontrado.", responseCode = "404"),
-                    @ApiResponse(description = "Senha antiga incorreta.", responseCode = "400")
-            }
-    )
-    @PutMapping("/{id}/password")
-    public ResponseEntity<String> updatePassword(
-            @PathVariable("id") UUID id,
-            @RequestBody LoginUserDto user
-    ) {
-        logger.info("PUT | {} | Iniciado updatePassword | id: {}", V1_USER, id);
-        try {
-            userService.updatePassword(id, user.oldPassword(), user.newPassword());
-            logger.info("PUT | {} | Finalizado updatePassword | id: {}", V1_USER, id);
-            return ok("Senha atualizada com sucesso.");
-        } catch (IllegalArgumentException e) {
-            logger.error("Erro ao atualizar a senha | id: {}", id);
-            return status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (ResourceNotFoundException e) {
-            logger.error("Erro ao encontrar o usuário | id: {}", id);
-            return status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-
 }

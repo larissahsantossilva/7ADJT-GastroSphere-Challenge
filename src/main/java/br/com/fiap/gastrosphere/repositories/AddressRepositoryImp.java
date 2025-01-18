@@ -45,32 +45,32 @@ public class AddressRepositoryImp implements AddressRepository {
     }
 
     @Override
-    public Integer create(Address address) {
-        return this.jdbcClient.sql("INSERT INTO gastrosphere.addresses (country, state, city, zip_code, street) VALUES (:country, :state, :city, :zipCode, :street)")
+    public Optional<Integer> create(Address address) {
+        return Optional.of(this.jdbcClient.sql("INSERT INTO gastrosphere.addresses (country, state, city, zip_code, street) VALUES (:country, :state, :city, :zipCode, :street)")
                 .param("country", address.getCountry())
                 .param("state", address.getState())
                 .param("city", address.getCity())
                 .param("zipCode", address.getZipCode())
                 .param("street", address.getStreet())
-                .update();
+                .update());
     }
 
     @Override
-    public Integer update(UUID id, Address address) {
-        return this.jdbcClient.sql("UPDATE gastrosphere.addresses SET country = :country, state = :state, city = :city, zip_code = :zipCode, street = :street WHERE id = :id")
+    public Optional<Integer> updateById(UUID id, Address address) {
+        return Optional.of(this.jdbcClient.sql("UPDATE gastrosphere.addresses SET country = :country, state = :state, city = :city, zip_code = :zipCode, street = :street WHERE id = :id")
                 .param("id", id)
                 .param("country", address.getCountry())
                 .param("state", address.getState())
                 .param("city", address.getCity())
                 .param("zipCode", address.getZipCode())
                 .param("street", address.getStreet())
-                .update();
+                .update());
     }
 
     @Override
-    public Integer delete(UUID id) {
-        return this.jdbcClient.sql("DELETE FROM gastrosphere.addresses WHERE id = :id")
+    public Optional<Integer> deleteById(UUID id) {
+        return Optional.of(this.jdbcClient.sql("DELETE FROM gastrosphere.addresses WHERE id = :id")
                 .param("id", id)
-                .update();
+            .update());
     }
 }
