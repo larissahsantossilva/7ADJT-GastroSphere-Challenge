@@ -1,5 +1,6 @@
 package br.com.fiap.gastrosphere.services;
 
+import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.*;
 import static java.util.Optional.ofNullable;
 import static java.util.regex.Pattern.matches;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -32,7 +33,7 @@ public class UserService {
 
 	public List<UserDto> findAllUsers(int page, int size) {
 		int offset = (page - 1) * size;
-		return this.userRepository.findAll(size, offset) ;
+		return this.userRepository.findAll(size, offset);
 	}
 
 	public Optional<UserDto> findById(UUID id) {
@@ -45,12 +46,12 @@ public class UserService {
 		try {
 			result = this.userRepository.create(user);
 			if (result.isPresent() && result.get() != 1) {
-				logger.error("Erro ao criar usuário");
-				throw new UnprocessableEntityException("Erro ao criar usuário");
+				logger.error(ERRO_AO_CRIAR_USUARIO);
+				throw new UnprocessableEntityException(ERRO_AO_CRIAR_USUARIO);
 			}
 		} catch (DataAccessException e) {
-			logger.error("Erro ao criar usuário", e);
-			throw new UnprocessableEntityException("Erro ao criar usuário");
+			logger.error(ERRO_AO_CRIAR_USUARIO, e);
+			throw new UnprocessableEntityException(ERRO_AO_CRIAR_USUARIO);
 		}
 	}
 
@@ -59,12 +60,30 @@ public class UserService {
 		try {
 			result = this.userRepository.update(user, id);
 			if (result.isPresent() && result.get() != 1) {
-				logger.error("Erro ao alterar usuário");
-				throw new UnprocessableEntityException("Erro ao alterar usuário");
+				logger.error(ERRO_AO_ALTERAR_USUARIO);
+				throw new UnprocessableEntityException(ERRO_AO_ALTERAR_USUARIO);
 			}
 		} catch (DataAccessException e) {
-			logger.error("Erro ao criar alterar", e);
-			throw new UnprocessableEntityException("Erro ao alterar usuário");
+			logger.error(ERRO_AO_ALTERAR_USUARIO, e);
+			throw new UnprocessableEntityException(ERRO_AO_ALTERAR_USUARIO);
+		}
+	}
+
+	public void updatePassword(UUID id, String oldPassword, String newPassword) {
+		uuidValidator(id);
+		UserDto userDto = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(USUARIO_NAO_ENCONTRADO));
+		if (!oldPassword.equals(userDto.password())) {
+			logger.error(SENHA_ANTIGA_INCORRETA);
+			throw new IllegalArgumentException(SENHA_ANTIGA_INCORRETA);
+		}
+		if (newPassword.equals(userDto.password())) {
+			logger.error(SENHA_NOVA_DEVE_SER_DIFERENTE);
+			throw new IllegalArgumentException(SENHA_NOVA_DEVE_SER_DIFERENTE);
+		}
+		int result = userRepository.updatePassword(id, newPassword);
+		if (result == 0) {
+			logger.error(ERRO_AO_ATUALIZAR_SENHA);
+			throw new UnprocessableEntityException(ERRO_AO_ATUALIZAR_SENHA);
 		}
 	}
 
@@ -72,8 +91,8 @@ public class UserService {
 		Optional<Integer> result;
 		 result = this.userRepository.deleteById(id);
 		 if(result.isPresent() && result.get() != 1) {
-			 logger.error("Usuário não encontrado");
-			 throw new ResourceNotFoundException("Usuário não encontrado");
+			 logger.error(USUARIO_NAO_ENCONTRADO);
+			 throw new ResourceNotFoundException(USUARIO_NAO_ENCONTRADO);
 		 }
 	}
 
@@ -82,24 +101,4 @@ public class UserService {
 			throw new ResourceNotFoundException("ID de usuário inválido");
 		}
 	}
-
-	public void updatePassword(UUID id, String oldPassword, String newPassword) {
-		uuidValidator(id);
-		UserDto userDto = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
-		logger.info("password {}", userDto.password());
-		if (!oldPassword.equals(userDto.password())) {
-			logger.error("Senha antiga incorreta.");
-			throw new IllegalArgumentException("Senha antiga incorreta.");
-		}
-		if (newPassword.equals(userDto.password())) {
-			logger.error("Senha nova deve ser diferente.");
-			throw new IllegalArgumentException("Senha nova deve ser diferente.");
-		}
-		int result = userRepository.updatePassword(id, newPassword);
-		if (result == 0) {
-			logger.error("Erro ao atualizar a senha.");
-			throw new UnprocessableEntityException("Erro ao atualizar a senha.");
-		}
-	}
-
 }
