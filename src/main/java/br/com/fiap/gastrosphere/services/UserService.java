@@ -1,6 +1,7 @@
 package br.com.fiap.gastrosphere.services;
 
 import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.*;
+import static br.com.fiap.gastrosphere.utils.GastroSphereUtils.uuidValidator;
 import static java.util.Optional.ofNullable;
 import static java.util.regex.Pattern.matches;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -22,8 +23,6 @@ import br.com.fiap.gastrosphere.repositories.UserRepository;
 
 @Service
 public class UserService {
-
-	private static final String REGEX_UUID = "^[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$";
 	private static final Logger logger = getLogger(UserService.class);
 	private final UserRepository userRepository;
 
@@ -96,9 +95,5 @@ public class UserService {
 		 }
 	}
 
-	private void uuidValidator(UUID id) {
-	if (!matches(REGEX_UUID, id.toString())) {
-			throw new ResourceNotFoundException("ID de usuário inválido");
-		}
-	}
+
 }

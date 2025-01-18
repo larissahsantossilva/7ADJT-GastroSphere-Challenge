@@ -1,5 +1,7 @@
 package br.com.fiap.gastrosphere.controllers;
 
+import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.*;
+import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.HTTP_STATUS_CODE_204;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.http.ResponseEntity.status;
@@ -12,6 +14,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +40,7 @@ public class AddressController {
         description = "Busca todos os endereços de forma paginada.",
         summary = "Busca todos os endereços de forma paginada.",
         responses = {
-            @ApiResponse(description = "OK", responseCode = "200")
+            @ApiResponse(description = OK, responseCode = HTTP_STATUS_CODE_200)
         }
     )
     @GetMapping
@@ -49,11 +52,7 @@ public class AddressController {
             logger.info("GET | {} | Iniciado busca de endereço pelo zipCode | ZipCode: {}", V1_ADDRESS, zipCode);
             Optional<Address> address = this.addressService.findAddressByZipCode(zipCode);
             logger.info("GET | {} | Finalizado busca de endereço pelo zipCode | ZipCode: {}", V1_ADDRESS, zipCode);
-            if (address.isPresent()) {
-                return ok(List.of(address.get()));  // Retorna o único endereço encontrado em uma lista
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+            return address.map(value -> ok(List.of(value))).orElseGet(() -> ResponseEntity.notFound().build());
         } else {
             logger.info("GET | {} | Iniciado busca de endereço por paginação", V1_ADDRESS);
             var addresses = this.addressService.findAllAddresses(page, size);
@@ -66,15 +65,20 @@ public class AddressController {
         description = "Busca endereço por id.",
         summary = "Busca endereço por id.",
         responses = {
-            @ApiResponse(description = "OK", responseCode = "200")
+            @ApiResponse(description = OK, responseCode = HTTP_STATUS_CODE_200),
+            @ApiResponse(description = NO_CONTENT, responseCode = HTTP_STATUS_CODE_204)
         }
     )
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Address>> findAddressById(@PathVariable("id") UUID id) {
         logger.info("GET | {} | Iniciado findAddressById | id: {}", V1_ADDRESS, id);
         var address = addressService.findById(id);
-        logger.info("GET | {} | Finalizado findAddressById | id: {}", V1_ADDRESS, id);
-        return ok(address);
+        if(address.isPresent()){
+            logger.info("GET | {} | Finalizado findAddressById | id: {}", V1_ADDRESS, id);
+            return ok(address);
+        }
+        logger.info("GET | {} | Finalizado findAddressById No Content | id: {}", V1_ADDRESS, id);
+        return status(HttpStatus.NO_CONTENT).build();
     }
 
     @Operation(

@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static br.com.fiap.gastrosphere.utils.GastroSphereUtils.uuidValidator;
+
 @Service
 public class AddressService {
 
@@ -23,6 +25,7 @@ public class AddressService {
     }
 
     public Optional<Address> findById(UUID id) {
+        uuidValidator(id);
         return this.addressRepository.findById(id);
     }
 

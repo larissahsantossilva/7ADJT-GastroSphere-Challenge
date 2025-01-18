@@ -67,7 +67,7 @@ public class UserController {
             logger.info("GET | {} | Finalizado findUserById | id: {}", V1_USER, id);
             return ok(user);
         }
-        logger.info("GET | {} | Sem retorno", V1_USER);
+        logger.info("GET | {} | Finalizado findUserById No Content | id: {}", V1_USER, id);
         return status(HttpStatus.NO_CONTENT).build();
     }
 
