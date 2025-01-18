@@ -13,32 +13,32 @@ import org.slf4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
-import br.com.fiap.gastrosphere.dtos.UserDto;
+import br.com.fiap.gastrosphere.dtos.responses.UserBodyResponse;
 import br.com.fiap.gastrosphere.entities.User;
 import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
 import br.com.fiap.gastrosphere.repositories.UserRepository;
 
 @Service
-public class UserService {
-	private static final Logger logger = getLogger(UserService.class);
+public class UserServiceImpl {
+	private static final Logger logger = getLogger(UserServiceImpl.class);
 	private final UserRepository userRepository;
 
-	public UserService(UserRepository userRepository) {
+	public UserServiceImpl(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
 
-	public List<UserDto> findAllUsers(int page, int size) {
+	public List<UserBodyResponse> findAllUsers(int page, int size) {
 		int offset = (page - 1) * size;
 		logger.info("size {}, offset {}", size, offset);
 		return this.userRepository.findAll(size, offset);
 	}
 
-	public Optional<UserDto> findById(UUID id) {
+	public Optional<UserBodyResponse> findById(UUID id) {
         uuidValidator(id);
 		return this.userRepository.findById(id);
 	}
 
-	public Optional<UserDto> findByAddressId(UUID id) {
+	public Optional<UserBodyResponse> findByAddressId(UUID id) {
 		uuidValidator(id);
 		return this.userRepository.findByAddressId(id);
 	}
@@ -73,7 +73,7 @@ public class UserService {
 
 	public void updatePassword(UUID id, String oldPassword, String newPassword) {
 		uuidValidator(id);
-		UserDto userDto = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(USUARIO_NAO_ENCONTRADO));
+		UserBodyResponse userDto = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(USUARIO_NAO_ENCONTRADO));
 		if (!oldPassword.equals(userDto.password())) {
 			logger.error(SENHA_ANTIGA_INCORRETA);
 			throw new IllegalArgumentException(SENHA_ANTIGA_INCORRETA);
@@ -102,6 +102,4 @@ public class UserService {
 			 throw new UnprocessableEntityException(ERRO_AO_DELETAR_USUARIO);
 		 }
 	}
-
-
 }

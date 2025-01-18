@@ -1,6 +1,7 @@
-package br.com.fiap.gastrosphere.repositories;
+package br.com.fiap.gastrosphere.repositories.impl;
 
 import br.com.fiap.gastrosphere.entities.Address;
+import br.com.fiap.gastrosphere.repositories.AddressRepository;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
@@ -9,11 +10,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public class AddressRepositoryImp implements AddressRepository {
+public class AddressRepositoryImpl implements AddressRepository {
 
     private final JdbcClient jdbcClient;
 
-    public AddressRepositoryImp(JdbcClient jdbcClient) {
+    public AddressRepositoryImpl(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
     }
 

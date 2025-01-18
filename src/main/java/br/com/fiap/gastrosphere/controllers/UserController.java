@@ -1,6 +1,7 @@
 package br.com.fiap.gastrosphere.controllers;
 
 import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.*;
+import static br.com.fiap.gastrosphere.utils.GastroSphereUtils.convertToUser;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.ResponseEntity.*;
 
@@ -8,7 +9,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import br.com.fiap.gastrosphere.dtos.responses.UserBodyResponse;
+import br.com.fiap.gastrosphere.dtos.requests.UserBodyRequest;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -18,9 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import br.com.fiap.gastrosphere.dtos.LoginUserDto;
-import br.com.fiap.gastrosphere.dtos.UserDto;
-import br.com.fiap.gastrosphere.entities.User;
-import br.com.fiap.gastrosphere.services.UserService;
+import br.com.fiap.gastrosphere.services.UserServiceImpl;
 
 @RestController
 @RequestMapping(UserController.V1_USER)
@@ -29,22 +33,26 @@ public class UserController {
 
     public static final String V1_USER = "/api/v1/users";
     private static final Logger logger = getLogger(UserController.class);
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
-    public UserController(UserService userService) {
+    public UserController(UserServiceImpl userService) {
         this.userService = userService;
     }
 
     @Operation(
-        description = "Busca todos os usuários de forma paginada.",
-        summary = "Busca todos os usuários de forma paginada.",
-        responses = {
-            @ApiResponse(description = OK, responseCode = HTTP_STATUS_CODE_200)
-        }
+            description = "Busca todos os usuários de forma paginada.",
+            summary = "Busca todos os usuários de forma paginada.",
+            responses = {
+                    @ApiResponse(
+                            description = OK,
+                            responseCode = HTTP_STATUS_CODE_200,
+                            content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UserBodyResponse.class)))}
+                    )
+            }
     )
     @GetMapping
-    public ResponseEntity<List<UserDto>> findAllUsers(@RequestParam(value = "page", defaultValue = "1") int page,
-                                                      @RequestParam(value = "size", defaultValue = "10") int size) {
+    public ResponseEntity<List<UserBodyResponse>> findAllUsers(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                               @RequestParam(value = "size", defaultValue = "10") int size) {
         logger.info("GET | {} | Iniciado findAllUsers", V1_USER);
         var users = this.userService.findAllUsers(page, size);
         logger.info("GET | {} | Finalizado findAllUsers", V1_USER);
@@ -52,15 +60,23 @@ public class UserController {
     }
 
     @Operation(
-        description = "Busca usuários por id.",
-        summary = "Busca usuários por id.",
-        responses = {
-            @ApiResponse(description = OK, responseCode = HTTP_STATUS_CODE_200),
-            @ApiResponse(description = NO_CONTENT, responseCode = HTTP_STATUS_CODE_204)
-        }
+            description = "Busca usuário por id.",
+            summary = "Busca usuário por id.",
+            responses = {
+                    @ApiResponse(
+                            description = OK,
+                            responseCode = HTTP_STATUS_CODE_200,
+                            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserBodyResponse.class))}
+                    ),
+                    @ApiResponse(
+                            description = NO_CONTENT,
+                            responseCode = HTTP_STATUS_CODE_204,
+                            content = {@Content(mediaType = "application/json",schema = @Schema(implementation = Void.class))}
+                    )
+            }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<UserDto>> findUserById(@PathVariable("id") UUID id) {
+    public ResponseEntity<Optional<UserBodyResponse>> findUserById(@PathVariable("id") UUID id) {
         logger.info("GET | {} | Iniciado findUserById | id: {}", V1_USER, id);
         var user = userService.findById(id);
         if(user.isPresent()){
@@ -72,49 +88,89 @@ public class UserController {
     }
 
     @Operation(
-        description = "Cria usuário.",
-        summary = "Cria usuário.",
-        responses = {
-            @ApiResponse(description = USUARIO_CRIADO_COM_SUCESSO, responseCode = HTTP_STATUS_CODE_201),
-            @ApiResponse(description = ERRO_AO_CRIAR_USUARIO, responseCode = HTTP_STATUS_CODE_422),
-        }
+            description = "Cria usuário.",
+            summary = "Cria usuário.",
+            responses = {
+                    @ApiResponse(
+                            description = USUARIO_CRIADO_COM_SUCESSO,
+                            responseCode = HTTP_STATUS_CODE_201,
+                            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))}
+                    ),
+                    @ApiResponse(
+                            description = ERRO_AO_CRIAR_USUARIO,
+                            responseCode = HTTP_STATUS_CODE_422,
+                            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))}
+                    ),
+            }
     )
     @PostMapping
-    public ResponseEntity<String> createUser(@RequestBody User user) {
-        logger.info("POST | {} | Iniciado createUser | User: {}", V1_USER, user.getDocument());
-        userService.createUser(user);
+    public ResponseEntity<String> createUser(@Valid @RequestBody UserBodyRequest userRequestBody) {
+        logger.info("POST | {} | Iniciado createUser | User: {}", V1_USER, userRequestBody.getDocument());
+        userService.createUser(convertToUser(userRequestBody));
         logger.info("POST | {} | Finalizado createUser", V1_USER);
         return status(201).body(USUARIO_CRIADO_COM_SUCESSO);
     }
 
     @Operation(
-        description = "Atualiza usuário por id.",
-        summary = "Atualiza usuário por id.",
-        responses = {
-            @ApiResponse(description = OK, responseCode = HTTP_STATUS_CODE_200),
-            @ApiResponse(description = USUARIO_NAO_ENCONTRADO, responseCode = HTTP_STATUS_CODE_404),
-            @ApiResponse(description = ERRO_AO_ALTERAR_USUARIO, responseCode = HTTP_STATUS_CODE_422)
-        }
+            description = "Atualiza usuário por id.",
+            summary = "Atualiza usuário por id.",
+            responses = {
+                    @ApiResponse(
+                            description = OK,
+                            responseCode = HTTP_STATUS_CODE_200,
+                            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))}
+                    ),
+                    @ApiResponse(
+                            description = USUARIO_NAO_ENCONTRADO,
+                            responseCode = HTTP_STATUS_CODE_404,
+                            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))}
+                    ),
+                    @ApiResponse(
+                            description = ERRO_AO_ALTERAR_USUARIO,
+                            responseCode = HTTP_STATUS_CODE_422,
+                            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))}
+                    )
+            }
     )
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateUser(@PathVariable("id") UUID id,
-                                           @RequestBody User user) {
+                                           @Valid @RequestBody UserBodyRequest userRequestBody) {
         logger.info("PUT | {} | Iniciado updateUser | id: {}", V1_USER, id);
-        userService.updateUser(user, id);
+        userService.updateUser(convertToUser(userRequestBody), id);
         logger.info("PUT | {} | Finalizado updateUser", V1_USER);
         return status(HttpStatus.OK).build();
     }
 
     @Operation(
-        description = "Troca a senha de um usuário.",
-        summary = "Troca a senha do usuário.",
-        responses = {
-            @ApiResponse(description = OK, responseCode = HTTP_STATUS_CODE_200),
-            @ApiResponse(description = SENHA_ANTIGA_INCORRETA, responseCode = HTTP_STATUS_CODE_400),
-            @ApiResponse(description = SENHA_NOVA_DEVE_SER_DIFERENTE, responseCode = HTTP_STATUS_CODE_400),
-            @ApiResponse(description = USUARIO_NAO_ENCONTRADO, responseCode = HTTP_STATUS_CODE_404),
-            @ApiResponse(description = ERRO_AO_ATUALIZAR_SENHA, responseCode = HTTP_STATUS_CODE_422)
-        }
+            description = "Troca a senha de um usuário.",
+            summary = "Troca a senha do usuário.",
+            responses = {
+                    @ApiResponse(
+                            description = OK,
+                            responseCode = HTTP_STATUS_CODE_200,
+                            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))}
+                    ),
+                    @ApiResponse(
+                            description = SENHA_ANTIGA_INCORRETA,
+                            responseCode = HTTP_STATUS_CODE_400,
+                            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))}
+                    ),
+                    @ApiResponse(
+                            description = SENHA_NOVA_DEVE_SER_DIFERENTE,
+                            responseCode = HTTP_STATUS_CODE_400,
+                            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))}
+                    ),
+                    @ApiResponse(
+                            description = USUARIO_NAO_ENCONTRADO,
+                            responseCode = HTTP_STATUS_CODE_404,
+                            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))}
+                    ),
+                    @ApiResponse(
+                            description = ERRO_AO_ATUALIZAR_SENHA,
+                            responseCode = HTTP_STATUS_CODE_422,
+                            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))}
+                    )
+            }
     )
     @PutMapping("/{id}/password")
     public ResponseEntity<String> updatePassword(@PathVariable("id") UUID id,
@@ -126,12 +182,20 @@ public class UserController {
     }
 
     @Operation(
-        description = "Exclui usuário por id.",
-        summary = "Exclui usuário por id.",
-        responses = {
-            @ApiResponse(description = OK, responseCode = HTTP_STATUS_CODE_200),
-            @ApiResponse(description = USUARIO_NAO_ENCONTRADO, responseCode = HTTP_STATUS_CODE_404)
-        }
+            description = "Exclui usuário por id.",
+            summary = "Exclui usuário por id.",
+            responses = {
+                    @ApiResponse(
+                            description = OK,
+                            responseCode = HTTP_STATUS_CODE_200,
+                            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))}
+                    ),
+                    @ApiResponse(
+                            description = USUARIO_NAO_ENCONTRADO,
+                            responseCode = HTTP_STATUS_CODE_404,
+                            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))}
+                    )
+            }
     )
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUserById(@PathVariable("id") UUID id) {
