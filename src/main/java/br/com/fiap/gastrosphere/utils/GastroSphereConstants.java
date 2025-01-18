@@ -25,5 +25,6 @@ public class GastroSphereConstants {
 
     public static final String ERRO_AO_CRIAR_USUARIO = "Erro ao criar usuário.";
     public static final String USUARIO_CRIADO_COM_SUCESSO = "Usuário criado com sucesso.";
-
+    public static final String ERRO_AO_CRIAR_ENDERECO = "Erro ao criar endereço.";
+    public static final String ENDERECO_CRIADO_COM_SUCESSO = "Endereço criado com sucesso.";
 }

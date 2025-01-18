@@ -85,7 +85,8 @@ public class AddressController {
         description = "Cria endereço.",
         summary = "Cria endereço.",
         responses = {
-            @ApiResponse(description = "OK", responseCode = "201") //avaliar content depois
+            @ApiResponse(description = ENDERECO_CRIADO_COM_SUCESSO, responseCode = HTTP_STATUS_CODE_201),
+            @ApiResponse(description = ERRO_AO_CRIAR_ENDERECO, responseCode = HTTP_STATUS_CODE_422),
         }
     )
     @PostMapping
@@ -93,7 +94,7 @@ public class AddressController {
         logger.info("POST | {} | Iniciado createAddress ", V1_ADDRESS);
         addressService.createAddress(address);
         logger.info("POST | {} | Finalizado createAddress ", V1_ADDRESS);
-        return status(201).body("Endereço criado com sucesso");
+        return status(201).body(ENDERECO_CRIADO_COM_SUCESSO);
     }
 
     @Operation(

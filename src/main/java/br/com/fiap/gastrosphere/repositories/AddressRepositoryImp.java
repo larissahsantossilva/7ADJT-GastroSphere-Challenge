@@ -45,14 +45,14 @@ public class AddressRepositoryImp implements AddressRepository {
     }
 
     @Override
-    public Integer create(Address address) {
-        return this.jdbcClient.sql("INSERT INTO gastrosphere.addresses (country, state, city, zip_code, street) VALUES (:country, :state, :city, :zipCode, :street)")
+    public Optional<Integer> create(Address address) {
+        return Optional.of(this.jdbcClient.sql("INSERT INTO gastrosphere.addresses (country, state, city, zip_code, street) VALUES (:country, :state, :city, :zipCode, :street)")
                 .param("country", address.getCountry())
                 .param("state", address.getState())
                 .param("city", address.getCity())
                 .param("zipCode", address.getZipCode())
                 .param("street", address.getStreet())
-                .update();
+                .update());
     }
 
     @Override
