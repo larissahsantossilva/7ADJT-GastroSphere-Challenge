@@ -9,9 +9,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import br.com.fiap.gastrosphere.dtos.UserDTO1;
+import br.com.fiap.gastrosphere.dtos.UserResponse;
 import br.com.fiap.gastrosphere.dtos.UserRequest;
-import br.com.fiap.gastrosphere.utils.GastroSphereUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import br.com.fiap.gastrosphere.dtos.LoginUserDto;
-import br.com.fiap.gastrosphere.entities.User;
 import br.com.fiap.gastrosphere.services.UserService;
 
 @RestController
@@ -46,8 +44,8 @@ public class UserController {
         }
     )
     @GetMapping
-    public ResponseEntity<List<UserDTO1>> findAllUsers(@RequestParam(value = "page", defaultValue = "1") int page,
-                                                       @RequestParam(value = "size", defaultValue = "10") int size) {
+    public ResponseEntity<List<UserResponse>> findAllUsers(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                           @RequestParam(value = "size", defaultValue = "10") int size) {
         logger.info("GET | {} | Iniciado findAllUsers", V1_USER);
         var users = this.userService.findAllUsers(page, size);
         logger.info("GET | {} | Finalizado findAllUsers", V1_USER);
@@ -63,7 +61,7 @@ public class UserController {
         }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<UserDTO1>> findUserById(@PathVariable("id") UUID id) {
+    public ResponseEntity<Optional<UserResponse>> findUserById(@PathVariable("id") UUID id) {
         logger.info("GET | {} | Iniciado findUserById | id: {}", V1_USER, id);
         var user = userService.findById(id);
         if(user.isPresent()){

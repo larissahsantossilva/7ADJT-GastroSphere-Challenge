@@ -1,6 +1,6 @@
 package br.com.fiap.gastrosphere.services;
 
-import br.com.fiap.gastrosphere.dtos.UserDTO1;
+import br.com.fiap.gastrosphere.dtos.UserResponse;
 import br.com.fiap.gastrosphere.entities.Address;
 import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
 import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
@@ -73,7 +73,7 @@ public class AddressService {
 
     public void deleteAddressById(UUID id) {
         Optional<Integer> result;
-        Optional<UserDTO1> user = this.userRepository.findByAddressId(id);
+        Optional<UserResponse> user = this.userRepository.findByAddressId(id);
         if(user.isPresent()){
             logger.error(ENDERECO_ASSOCIADO_A_USUARIO);
             throw new UnprocessableEntityException(ENDERECO_ASSOCIADO_A_USUARIO);

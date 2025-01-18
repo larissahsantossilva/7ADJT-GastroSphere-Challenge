@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import br.com.fiap.gastrosphere.entities.Address;
 
-public record UserDTO1(
+public record UserResponse(
 		UUID id,
 		String name,
 		String email,

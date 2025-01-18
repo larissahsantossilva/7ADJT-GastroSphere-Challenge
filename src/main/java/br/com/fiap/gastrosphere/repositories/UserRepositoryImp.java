@@ -12,7 +12,7 @@ import java.util.UUID;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
-import br.com.fiap.gastrosphere.dtos.UserDTO1;
+import br.com.fiap.gastrosphere.dtos.UserResponse;
 import br.com.fiap.gastrosphere.entities.Address;
 import br.com.fiap.gastrosphere.entities.User;
 
@@ -26,7 +26,7 @@ public class UserRepositoryImp implements UserRepository {
 	}
 
 	@Override
-	public List<UserDTO1> findAll(int size, int offset) {
+	public List<UserResponse> findAll(int size, int offset) {
 		return this.jdbcClient.sql(""" 
 			SELECT
 				u.id AS user_id,
@@ -57,7 +57,7 @@ public class UserRepositoryImp implements UserRepository {
 	}
 
 	@Override
-	public Optional<UserDTO1> findById(UUID id) {
+	public Optional<UserResponse> findById(UUID id) {
 		return this.jdbcClient
 				.sql("""
 						SELECT
@@ -89,7 +89,7 @@ public class UserRepositoryImp implements UserRepository {
 	}
 
 	@Override
-	public Optional<UserDTO1> findByAddressId(UUID id) {
+	public Optional<UserResponse> findByAddressId(UUID id) {
 		return this.jdbcClient
 				.sql("""
 						SELECT
@@ -169,8 +169,8 @@ public class UserRepositoryImp implements UserRepository {
 			.update());
 	}
 
-	private UserDTO1 buildUser(ResultSet rs, int rowNum) throws SQLException {
-		UserDTO1 user = new UserDTO1(
+	private UserResponse buildUser(ResultSet rs, int rowNum) throws SQLException {
+		UserResponse user = new UserResponse(
 				fromString(rs.getString("user_id")),
 				rs.getString("name"), 
 				rs.getString("email"),
