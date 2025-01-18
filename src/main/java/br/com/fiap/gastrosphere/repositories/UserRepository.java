@@ -13,6 +13,8 @@ public interface UserRepository {
 
     Optional<UserDto> findById(UUID id);
 
+    Optional<UserDto> findByAddressId(UUID id);
+
     Optional<Integer> create(User user);
 
     Optional<Integer> update(User user, UUID id);

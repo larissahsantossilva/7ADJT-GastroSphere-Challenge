@@ -89,6 +89,38 @@ public class UserRepositoryImp implements UserRepository {
 	}
 
 	@Override
+	public Optional<UserDto> findByAddressId(UUID id) {
+		return this.jdbcClient
+				.sql("""
+						SELECT
+						u.id AS user_id,
+						u."name",
+						u.email,
+						u.login,
+						u."password",
+						u.user_type,
+						u.document,
+						u.created_at,
+						u.last_modified_at,
+						u.address_number,
+						u.address_complement,
+						a.id as address_id,
+						a.country,
+						a.state,
+						a.city,
+						a.zip_code,
+						a.street
+						FROM gastrosphere.users u
+						INNER JOIN gastrosphere.addresses a
+						ON u.address_id  = a.id
+					WHERE a.id = :id
+					    		""")
+				.param("id", id)
+				.query(this::buildUser)
+				.optional();
+	}
+
+	@Override
 	public Optional<Integer> deleteById(UUID id) {
 		 return Optional.of(this.jdbcClient.sql("DELETE FROM gastrosphere.users WHERE id = :id")
 				.param("id", id)
