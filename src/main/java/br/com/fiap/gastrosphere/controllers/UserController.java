@@ -111,22 +111,11 @@ public class UserController {
         }
     )
     @PutMapping("/{id}/password")
-    public ResponseEntity<String> updatePassword(
-            @PathVariable("id") UUID id,
-            @RequestBody LoginUserDto user
-    ) {
+    public ResponseEntity<String> updatePassword(@PathVariable("id") UUID id, @RequestBody LoginUserDto user) {
         logger.info("PUT | {} | Iniciado updatePassword | id: {}", V1_USER, id);
-        try {
-            userService.updatePassword(id, user.oldPassword(), user.newPassword());
-            logger.info("PUT | {} | Finalizado updatePassword | id: {}", V1_USER, id);
-            return ok("Senha atualizada com sucesso.");
-        } catch (IllegalArgumentException e) {
-            logger.error("Erro ao atualizar a senha | id: {}", id);
-            return status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (ResourceNotFoundException e) {
-            logger.error("Erro ao encontrar o usuário | id: {}", id);
-            return status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+        userService.updatePassword(id, user.oldPassword(), user.newPassword());
+        logger.info("PUT | {} | Finalizado updatePassword | id: {}", V1_USER, id);
+        return ok("Senha atualizada com sucesso.");
     }
 
     @Operation(

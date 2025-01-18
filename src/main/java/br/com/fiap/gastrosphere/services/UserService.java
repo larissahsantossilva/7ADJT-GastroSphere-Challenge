@@ -85,17 +85,20 @@ public class UserService {
 
 	public void updatePassword(UUID id, String oldPassword, String newPassword) {
 		uuidValidator(id);
-	
-		UserDto userDto = userRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
-	
+		UserDto userDto = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+		logger.info("password {}", userDto.password());
 		if (!oldPassword.equals(userDto.password())) {
+			logger.error("Senha antiga incorreta.");
 			throw new IllegalArgumentException("Senha antiga incorreta.");
 		}
-	
-		int updatedRows = userRepository.updatePassword(id, newPassword);
-		if (updatedRows == 0) {
-			throw new RuntimeException("Erro ao atualizar a senha.");
+		if (newPassword.equals(userDto.password())) {
+			logger.error("Senha nova deve ser diferente.");
+			throw new IllegalArgumentException("Senha nova deve ser diferente.");
+		}
+		int result = userRepository.updatePassword(id, newPassword);
+		if (result == 0) {
+			logger.error("Erro ao atualizar a senha.");
+			throw new UnprocessableEntityException("Erro ao atualizar a senha.");
 		}
 	}
 

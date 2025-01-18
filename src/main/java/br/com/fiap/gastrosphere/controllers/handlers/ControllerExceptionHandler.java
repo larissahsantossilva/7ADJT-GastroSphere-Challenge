@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import br.com.fiap.gastrosphere.dtos.IllegalArgumentDTO;
 import br.com.fiap.gastrosphere.dtos.UnprocessableEntityDTO;
 import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
 import org.slf4j.Logger;
@@ -55,5 +56,12 @@ public class ControllerExceptionHandler {
 		logger.error("UnprocessableEntityException ", e);
 		var status = HttpStatus.UNPROCESSABLE_ENTITY;
 		return ResponseEntity.status(status.value()).body(new UnprocessableEntityDTO(status.value(), e.getMessage()));
+	}
+
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<IllegalArgumentDTO> handlerIllegalArgumentException(IllegalArgumentException e) {
+		logger.error("IllegalArgumentException ", e);
+		var status = HttpStatus.BAD_REQUEST;
+		return ResponseEntity.status(status.value()).body(new IllegalArgumentDTO(status.value(), e.getMessage()));
 	}
 }
