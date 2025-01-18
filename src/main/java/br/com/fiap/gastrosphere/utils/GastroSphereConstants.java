@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 public class GastroSphereConstants {
     public static final String OK = "OK";
-    public static final String USUARIO_NAO_ENCONTRADO = "Usuário não encontrado";
     public static final String NO_CONTENT = "No Content";
     public static final String NOT_FOUND = "Not Found";
     public static final String BAD_REQUEST = "Bad Request";
@@ -22,9 +21,13 @@ public class GastroSphereConstants {
     public static final String SENHA_NOVA_DEVE_SER_DIFERENTE = "Senha nova deve ser diferente.";
     public static final String ERRO_AO_ATUALIZAR_SENHA = "Erro ao atualizar senha.";
     public static final String ERRO_AO_ALTERAR_USUARIO = "Erro ao alterar usuário.";
+    public static final String USUARIO_NAO_ENCONTRADO = "Usuário não encontrado.";
 
     public static final String ERRO_AO_CRIAR_USUARIO = "Erro ao criar usuário.";
     public static final String USUARIO_CRIADO_COM_SUCESSO = "Usuário criado com sucesso.";
     public static final String ERRO_AO_CRIAR_ENDERECO = "Erro ao criar endereço.";
     public static final String ENDERECO_CRIADO_COM_SUCESSO = "Endereço criado com sucesso.";
+
+    public static final String ERRO_AO_ALTERAR_ENDERECO = "Erro ao alterar endereço.";
+    public static final String ENDERECO_NAO_ENCONTRADO = "Endereço não encontrado.";
 }

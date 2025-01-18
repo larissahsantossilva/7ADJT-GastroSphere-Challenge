@@ -56,15 +56,15 @@ public class AddressRepositoryImp implements AddressRepository {
     }
 
     @Override
-    public Integer update(UUID id, Address address) {
-        return this.jdbcClient.sql("UPDATE gastrosphere.addresses SET country = :country, state = :state, city = :city, zip_code = :zipCode, street = :street WHERE id = :id")
+    public Optional<Integer> update(UUID id, Address address) {
+        return Optional.of(this.jdbcClient.sql("UPDATE gastrosphere.addresses SET country = :country, state = :state, city = :city, zip_code = :zipCode, street = :street WHERE id = :id")
                 .param("id", id)
                 .param("country", address.getCountry())
                 .param("state", address.getState())
                 .param("city", address.getCity())
                 .param("zipCode", address.getZipCode())
                 .param("street", address.getStreet())
-                .update();
+                .update());
     }
 
     @Override

@@ -101,7 +101,8 @@ public class AddressController {
         description = "Atualiza endereço por id.",
         summary = "Atualiza endereço por id.",
         responses = {
-            @ApiResponse(description = "OK", responseCode = "200") //avaliar content depois
+            @ApiResponse(description = OK, responseCode = HTTP_STATUS_CODE_200),
+            @ApiResponse(description = ERRO_AO_ALTERAR_ENDERECO, responseCode = HTTP_STATUS_CODE_422),
         }
     )
     @PutMapping("/{id}")

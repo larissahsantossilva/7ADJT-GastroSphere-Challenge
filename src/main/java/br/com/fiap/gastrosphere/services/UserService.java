@@ -59,8 +59,8 @@ public class UserService {
 		try {
 			result = this.userRepository.update(user, id);
 			if (result.isPresent() && result.get() != 1) {
-				logger.error(ERRO_AO_ALTERAR_USUARIO);
-				throw new UnprocessableEntityException(ERRO_AO_ALTERAR_USUARIO);
+				logger.error(USUARIO_NAO_ENCONTRADO);
+				throw new ResourceNotFoundException(USUARIO_NAO_ENCONTRADO);
 			}
 		} catch (DataAccessException e) {
 			logger.error(ERRO_AO_ALTERAR_USUARIO, e);

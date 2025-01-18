@@ -1,6 +1,7 @@
 package br.com.fiap.gastrosphere.services;
 
 import br.com.fiap.gastrosphere.entities.Address;
+import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
 import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
 import br.com.fiap.gastrosphere.repositories.AddressRepository;
 import org.slf4j.Logger;
@@ -11,8 +12,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.ERRO_AO_CRIAR_ENDERECO;
-import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.ERRO_AO_CRIAR_USUARIO;
+import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.*;
+import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.ERRO_AO_ALTERAR_USUARIO;
 import static br.com.fiap.gastrosphere.utils.GastroSphereUtils.uuidValidator;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -54,9 +55,16 @@ public class AddressService {
     }
 
     public void updateAddress(UUID id, Address address) {
-        var update = this.addressRepository.update(id, address);
-        if (update == 0) {
-            throw new RuntimeException("Endereço não encontrado");
+        Optional<Integer> result;
+        try {
+            result = this.addressRepository.update(id, address);
+            if (result.isPresent() && result.get() != 1) {
+                logger.error(ENDERECO_NAO_ENCONTRADO);
+                throw new ResourceNotFoundException(ENDERECO_NAO_ENCONTRADO);
+            }
+        } catch (DataAccessException e) {
+            logger.error(ERRO_AO_ALTERAR_ENDERECO, e);
+            throw new UnprocessableEntityException(ERRO_AO_ALTERAR_ENDERECO);
         }
     }
 
