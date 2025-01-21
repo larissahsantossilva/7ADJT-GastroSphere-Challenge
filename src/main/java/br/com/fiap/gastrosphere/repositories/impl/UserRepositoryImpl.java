@@ -5,6 +5,7 @@ import static java.util.UUID.fromString;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -144,8 +145,8 @@ public class UserRepositoryImpl implements UserRepository {
 				.param("address_id", user.getAddressId())
 				.param("address_number", user.getAddressNumber())
 				.param("address_complement", user.getAddressComplement())
-				.param("created_at", LocalDate.now())
-				.param("last_modified_at", LocalDate.now())
+				.param("created_at", LocalDate.now(ZoneId.of("America/Sao_Paulo")))
+				.param("last_modified_at", LocalDate.now(ZoneId.of("America/Sao_Paulo")))
 			.update());
 	}
 
@@ -166,7 +167,7 @@ public class UserRepositoryImpl implements UserRepository {
 				.param("address_id", user.getAddressId() != null ? user.getAddressId() : null)
 				.param("address_number", user.getAddressNumber())
 				.param("address_complement", user.getAddressComplement())
-				.param("last_modified_at", LocalDate.now())
+				.param("last_modified_at", LocalDate.now(ZoneId.of("America/Sao_Paulo")))
 			.update());
 	}
 
@@ -207,7 +208,7 @@ public class UserRepositoryImpl implements UserRepository {
 						""")
 				.param("id", id)
 				.param("newPassword", newPassword)
-				.param("lastModifiedAt", LocalDate.now())
+				.param("lastModifiedAt", LocalDate.now(ZoneId.of("America/Sao_Paulo")))
 				.update();
 	}
 
