@@ -2,9 +2,11 @@ package br.com.fiap.gastrosphere.services;
 
 import br.com.fiap.gastrosphere.dtos.responses.UserBodyResponse;
 import br.com.fiap.gastrosphere.entities.Address;
+import br.com.fiap.gastrosphere.entities.Restaurant;
 import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
 import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
 import br.com.fiap.gastrosphere.repositories.AddressRepository;
+import br.com.fiap.gastrosphere.repositories.RestaurantRepository;
 import br.com.fiap.gastrosphere.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.springframework.dao.DataAccessException;
@@ -23,10 +25,14 @@ public class AddressServiceImpl {
     private static final Logger logger = getLogger(AddressServiceImpl.class);
     private final AddressRepository addressRepository;
     private final UserRepository userRepository;
+    private final RestaurantRepository restaurantRepository;
 
-    public AddressServiceImpl(AddressRepository addressRepository, UserRepository userRepository) {
+    public AddressServiceImpl(AddressRepository addressRepository,
+                              UserRepository userRepository,
+                              RestaurantRepository restaurantRepository) {
         this.addressRepository = addressRepository;
         this.userRepository = userRepository;
+        this.restaurantRepository = restaurantRepository;
     }
 
     public List<Address> findAllAddresses(int page, int size) {
@@ -74,9 +80,15 @@ public class AddressServiceImpl {
     public void deleteAddressById(UUID id) {
         Optional<Integer> result;
         Optional<UserBodyResponse> user = this.userRepository.findByAddressId(id);
+        Optional<Restaurant> restaurant = this.restaurantRepository.findByAddressId(id);
+
         if(user.isPresent()){
             logger.error(ENDERECO_ASSOCIADO_A_USUARIO);
             throw new UnprocessableEntityException(ENDERECO_ASSOCIADO_A_USUARIO);
+        }
+        if(restaurant.isPresent()){
+            logger.error(ENDERECO_ASSOCIADO_A_RESTAURANTE);
+            throw new UnprocessableEntityException(ENDERECO_ASSOCIADO_A_RESTAURANTE);
         }
         try {
             result = this.addressRepository.deleteById(id);
@@ -87,5 +99,7 @@ public class AddressServiceImpl {
             logger.error(ERRO_AO_DELETAR_ENDERECO, e);
             throw new UnprocessableEntityException(ERRO_AO_DELETAR_ENDERECO);
         }
+
     }
+
 }

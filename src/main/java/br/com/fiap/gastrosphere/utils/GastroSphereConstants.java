@@ -36,4 +36,12 @@ public class GastroSphereConstants {
     public static final String ID_USUARIO_INVALIDO = "ID de usuário inválido.";
 
     public static final String ENDERECO_ASSOCIADO_A_USUARIO = "Endereço associado a usuário.";
+    public static final String ENDERECO_ASSOCIADO_A_RESTAURANTE = "Endereço associado a restaurante.";
+
+    public static final String ERRO_AO_CRIAR_RESTAURANTE = "Erro ao criar restaurante.";
+    public static final String RESTAURANTE_CRIADO_COM_SUCESSO = "Restaurante criado com sucesso.";
+    public static final String RESTAURANTE_NAO_ENCONTRADO = "Restaurante não encontrado.";
+    public static final String ERRO_AO_ALTERAR_RESTAURANTE = "Erro ao alterar restaurante.";
+    public static final String ERRO_AO_DELETAR_RESTAURANTE = "Erro ao deletar restaurante.";
+
 }
