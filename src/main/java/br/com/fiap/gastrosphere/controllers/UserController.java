@@ -23,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import br.com.fiap.gastrosphere.dtos.LoginUserDto;
+import br.com.fiap.gastrosphere.dtos.LoginUserDTO;
 import br.com.fiap.gastrosphere.services.UserServiceImpl;
 
 @RestController
@@ -174,7 +174,7 @@ public class UserController {
     )
     @PutMapping("/{id}/password")
     public ResponseEntity<String> updatePassword(@PathVariable("id") UUID id,
-                                                 @Valid @RequestBody LoginUserDto user) {
+                                                 @Valid @RequestBody LoginUserDTO user) {
         logger.info("PUT | {} | Iniciado updatePassword | id: {}", V1_USER, id);
         userService.updatePassword(id, user.oldPassword(), user.newPassword());
         logger.info("PUT | {} | Finalizado updatePassword | id: {}", V1_USER, id);

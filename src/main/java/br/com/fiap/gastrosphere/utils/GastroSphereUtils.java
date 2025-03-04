@@ -1,8 +1,10 @@
 package br.com.fiap.gastrosphere.utils;
 
 import br.com.fiap.gastrosphere.dtos.requests.AddressBodyRequest;
+import br.com.fiap.gastrosphere.dtos.requests.RestaurantBodyRequest;
 import br.com.fiap.gastrosphere.dtos.requests.UserBodyRequest;
 import br.com.fiap.gastrosphere.entities.Address;
+import br.com.fiap.gastrosphere.entities.Restaurant;
 import br.com.fiap.gastrosphere.entities.User;
 import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
@@ -20,12 +22,29 @@ public class GastroSphereUtils {
             throw new ResourceNotFoundException(ID_USUARIO_INVALIDO);
         }
     }
+
     public static Address convertToAddress(AddressBodyRequest addressDto) {
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(addressDto, Address.class);
     }
+
     public static User convertToUser(UserBodyRequest userRequest) {
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(userRequest, User.class);
     }
+
+    public static Restaurant convertToRestaurant(RestaurantBodyRequest restaurantRequest) {
+        Restaurant restaurant = new Restaurant();
+
+        restaurant.setName(restaurantRequest.getName());
+        restaurant.setAddressId(restaurantRequest.getAddressId());
+        restaurant.setOwnerId(restaurantRequest.getOwnerId());
+        restaurant.setAddressNumber(restaurantRequest.getAddressNumber());
+        restaurant.setAddressComplement(restaurantRequest.getAddressComplement());
+        restaurant.setRestaurantType(restaurantRequest.getRestaurantType());
+        restaurant.setOpeningHours(restaurantRequest.getOpeningHours());
+
+        return restaurant;
+    }
+
 }
