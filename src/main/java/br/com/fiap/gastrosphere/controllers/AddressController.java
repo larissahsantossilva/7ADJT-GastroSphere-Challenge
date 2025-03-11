@@ -87,7 +87,7 @@ public class AddressController {
     public ResponseEntity<Address> findAddressById(@PathVariable("id") UUID id) {
         logger.info("GET | {} | Iniciado findAddressById | id: {}", V1_ADDRESS, id);
         var address = addressService.findById(id);
-        if(address != null) {
+        if (address != null) {
             logger.info("GET | {} | Finalizado findAddressById | id: {}", V1_ADDRESS, id);
             return ok(address);
         }
