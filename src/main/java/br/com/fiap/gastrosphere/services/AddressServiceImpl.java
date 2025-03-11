@@ -1,8 +1,6 @@
 package br.com.fiap.gastrosphere.services;
 
-import br.com.fiap.gastrosphere.dtos.responses.UserBodyResponse;
 import br.com.fiap.gastrosphere.entities.Address;
-import br.com.fiap.gastrosphere.entities.Restaurant;
 import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
 import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
 import br.com.fiap.gastrosphere.repositories.AddressRepository;
@@ -10,10 +8,11 @@ import br.com.fiap.gastrosphere.repositories.RestaurantRepository;
 import br.com.fiap.gastrosphere.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.*;
@@ -35,42 +34,45 @@ public class AddressServiceImpl {
         this.restaurantRepository = restaurantRepository;
     }
 
-    public List<Address> findAllAddresses(int page, int size) {
-        int offset = (page - 1) * size;
-        return this.addressRepository.findAll(size, offset);
+    public Page<Address> findAllAddresses(int page, int size) {
+        return addressRepository.findAll(PageRequest.of(page, size));
     }
 
-    public Optional<Address> findById(UUID id) {
+    public Address findById(UUID id) {
         uuidValidator(id);
-        return this.addressRepository.findById(id);
+        return addressRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(ID_NAO_ENCONTRADO));
     }
 
-    public Optional<Address> findAddressByZipCode(String zipCode) {
-        return this.addressRepository.findByZipCode(zipCode);
+    public Page<Address> findAddressByZipCode(String zipCode, int page, int size) {
+        return addressRepository.findByZipCode(zipCode, PageRequest.of(page, size));
     }
 
-    public void createAddress(Address address) {
-        Optional<Integer> result;
+    public Address createAddress(Address address) {
         try {
-            result = this.addressRepository.create(address);
-            if (result.isPresent() && result.get() != 1) {
-                logger.error(ERRO_AO_CRIAR_ENDERECO);
-                throw new UnprocessableEntityException(ERRO_AO_CRIAR_ENDERECO);
-            }
+            return addressRepository.save(address);
         } catch (DataAccessException e) {
             logger.error(ERRO_AO_CRIAR_ENDERECO, e);
             throw new UnprocessableEntityException(ERRO_AO_CRIAR_ENDERECO);
         }
     }
 
-    public void updateAddress(UUID id, Address address) {
-        Optional<Integer> result;
+    public Address updateAddress(UUID id, Address address) {
+        Address existingAddress = addressRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(ENDERECO_NAO_ENCONTRADO));
+
+        if (address.getCountry() != null) existingAddress.setCountry(address.getCountry());
+        if (address.getState() != null) existingAddress.setState(address.getState());
+        if (address.getCity() != null) existingAddress.setCity(address.getCity());
+        if (address.getZipCode() != null) existingAddress.setZipCode(address.getZipCode());
+        if (address.getStreet() != null) existingAddress.setStreet(address.getStreet());
+        if (address.getNumber() != null) existingAddress.setNumber(address.getNumber());
+        if (address.getComplement() != null) existingAddress.setComplement(address.getComplement());
+
+        existingAddress.setLastModifiedAt(LocalDate.now());
+
         try {
-            result = this.addressRepository.updateById(id, address);
-            if (result.isPresent() && result.get() != 1) {
-                logger.error(ENDERECO_NAO_ENCONTRADO);
-                throw new ResourceNotFoundException(ENDERECO_NAO_ENCONTRADO);
-            }
+            return addressRepository.save(existingAddress);
         } catch (DataAccessException e) {
             logger.error(ERRO_AO_ALTERAR_ENDERECO, e);
             throw new UnprocessableEntityException(ERRO_AO_ALTERAR_ENDERECO);
@@ -78,28 +80,19 @@ public class AddressServiceImpl {
     }
 
     public void deleteAddressById(UUID id) {
-        Optional<Integer> result;
-        Optional<UserBodyResponse> user = this.userRepository.findByAddressId(id);
-        Optional<Restaurant> restaurant = this.restaurantRepository.findByAddressId(id);
-
-        if(user.isPresent()){
+        if (userRepository.findByAddressId(id).isPresent()) {
             logger.error(ENDERECO_ASSOCIADO_A_USUARIO);
             throw new UnprocessableEntityException(ENDERECO_ASSOCIADO_A_USUARIO);
         }
-        if(restaurant.isPresent()){
+        if (restaurantRepository.findByAddressId(id).isPresent()) {
             logger.error(ENDERECO_ASSOCIADO_A_RESTAURANTE);
-            throw new UnprocessableEntityException(ENDERECO_ASSOCIADO_A_RESTAURANTE);
         }
         try {
-            result = this.addressRepository.deleteById(id);
-            if (result.isPresent() && result.get() != 1) {
-                throw new ResourceNotFoundException(ENDERECO_NAO_ENCONTRADO);
-            }
+            addressRepository.deleteById(id);
         } catch (DataAccessException e) {
             logger.error(ERRO_AO_DELETAR_ENDERECO, e);
             throw new UnprocessableEntityException(ERRO_AO_DELETAR_ENDERECO);
         }
-
     }
 
 }

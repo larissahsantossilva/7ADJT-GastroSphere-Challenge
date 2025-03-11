@@ -1,17 +1,9 @@
 package br.com.fiap.gastrosphere.controllers;
 
-import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.*;
-import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.HTTP_STATUS_CODE_204;
-import static br.com.fiap.gastrosphere.utils.GastroSphereUtils.convertToAddress;
-import static org.slf4j.LoggerFactory.getLogger;
-import static org.springframework.http.ResponseEntity.ok;
-import static org.springframework.http.ResponseEntity.status;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
 import br.com.fiap.gastrosphere.dtos.requests.AddressBodyRequest;
+import br.com.fiap.gastrosphere.entities.Address;
+import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
+import br.com.fiap.gastrosphere.services.AddressServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,12 +11,18 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import br.com.fiap.gastrosphere.entities.Address;
-import br.com.fiap.gastrosphere.services.AddressServiceImpl;
+import java.util.UUID;
+
+import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.*;
+import static br.com.fiap.gastrosphere.utils.GastroSphereUtils.convertToAddress;
+import static org.slf4j.LoggerFactory.getLogger;
+import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.http.ResponseEntity.status;
 
 @RestController
 @RequestMapping(AddressController.V1_ADDRESS)
@@ -51,22 +49,23 @@ public class AddressController {
         }
     )
     @GetMapping
-    public ResponseEntity<List<Address>> findAllAddresses(
-            @RequestParam(value = "page", defaultValue = "1") int page,
+    public ResponseEntity<Page<Address>> findAllAddresses(
+            @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
             @RequestParam(value = "zipCode", required = false) String zipCode) {
         if (zipCode != null && !zipCode.isEmpty()) {
             logger.info("GET | {} | Iniciado busca de endereço pelo zipCode | ZipCode: {}", V1_ADDRESS, zipCode);
-            Optional<Address> address = this.addressService.findAddressByZipCode(zipCode);
+            Page<Address> addressByZipCode = this.addressService.findAddressByZipCode(zipCode, page, size);
             logger.info("GET | {} | Finalizado busca de endereço pelo zipCode | ZipCode: {}", V1_ADDRESS, zipCode);
-            return address.map(value -> ok(List.of(value))).orElseGet(() -> ResponseEntity.notFound().build());
+            return ok(addressByZipCode);
         } else {
             logger.info("GET | {} | Iniciado busca de endereço por paginação", V1_ADDRESS);
-            var addresses = this.addressService.findAllAddresses(page, size);
+            Page<Address> addresses = addressService.findAllAddresses(page, size);
             logger.info("GET | {} | Finalizado busca de endereço por paginação", V1_ADDRESS);
             return ok(addresses);
         }
     }
+
 
     @Operation(
         description = "Busca endereço por id.",
@@ -78,23 +77,24 @@ public class AddressController {
                 content = @Content(mediaType = "application/json", schema = @Schema(implementation = Address.class))
             ),
             @ApiResponse(
-                description = NO_CONTENT,
-                responseCode = HTTP_STATUS_CODE_204,
+                description = NOT_FOUND,
+                responseCode = HTTP_STATUS_CODE_404,
                 content = @Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))
             )
         }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Address>> findAddressById(@PathVariable("id") UUID id) {
+    public ResponseEntity<Address> findAddressById(@PathVariable("id") UUID id) {
         logger.info("GET | {} | Iniciado findAddressById | id: {}", V1_ADDRESS, id);
         var address = addressService.findById(id);
-        if(address.isPresent()){
+        if(address != null) {
             logger.info("GET | {} | Finalizado findAddressById | id: {}", V1_ADDRESS, id);
             return ok(address);
         }
-        logger.info("GET | {} | Finalizado findAddressById No Content | id: {}", V1_ADDRESS, id);
-        return status(HttpStatus.NO_CONTENT).build();
+        logger.info("GET | {} | Finalizado findAddressById Not Found | id: {}", V1_ADDRESS, id);
+        return status(HttpStatus.NOT_FOUND).build();
     }
+
 
     @Operation(
         description = "Cria endereço.",
@@ -113,12 +113,13 @@ public class AddressController {
         }
     )
     @PostMapping
-    public ResponseEntity<String> createAddress(@Valid @RequestBody AddressBodyRequest addressDto) {
+    public ResponseEntity<UUID> createAddress(@Valid @RequestBody AddressBodyRequest addressDto) {
         logger.info("POST | {} | Iniciado createAddress. ", V1_ADDRESS);
-        addressService.createAddress(convertToAddress(addressDto));
+        Address address = addressService.createAddress(convertToAddress(addressDto));
         logger.info("POST | {} | Finalizado createAddress ", V1_ADDRESS);
-        return status(201).body(ENDERECO_CRIADO_COM_SUCESSO);
+        return status(201).body(address.getId());
     }
+
 
     @Operation(
         description = "Atualiza endereço por id.",
@@ -149,13 +150,14 @@ public class AddressController {
         return ok("Endereço atualizado com sucesso");
     }
 
+
     @Operation(
         description = "Exclui endereço por id.",
         summary = "Exclui endereço por id.",
         responses = {
             @ApiResponse(
-                description = OK,
-                responseCode = HTTP_STATUS_CODE_200,
+                description = NO_CONTENT,
+                responseCode = HTTP_STATUS_CODE_204,
                 content = @Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))
             ),
             @ApiResponse(
@@ -168,8 +170,14 @@ public class AddressController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteAddress(@PathVariable("id") UUID id) {
     	logger.info("DELETE | {} | Iniciado deleteAddressById | Id: {}", V1_ADDRESS, id);
-        addressService.deleteAddressById(id);
-        logger.info("DELETE | {} | Finalizado deleteAddressById | Id: {}", V1_ADDRESS, id);
-        return ok().build();
+        try {
+            addressService.deleteAddressById(id);
+            logger.info("DELETE | {} | Endereço deletado com sucesso | Id: {}", V1_ADDRESS, id);
+            return ResponseEntity.noContent().build();
+        } catch (UnprocessableEntityException e) {
+            logger.error("DELETE | {} | Erro ao deletar endereço | Id: {} | Erro: {}", V1_ADDRESS, id, e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Endereço não encontrado");
+        }
     }
+
 }
