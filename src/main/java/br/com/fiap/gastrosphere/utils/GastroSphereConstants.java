@@ -1,7 +1,5 @@
 package br.com.fiap.gastrosphere.utils;
 
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-
 public class GastroSphereConstants {
     public static final String OK = "OK";
     public static final String NO_CONTENT = "No Content";
@@ -33,7 +31,8 @@ public class GastroSphereConstants {
     public static final String ERRO_AO_DELETAR_ENDERECO = "Erro ao deletar endereço.";
     public static final String ERRO_AO_DELETAR_USUARIO = "Erro ao deletar usuário.";
 
-    public static final String ID_USUARIO_INVALIDO = "ID de usuário inválido.";
+    public static final String ID_INVALIDO = "ID inválido.";
+    public static final String ID_NAO_ENCONTRADO = "ID não encontrado.";
 
     public static final String ENDERECO_ASSOCIADO_A_USUARIO = "Endereço associado a usuário.";
     public static final String ENDERECO_ASSOCIADO_A_RESTAURANTE = "Endereço associado a restaurante.";

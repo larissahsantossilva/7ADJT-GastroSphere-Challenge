@@ -43,4 +43,14 @@ public class AddressBodyRequest {
     @NotBlank(message = "Rua do endereço não pode ser vazio.")
     @Size(min = 1, max = 255)
     private String street;
+
+    @Schema(description = "Número do endereço.")
+    @NotNull(message = "Número do endereço não pode ser nulo.")
+    @NotBlank(message = "Número do endereço não pode ser vazio.")
+    @Size(min = 1, max = 10)
+    private String number;
+
+    @Schema(description = "Complemento do endereço do usuário.")
+    @Size(max = 255)
+    private String complement;
 }

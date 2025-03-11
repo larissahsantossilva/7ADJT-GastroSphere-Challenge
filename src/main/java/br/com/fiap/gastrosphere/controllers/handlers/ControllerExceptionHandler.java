@@ -46,7 +46,7 @@ public class ControllerExceptionHandler {
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ResourceNotFoundDTO> handleMethodArgumentMismatchException(MethodArgumentTypeMismatchException ex) {
         if (ex.getName().equals("id") && ex.getRequiredType().equals(UUID.class)) {
-            return ResponseEntity.badRequest().body(new ResourceNotFoundDTO("ID de usuário inválido", 400));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResourceNotFoundDTO("ID não encontrado", 404));
         }
         return ResponseEntity.internalServerError().body(new ResourceNotFoundDTO("Erro interno do servidor", 500));
     }
