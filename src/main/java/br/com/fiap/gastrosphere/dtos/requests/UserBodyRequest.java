@@ -6,8 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.util.UUID;
-
 @Getter
 @Setter
 @ToString
@@ -51,17 +49,8 @@ public class UserBodyRequest {
     @Size(min = 5, max = 20)
     private String document;
 
-    @Schema(description = "ID do endereço do usuário.")
-    @NotNull(message = "ID do endereço do usuário não pode ser nulo.")
-    private UUID addressId;
+    @Schema(description = "Endereço do usuário.")
+    @NotNull(message = "Endereço do usuário não pode ser nulo.")
+    private AddressBodyRequest address;
 
-    @Schema(description = "Número do endereço do usuário.")
-    @NotNull(message = "Número do endereço do usuário não pode ser nulo.")
-    @NotBlank(message = "Número do endereço do usuário não pode ser vazio.")
-    @Size(min = 1, max = 10)
-    private String addressNumber;
-
-    @Schema(description = "Complemento do endereço do usuário.")
-    @Size(max = 255)
-    private String addressComplement;
 }

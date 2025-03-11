@@ -3,6 +3,7 @@ package br.com.fiap.gastrosphere.entities;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -16,29 +17,42 @@ import lombok.ToString;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "users", schema = "gastrosphere")
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false, unique = true)
     private UUID id;
 
+    @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "email", nullable = false)
     private String email;
 
+    @Column(name = "login", nullable = false)
     private String login;
 
+    @Column(name = "password", nullable = false)
     private String password;
 
+    //TODO refatorar e passar UserType
+    @Column(name = "userType", nullable = false)
     private String userType;
 
+    @Column(name = "document", nullable = false)
     private String document;
 
-    private UUID addressId;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id", nullable = false, foreignKey = @ForeignKey(name = "fk_users_address"))
+    private Address address;
 
-    private String addressNumber;
+    @Column(name = "createdAt", nullable = false)
+    private LocalDate createdAt = LocalDate.now();
 
-    private String addressComplement;
+    @Column(name = "lastModifiedAt", nullable = false)
+    private LocalDate lastModifiedAt = LocalDate.now();
 
-    private LocalDate createdAt;
-
-    private LocalDate lastModifiedAt;
 }
