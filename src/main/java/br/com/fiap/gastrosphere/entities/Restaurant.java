@@ -25,15 +25,15 @@ public class Restaurant {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_restaurants_users"))
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", nullable = false, foreignKey = @ForeignKey(name = "fk_restaurants_address"))
     private Address address;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "restaurant_type_id", nullable = false, foreignKey = @ForeignKey(name = "fk_restaurants_restaurant_type"))
     private RestaurantType restaurantType;
 
