@@ -1,3 +1,4 @@
+-- Removendo campos de endereco
 ALTER TABLE gastrosphere.addresses
 ADD COLUMN number VARCHAR(10) DEFAULT 'N/A' NOT NULL,
 ADD COLUMN complement VARCHAR(255),

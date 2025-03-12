@@ -6,10 +6,11 @@ import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
 import br.com.fiap.gastrosphere.repositories.RestaurantRepository;
 import org.slf4j.Logger;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.*;
@@ -25,54 +26,49 @@ public class RestaurantServiceImpl {
         this.restaurantRepository = restaurantRepository;
     }
 
-    public List<Restaurant> findAllRestaurants(int page, int size) {
-        int offset = (page - 1) * size;
-        logger.info("size {}, offset {}", size, offset);
-        return this.restaurantRepository.findAll(size, offset);
+    public Page<Restaurant> findAllRestaurants(int page, int size) {
+        return restaurantRepository.findAll(PageRequest.of(page, size));
     }
 
-    public Optional<Restaurant> findById(UUID id) {
+    public Restaurant findById(UUID id) {
         uuidValidator(id);
-        return this.restaurantRepository.findById(id);
+        return restaurantRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(ID_NAO_ENCONTRADO));
     }
 
-    public void createRestaurant(Restaurant restaurant) {
-        Optional<Integer> result;
+    public Restaurant createRestaurant(Restaurant restaurant) {
         try {
-            result = this.restaurantRepository.create(restaurant);
-            if (result.isPresent() && result.get() != 1) {
-                logger.error(ERRO_AO_CRIAR_RESTAURANTE);
-                throw new UnprocessableEntityException(ERRO_AO_CRIAR_RESTAURANTE);
-            }
+            return restaurantRepository.save(restaurant);
         } catch (DataAccessException e) {
             logger.error(ERRO_AO_CRIAR_RESTAURANTE, e);
             throw new UnprocessableEntityException(ERRO_AO_CRIAR_RESTAURANTE);
         }
     }
 
-    public void updateRestaurant(Restaurant restaurant, UUID id) {
-        Optional<Integer> result;
+    public Restaurant updateRestaurant(Restaurant restaurant, UUID id) {
+        Restaurant existingRestaurant = restaurantRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(RESTAURANTE_NAO_ENCONTRADO));
+
+        if (restaurant.getUser() != null) existingRestaurant.setUser(restaurant.getUser());
+        if (restaurant.getName() != null) existingRestaurant.setName(restaurant.getName());
+        if (restaurant.getAddress() != null) existingRestaurant.setAddress(restaurant.getAddress());
+        if (restaurant.getRestaurantType() != null) existingRestaurant.setRestaurantType(restaurant.getRestaurantType());
+        if (restaurant.getStartedAt() != null) existingRestaurant.setStartedAt(restaurant.getStartedAt());
+        if (restaurant.getFinishedAt() != null) existingRestaurant.setFinishedAt(restaurant.getFinishedAt());
+
+        existingRestaurant.setLastModifiedAt(LocalDate.now());
+
         try {
-            result = this.restaurantRepository.updateById(id, restaurant);
-            if (result.isPresent() && result.get() != 1) {
-                logger.error(RESTAURANTE_NAO_ENCONTRADO);
-                throw new ResourceNotFoundException(RESTAURANTE_NAO_ENCONTRADO);
-            }
+            return restaurantRepository.save(existingRestaurant);
         } catch (DataAccessException e) {
             logger.error(ERRO_AO_ALTERAR_RESTAURANTE, e);
             throw new UnprocessableEntityException(ERRO_AO_ALTERAR_RESTAURANTE);
         }
     }
 
-
     public void deleteRestaurantById(UUID id) {
-        Optional<Integer> result;
         try {
-            result = this.restaurantRepository.deleteById(id);
-            if (result.isPresent() && result.get() != 1) {
-                logger.error(RESTAURANTE_NAO_ENCONTRADO);
-                throw new ResourceNotFoundException(RESTAURANTE_NAO_ENCONTRADO);
-            }
+           restaurantRepository.deleteById(id);
         } catch (DataAccessException e) {
             logger.error(ERRO_AO_DELETAR_RESTAURANTE, e);
             throw new UnprocessableEntityException(ERRO_AO_DELETAR_RESTAURANTE);

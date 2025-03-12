@@ -34,17 +34,8 @@ public class GastroSphereUtils {
     }
 
     public static Restaurant convertToRestaurant(RestaurantBodyRequest restaurantRequest) {
-        Restaurant restaurant = new Restaurant();
-
-        restaurant.setName(restaurantRequest.getName());
-        restaurant.setAddressId(restaurantRequest.getAddressId());
-        restaurant.setOwnerId(restaurantRequest.getOwnerId());
-        restaurant.setAddressNumber(restaurantRequest.getAddressNumber());
-        restaurant.setAddressComplement(restaurantRequest.getAddressComplement());
-        restaurant.setRestaurantType(restaurantRequest.getRestaurantType());
-        restaurant.setOpeningHours(restaurantRequest.getOpeningHours());
-
-        return restaurant;
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(restaurantRequest, Restaurant.class);
     }
 
 }

@@ -29,7 +29,7 @@ public class UserServiceImpl {
 	}
 
 	public Page<User> findAllUsers(int page, int size) {
-		return this.userRepository.findAll(PageRequest.of(page, size));
+		return userRepository.findAll(PageRequest.of(page, size));
 	}
 
 	public User findById(UUID id) {
@@ -62,7 +62,7 @@ public class UserServiceImpl {
 		existingUser.setLastModifiedAt(LocalDate.now());
 
 		try {
-			return this.userRepository.save(existingUser);
+			return userRepository.save(existingUser);
 		} catch (DataAccessException e) {
 			logger.error(ERRO_AO_ALTERAR_USUARIO, e);
 			throw new UnprocessableEntityException(ERRO_AO_ALTERAR_USUARIO);
@@ -93,7 +93,7 @@ public class UserServiceImpl {
 
 	public void deleteUserById(UUID id) {
 		try {
-			this.userRepository.deleteById(id);
+			userRepository.deleteById(id);
 		} catch (DataAccessException e) {
 			 logger.error(ERRO_AO_DELETAR_USUARIO, e);
 			 throw new UnprocessableEntityException(ERRO_AO_DELETAR_USUARIO);

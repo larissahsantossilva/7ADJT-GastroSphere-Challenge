@@ -1,5 +1,6 @@
 package br.com.fiap.gastrosphere.dtos.responses;
 
+import br.com.fiap.gastrosphere.dtos.AddressDTO;
 import br.com.fiap.gastrosphere.entities.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,7 @@ public class UserBodyResponse {
 	private String document;
 	private LocalDate createdAt;
 	private LocalDate lastModifiedAt;
-	private AddressBodyResponse address;
+	private AddressDTO address;
 
 	public UserBodyResponse(User user) {
 		this.id = user.getId();
@@ -32,7 +33,7 @@ public class UserBodyResponse {
 		this.document = user.getDocument();
 		this.createdAt = user.getCreatedAt();
 		this.lastModifiedAt = user.getLastModifiedAt();
-		this.address = user.getAddress() != null ? new AddressBodyResponse(user.getAddress()) : null;
+		this.address = user.getAddress() != null ? new AddressDTO(user.getAddress()) : null;
 	}
 
 }

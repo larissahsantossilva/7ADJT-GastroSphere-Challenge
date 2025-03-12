@@ -1,4 +1,4 @@
-package br.com.fiap.gastrosphere.dtos.responses;
+package br.com.fiap.gastrosphere.dtos;
 
 import br.com.fiap.gastrosphere.entities.Address;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AddressBodyResponse {
+public class AddressDTO {
     private String street;
     private String city;
     private String state;
@@ -17,7 +17,7 @@ public class AddressBodyResponse {
     private String number;
     private String complement;
 
-    public AddressBodyResponse(Address address) {
+    public AddressDTO(Address address) {
         this.street = address.getStreet();
         this.number = address.getNumber();
         this.city = address.getCity();
