@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.util.UUID;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -21,31 +21,24 @@ public class RestaurantBodyRequest {
     @Size(min = 1, max = 255)
     private String name;
 
-    @Schema(description = "ID do endereço do restaurante.")
-    @NotNull(message = "ID do endereço do restaurante não pode ser nulo.")
-    private UUID addressId;
+    @Schema(description = "ID do dono do restaurante.")
+    @NotNull(message = "ID do dono do restaurante não pode ser nulo.")
+    private UserBodyRequest user;
 
-    @Schema(description = "Número do endereço do restaurante.")
-    @NotNull(message = "Número do endereço do restaurante não pode ser nulo.")
-    @NotBlank(message = "Número do endereço do restaurante não pode ser vazio.")
-    @Size(min = 1, max = 10)
-    private String addressNumber;
-
-    @Schema(description = "Complemento do endereço do restaurante.")
-    @Size(max = 255)
-    private String addressComplement;
+    @Schema(description = "Endereço do usuário.")
+    @NotNull(message = "Endereço do usuário não pode ser nulo.")
+    private AddressBodyRequest address;
 
     @Schema(description = "Tipo do restaurante.")
     @NotNull(message = "Tipo do restaurante não pode ser nulo.")
-    @NotBlank(message = "Tipo do restaurante não pode ser vazio.")
-    @Size(min = 1, max = 100)
-    private String restaurantType;
+    private RestaurantTypeBodyRequest restaurantType;
 
-    @Schema(description = "Horário de funcionamento do restaurante.")
-    @Size(max = 100)
-    private String openingHours;
+    @Schema(description = "Horário de abertura.")
+    @NotNull(message = "Horário de abertura não pode ser nulo.")
+    private LocalTime startedAt;
 
-    @Schema(description = "ID do dono do restaurante.")
-    @NotNull(message = "ID do dono do restaurante não pode ser nulo.")
-    private UUID ownerId;
+    @Schema(description = "Horário de fechamento.")
+    @NotNull(message = "Horário de abertura não pode ser nulo.")
+    private LocalTime finishedAt;
+
 }
