@@ -45,7 +45,7 @@ public class User {
     @Column(name = "document", nullable = false)
     private String document;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id", nullable = false, foreignKey = @ForeignKey(name = "fk_users_address"))
     private Address address;
 

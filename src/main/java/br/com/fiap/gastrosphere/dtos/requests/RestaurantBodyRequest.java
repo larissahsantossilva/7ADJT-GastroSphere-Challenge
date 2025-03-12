@@ -35,12 +35,10 @@ public class RestaurantBodyRequest {
 
     @Schema(description = "Horário de abertura.")
     @NotNull(message = "Horário de abertura não pode ser nulo.")
-    @NotBlank(message = "Horário de abertura não pode ser vazio.")
     private LocalTime startedAt;
 
     @Schema(description = "Horário de fechamento.")
     @NotNull(message = "Horário de abertura não pode ser nulo.")
-    @NotBlank(message = "Horário de abertura não pode ser vazio.")
     private LocalTime finishedAt;
 
 }

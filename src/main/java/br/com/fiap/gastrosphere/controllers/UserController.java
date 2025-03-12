@@ -58,7 +58,9 @@ public class UserController {
             @RequestParam(value = "size", defaultValue = "10") int size) {
         logger.info("GET | {} | Iniciado findAllUsers", V1_USER);
         Page<User> users = this.userService.findAllUsers(page, size);
-        List<UserBodyResponse> userResponses = users.stream().map(UserBodyResponse::new).toList();
+        List<UserBodyResponse> userResponses = users.stream()
+                .map(UserBodyResponse::new)
+                .toList();
         logger.info("GET | {} | Finalizado findAllUsers", V1_USER);
         return ok(userResponses);
     }

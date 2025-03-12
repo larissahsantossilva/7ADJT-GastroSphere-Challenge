@@ -53,11 +53,13 @@ public class RestaurantController {
     )
     @GetMapping
     public ResponseEntity<List<RestaurantBodyResponse>> findAllRestaurants(
-            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size) {
         logger.info("GET | {} | Iniciado findAllRestaurants", V1_RESTAURANT);
         Page<Restaurant> restaurants = this.restaurantService.findAllRestaurants(page, size);
-        List<RestaurantBodyResponse> restaurantResponses = restaurants.stream().map(RestaurantBodyResponse::new).toList();
+        List<RestaurantBodyResponse> restaurantResponses = restaurants.stream()
+                .map(RestaurantBodyResponse::new)
+                .toList();
         logger.info("GET | {} | Finalizado findAllRestaurants", V1_RESTAURANT);
         return ok(restaurantResponses);
     }
