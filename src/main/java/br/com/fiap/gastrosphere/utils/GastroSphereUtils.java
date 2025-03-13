@@ -15,6 +15,9 @@ import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.ID_INVALIDO;
 import static java.util.regex.Pattern.matches;
 
 public class GastroSphereUtils {
+	
+	private GastroSphereUtils() {}
+	
     private static final String REGEX_UUID = "^[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$";
 
     public static void uuidValidator(UUID id) {
