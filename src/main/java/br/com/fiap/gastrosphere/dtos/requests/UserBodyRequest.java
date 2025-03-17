@@ -39,9 +39,7 @@ public class UserBodyRequest {
 
     @Schema(description = "Tipo de usuário.")
     @NotNull(message = "Tipo de usuário não pode ser nulo.")
-    @NotBlank(message = "Tipo de usuário não pode ser vazio.")
-    @Size(min = 4, max = 50)
-    private String userType;
+    private UserTypeBodyRequest userType;
 
     @Schema(description = "Documento do usuário.")
     @NotNull(message = "Documento do usuário não pode ser nulo.")

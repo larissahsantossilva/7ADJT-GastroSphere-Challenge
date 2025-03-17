@@ -1,9 +1,11 @@
 package br.com.fiap.gastrosphere.services;
 
 import br.com.fiap.gastrosphere.entities.User;
+import br.com.fiap.gastrosphere.entities.UserType;
 import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
 import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
 import br.com.fiap.gastrosphere.repositories.UserRepository;
+import br.com.fiap.gastrosphere.repositories.UserTypeRepository;
 import org.slf4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -23,9 +25,11 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class UserServiceImpl {
 	private static final Logger logger = getLogger(UserServiceImpl.class);
 	private final UserRepository userRepository;
+	private final UserTypeRepository userTypeRepository;
 
-	public UserServiceImpl(UserRepository userRepository) {
+	public UserServiceImpl(UserRepository userRepository, UserTypeRepository userTypeRepository) {
 		this.userRepository = userRepository;
+		this.userTypeRepository = userTypeRepository;
 	}
 
 	public Page<User> findAllUsers(int page, int size) {
@@ -39,6 +43,14 @@ public class UserServiceImpl {
 	}
 
 	public User createUser(User user) {
+		if (user.getUserType() != null) {
+			UserType userType = userTypeRepository.findByName(user.getUserType().getName());
+			if (userType == null) {
+				throw new UnprocessableEntityException(TIPO_USUARIO_NAO_ENCONTRADO);
+			}
+			user.setUserType(userType);
+		}
+
 		try {
 			return userRepository.save(user);
 		} catch (DataAccessException e) {
@@ -51,11 +63,18 @@ public class UserServiceImpl {
 		User existingUser = userRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(USUARIO_NAO_ENCONTRADO));
 
+		if (user.getUserType() != null) {
+			UserType userType = userTypeRepository.findByName(user.getUserType().getName());
+			if (userType == null) {
+				throw new UnprocessableEntityException(TIPO_USUARIO_NAO_ENCONTRADO);
+			}
+			existingUser.setUserType(userType);
+		}
+
 		if (user.getName() != null) existingUser.setName(user.getName());
 		if (user.getEmail() != null) existingUser.setEmail(user.getEmail());
 		if (user.getLogin() != null) existingUser.setLogin(user.getLogin());
 		if (user.getPassword() != null) existingUser.setPassword(user.getPassword());
-		if (user.getUserType() != null) existingUser.setUserType(user.getUserType());
 		if (user.getDocument() != null) existingUser.setDocument(user.getDocument());
 		if (user.getAddress() != null) existingUser.setAddress(user.getAddress());
 
