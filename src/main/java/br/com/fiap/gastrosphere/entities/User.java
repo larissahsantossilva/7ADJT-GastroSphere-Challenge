@@ -38,9 +38,9 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    //TODO refatorar e passar UserType
-    @Column(name = "userType", nullable = false)
-    private String userType;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_type_id", nullable = false, foreignKey = @ForeignKey(name = "fk_users_user_type"))
+    private UserType userType;
 
     @Column(name = "document", nullable = false)
     private String document;

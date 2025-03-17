@@ -43,4 +43,11 @@ public class GastroSphereConstants {
     public static final String ERRO_AO_ALTERAR_RESTAURANTE = "Erro ao alterar restaurante.";
     public static final String ERRO_AO_DELETAR_RESTAURANTE = "Erro ao deletar restaurante.";
 
+    public static final String ERRO_AO_CRIAR_TIPO_USUARIO = "Erro ao criar tipo de usuário.";
+    public static final String TIPO_USUARIO_CRIADO_COM_SUCESSO = "Tipo de usuário criado com sucesso.";
+    public static final String ERRO_AO_ALTERAR_TIPO_USUARIO = "Erro ao alterar tipo de usuário.";
+    public static final String TIPO_USUARIO_NAO_ENCONTRADO = "Tipo de usuário não encontrado.";
+    public static final String ERRO_AO_DELETAR_TIPO_USUARIO = "Erro ao deletar tipo de usuário.";
+    public static final String TIPO_USUARIO_ASSOCIADO_A_USUARIO = "Tipo de usuário associado a usuário.";
+
 }
