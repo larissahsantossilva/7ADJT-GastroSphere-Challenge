@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, UUID> {
 
     Optional<User> findByAddressId(UUID id);
+    boolean existsByUserType_Id(UUID userTypeId);
 
     @Modifying
     @Query("UPDATE User u " +
