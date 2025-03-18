@@ -2,7 +2,6 @@ package br.com.fiap.gastrosphere.controllers;
 
 import br.com.fiap.gastrosphere.dtos.requests.RestaurantBodyRequest;
 import br.com.fiap.gastrosphere.dtos.responses.RestaurantBodyResponse;
-import br.com.fiap.gastrosphere.entities.Address;
 import br.com.fiap.gastrosphere.entities.Restaurant;
 import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
 import br.com.fiap.gastrosphere.services.RestaurantServiceImpl;
@@ -47,7 +46,7 @@ public class RestaurantController {
                     @ApiResponse(
                             description = OK,
                             responseCode = HTTP_STATUS_CODE_200,
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Address.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Restaurant.class))
                     )
             }
     )
@@ -104,7 +103,7 @@ public class RestaurantController {
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
                     ),
                     @ApiResponse(
-                            description = ERRO_AO_CRIAR_USUARIO,
+                            description = ERRO_AO_CRIAR_RESTAURANTE,
                             responseCode = HTTP_STATUS_CODE_422,
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
                     ),
