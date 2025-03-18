@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.*;
@@ -53,6 +54,8 @@ public class UserTypeServiceImpl {
                 .orElseThrow(() -> new ResourceNotFoundException(TIPO_USUARIO_NAO_ENCONTRADO));
 
         if (userType.getName() != null) existingUserType.setName(userType.getName());
+
+        existingUserType.setLastModifiedAt(LocalDate.now());
 
         try {
             return userTypeRepository.save(existingUserType);

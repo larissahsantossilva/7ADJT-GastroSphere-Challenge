@@ -1,7 +1,6 @@
 package br.com.fiap.gastrosphere.controllers;
 
 import br.com.fiap.gastrosphere.dtos.requests.UserTypeBodyRequest;
-import br.com.fiap.gastrosphere.entities.Address;
 import br.com.fiap.gastrosphere.entities.UserType;
 import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
 import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
@@ -47,7 +46,7 @@ public class UserTypeController {
                     @ApiResponse(
                             description = OK,
                             responseCode = HTTP_STATUS_CODE_200,
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Address.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserType.class))
                     )
             }
     )
@@ -68,7 +67,7 @@ public class UserTypeController {
                     @ApiResponse(
                             description = OK,
                             responseCode = HTTP_STATUS_CODE_200,
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Address.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserType.class))
                     ),
                     @ApiResponse(
                             description = NOT_FOUND,
