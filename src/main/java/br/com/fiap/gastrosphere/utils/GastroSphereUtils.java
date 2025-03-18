@@ -30,6 +30,11 @@ public final class GastroSphereUtils {
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(restaurantRequest, Restaurant.class);
     }
+    
+    public static Menu convertToMenu(MenuBodyRequest menuRequest) {
+    	ModelMapper modelMapper = new ModelMapper();
+    	return modelMapper.map(menuRequest, Menu.class);
+    }
 
     public static UserType convertToUserType(UserTypeBodyRequest userTypeDto) {
         ModelMapper modelMapper = new ModelMapper();

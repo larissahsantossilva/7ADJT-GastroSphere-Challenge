@@ -59,6 +59,7 @@ public final class GastroSphereConstants {
     public static final String ERRO_AO_DELETAR_TIPO_USUARIO = "Erro ao deletar tipo de usuário.";
     public static final String TIPO_USUARIO_ASSOCIADO_A_USUARIO = "Tipo de usuário associado a usuário.";
 
+    public static final String MENU_CRIADO_COM_SUCESSO = "Menu criado com sucesso.";
     public static final String ERRO_AO_CRIAR_MENU = "Erro ao criar menu.";
     public static final String MENU_NAO_ENCONTRADO = "Menu não encontrado.";
     public static final String ERRO_AO_ALTERAR_MENU = "Erro ao alterar Menu.";
