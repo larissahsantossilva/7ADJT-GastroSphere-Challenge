@@ -1,13 +1,7 @@
 package br.com.fiap.gastrosphere.utils;
 
-import br.com.fiap.gastrosphere.dtos.requests.AddressBodyRequest;
-import br.com.fiap.gastrosphere.dtos.requests.RestaurantBodyRequest;
-import br.com.fiap.gastrosphere.dtos.requests.UserBodyRequest;
-import br.com.fiap.gastrosphere.dtos.requests.UserTypeBodyRequest;
-import br.com.fiap.gastrosphere.entities.Address;
-import br.com.fiap.gastrosphere.entities.Restaurant;
-import br.com.fiap.gastrosphere.entities.User;
-import br.com.fiap.gastrosphere.entities.UserType;
+import br.com.fiap.gastrosphere.dtos.requests.*;
+import br.com.fiap.gastrosphere.entities.*;
 import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 
@@ -43,6 +37,11 @@ public class GastroSphereUtils {
     public static UserType convertToUserType(UserTypeBodyRequest userTypeDto) {
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(userTypeDto, UserType.class);
+    }
+
+    public static RestaurantType convertToRestaurantType(RestaurantTypeBodyRequest restaurantTypeBodyResquest) {
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(restaurantTypeBodyResquest, RestaurantType.class);
     }
 
 }

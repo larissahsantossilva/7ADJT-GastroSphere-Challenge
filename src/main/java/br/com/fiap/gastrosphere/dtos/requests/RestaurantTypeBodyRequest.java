@@ -18,5 +18,4 @@ public class RestaurantTypeBodyRequest {
     @NotBlank(message = "Tipo do restaurante não pode ser vazio.")
     @Size(min = 3, max = 100)
     private String name;
-
 }
