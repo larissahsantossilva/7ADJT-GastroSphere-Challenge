@@ -1,6 +1,9 @@
 package br.com.fiap.gastrosphere.utils;
 
-public class GastroSphereConstants {
+public final class GastroSphereConstants {
+	
+	private GastroSphereConstants() {}
+	
     public static final String OK = "OK";
     public static final String NO_CONTENT = "No Content";
     public static final String NOT_FOUND = "Not Found";
@@ -50,4 +53,8 @@ public class GastroSphereConstants {
     public static final String ERRO_AO_DELETAR_TIPO_USUARIO = "Erro ao deletar tipo de usuário.";
     public static final String TIPO_USUARIO_ASSOCIADO_A_USUARIO = "Tipo de usuário associado a usuário.";
 
+    public static final String ERRO_AO_CRIAR_MENU = "Erro ao criar menu.";
+    public static final String MENU_NAO_ENCONTRADO = "Menu não encontrado.";
+    public static final String ERRO_AO_ALTERAR_MENU = "Erro ao alterar Menu.";
+    public static final String ERRO_AO_DELETAR_MENU = "Erro ao deletar Menu.";
 }
