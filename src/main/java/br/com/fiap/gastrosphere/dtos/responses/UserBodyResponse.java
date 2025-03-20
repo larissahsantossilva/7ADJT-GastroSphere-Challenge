@@ -1,15 +1,14 @@
 package br.com.fiap.gastrosphere.dtos.responses;
 
+import java.time.LocalDate;
+import java.util.UUID;
+
 import br.com.fiap.gastrosphere.dtos.AddressDTO;
-import br.com.fiap.gastrosphere.dtos.RestaurantTypeDTO;
 import br.com.fiap.gastrosphere.dtos.UserTypeDTO;
 import br.com.fiap.gastrosphere.entities.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDate;
-import java.util.UUID;
 
 @Getter
 @Setter

@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenApiConfiguration {
     @Bean
-    public OpenAPI getGastrosphereAPI() {
+    OpenAPI getGastrosphereAPI() {
         return new OpenAPI()
             .info(
                 new Info()
