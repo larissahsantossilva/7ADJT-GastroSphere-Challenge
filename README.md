@@ -64,6 +64,16 @@ Abaixo estão descritos os endpoints disponíveis:
 | `/api/v1/restaurants`           | POST   | Cria um novo restaurante                                  |
 | `/api/v1/restaurants/{id}`      | PUT    | Atualiza completamente os dados de um restaurante         |
 | `/api/v1/restaurants/{id}`      | DELETE | Deleta um restaurante específico pelo ID                  |
+| `/api/v1/menus`                 | GET    | Retorna uma lista paginada de menus                       |
+| `/api/v1/menus/{id}`            | GET    | Retorna os detalhes de um menu pelo ID                    |
+| `/api/v1/menus`                 | POST   | Cria um novo menu                                         |
+| `/api/v1/menus/{id}`            | PUT    | Atualiza completamente os dados de um menu                |
+| `/api/v1/menus/{id}`            | DELETE | Deleta um menu específico pelo ID                         |
+| `/api/v1/menu/items`            | GET    | Retorna uma lista paginada de itens de menu               |
+| `/api/v1/menu/{id}/items`       | GET    | Retorna os detalhes de item de menu pelo ID               |
+| `/api/v1/menu/items`            | POST   | Cria um novo item de menu                                 |
+| `/api/v1/menu/{id}/items`       | PUT    | Atualiza completamente os dados de um item de menu        |
+| `/api/v1/menu/{id}/items`       | DELETE | Deleta um item de menu específico pelo ID                 |
 
 A documentação completa da API está disponível via Swagger em: `http://localhost:8080/swagger-ui/index.html`.
 
