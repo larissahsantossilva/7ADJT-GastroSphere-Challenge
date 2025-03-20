@@ -1,12 +1,26 @@
 package br.com.fiap.gastrosphere.entities;
 
+import static jakarta.persistence.GenerationType.AUTO;
 import static java.time.LocalDate.now;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter
@@ -19,10 +33,11 @@ import lombok.*;
 public class Menu {
 	
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = AUTO)
+    @Column(name = "id", nullable = false, unique = true)
     private UUID id;
 
-    @Column(nullable = false)
+    @Column(name = "restaurant_id", nullable = false)
     private UUID restaurantId;
 
     @Column(nullable = false)
@@ -34,6 +49,6 @@ public class Menu {
     @Column(nullable = false)
     private LocalDate lastModifiedAt = now();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "menu")
+    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MenuItem> itemsMenu = new ArrayList<>();
- }
+}
