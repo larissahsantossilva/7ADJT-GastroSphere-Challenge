@@ -27,6 +27,9 @@ public class MenuItemBodyRequest {
    
 	@Schema(description = "ID do Item.")
 	private UUID id;
+
+	@Schema(description = "ID do menu.")
+	private UUID menuId;
 	
     @Schema(description = "Descrição do Item.")
     @NotNull(message = "A descrição do Item não pode ser nulo.")

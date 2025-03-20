@@ -14,14 +14,18 @@ import lombok.Setter;
 public class MenuItemResponse {
     
 	private UUID id;
+	private UUID menuId;
     private String description;
+    private String image;
     private BigDecimal price;
     private Boolean isAvailable;
 
     public MenuItemResponse(MenuItem menuItem) {
         this.id = menuItem.getId();
         this.description = menuItem.getDescription();
+        this.image = menuItem.getImage();
         this.price = menuItem.getPrice();
+        this.menuId = menuItem.getMenu().getId();
         this.isAvailable = menuItem.getIsAvailable();
     }
 }

@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 
 import br.com.fiap.gastrosphere.dtos.requests.AddressBodyRequest;
 import br.com.fiap.gastrosphere.dtos.requests.MenuBodyRequest;
+import br.com.fiap.gastrosphere.dtos.requests.MenuItemBodyRequest;
 import br.com.fiap.gastrosphere.dtos.requests.RestaurantBodyRequest;
 import br.com.fiap.gastrosphere.dtos.requests.RestaurantTypeBodyRequest;
 import br.com.fiap.gastrosphere.dtos.requests.UserBodyRequest;
@@ -57,6 +58,11 @@ public final class GastroSphereUtils {
     public static RestaurantType convertToRestaurantType(RestaurantTypeBodyRequest restaurantTypeBodyResquest) {
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(restaurantTypeBodyResquest, RestaurantType.class);
+    }
+    
+    public static MenuItem convertToMenuItem(MenuItemBodyRequest menuItemRequest) {
+    	ModelMapper modelMapper = new ModelMapper();
+    	return modelMapper.map(menuItemRequest, MenuItem.class);
     }
 
     public static Menu convertToMenu(MenuBodyRequest menuRequest) {

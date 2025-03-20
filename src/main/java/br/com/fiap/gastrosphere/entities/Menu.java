@@ -1,5 +1,6 @@
 package br.com.fiap.gastrosphere.entities;
 
+import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.GenerationType.AUTO;
 import static java.time.LocalDate.now;
 
@@ -8,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -49,6 +49,6 @@ public class Menu {
     @Column(nullable = false)
     private LocalDate lastModifiedAt = now();
 
-    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "menu", cascade = ALL, orphanRemoval = true)
     private List<MenuItem> itemsMenu = new ArrayList<>();
 }
