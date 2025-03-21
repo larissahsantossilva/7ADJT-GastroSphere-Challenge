@@ -2,7 +2,7 @@ package br.com.fiap.gastrosphere.core.domain.entity;
 
 import br.com.fiap.gastrosphere.core.application.dto.AddressDTO;
 import br.com.fiap.gastrosphere.core.application.dto.UserDTO;
-import br.com.fiap.gastrosphere.entities.Restaurant;
+import br.com.fiap.gastrosphere.core.infra.model.Restaurant;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

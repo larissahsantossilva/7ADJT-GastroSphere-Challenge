@@ -1,9 +1,5 @@
-package br.com.fiap.gastrosphere.entities;
+package br.com.fiap.gastrosphere.core.infra.model;
 
-import br.com.fiap.gastrosphere.core.domain.entity.RestaurantType;
-import br.com.fiap.gastrosphere.core.infra.model.AddressModel;
-import br.com.fiap.gastrosphere.core.infra.model.RestaurantTypeModel;
-import br.com.fiap.gastrosphere.core.infra.model.UserModel;
 import jakarta.persistence.*;
 import lombok.*;
 

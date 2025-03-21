@@ -1,6 +1,6 @@
 package br.com.fiap.gastrosphere.core.infra.repository;
 
-import br.com.fiap.gastrosphere.entities.Restaurant;
+import br.com.fiap.gastrosphere.core.infra.model.Restaurant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

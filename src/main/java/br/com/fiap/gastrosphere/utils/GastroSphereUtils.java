@@ -19,7 +19,7 @@ import br.com.fiap.gastrosphere.core.application.dto.request.UserTypeBodyRequest
 import br.com.fiap.gastrosphere.core.infra.model.AddressModel;
 import br.com.fiap.gastrosphere.core.infra.model.Menu;
 import br.com.fiap.gastrosphere.core.infra.model.MenuItem;
-import br.com.fiap.gastrosphere.entities.Restaurant;
+import br.com.fiap.gastrosphere.core.infra.model.Restaurant;
 import br.com.fiap.gastrosphere.core.infra.model.UserModel;
 import br.com.fiap.gastrosphere.core.infra.model.UserTypeModel;
 import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;

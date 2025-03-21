@@ -3,7 +3,7 @@ package br.com.fiap.gastrosphere.core.application.controller;
 import br.com.fiap.gastrosphere.core.application.service.RestaurantServiceImpl;
 import br.com.fiap.gastrosphere.core.domain.entity.RestaurantBodyRequest;
 import br.com.fiap.gastrosphere.core.domain.entity.RestaurantBodyResponse;
-import br.com.fiap.gastrosphere.entities.Restaurant;
+import br.com.fiap.gastrosphere.core.infra.model.Restaurant;
 import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
