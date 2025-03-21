@@ -1,8 +1,8 @@
 package br.com.fiap.gastrosphere.core.application.service;
 
 import br.com.fiap.gastrosphere.core.infra.model.UserTypeModel;
-import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
-import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
+import br.com.fiap.gastrosphere.core.domain.exception.ResourceNotFoundException;
+import br.com.fiap.gastrosphere.core.domain.exception.UnprocessableEntityException;
 import br.com.fiap.gastrosphere.core.infra.repository.UserRepository;
 import br.com.fiap.gastrosphere.core.infra.repository.UserTypeRepository;
 import org.slf4j.Logger;

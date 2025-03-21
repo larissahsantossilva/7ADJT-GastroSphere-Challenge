@@ -19,8 +19,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import br.com.fiap.gastrosphere.core.infra.model.Menu;
-import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
-import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
+import br.com.fiap.gastrosphere.core.domain.exception.ResourceNotFoundException;
+import br.com.fiap.gastrosphere.core.domain.exception.UnprocessableEntityException;
 import br.com.fiap.gastrosphere.core.infra.repository.MenuItemRepository;
 import br.com.fiap.gastrosphere.core.infra.repository.MenuRepository;
 import jakarta.transaction.Transactional;

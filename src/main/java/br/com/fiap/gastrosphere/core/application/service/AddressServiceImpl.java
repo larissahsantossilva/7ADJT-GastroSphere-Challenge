@@ -1,8 +1,8 @@
 package br.com.fiap.gastrosphere.core.application.service;
 
 import br.com.fiap.gastrosphere.core.infra.model.AddressModel;
-import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
-import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
+import br.com.fiap.gastrosphere.core.domain.exception.ResourceNotFoundException;
+import br.com.fiap.gastrosphere.core.domain.exception.UnprocessableEntityException;
 import br.com.fiap.gastrosphere.core.infra.repository.AddressRepository;
 import br.com.fiap.gastrosphere.core.infra.repository.RestaurantRepository;
 import br.com.fiap.gastrosphere.core.infra.repository.UserRepository;

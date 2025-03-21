@@ -38,7 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.gastrosphere.core.application.dto.request.MenuItemBodyRequest;
 import br.com.fiap.gastrosphere.core.application.dto.response.MenuItemResponse;
-import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
+import br.com.fiap.gastrosphere.core.domain.exception.UnprocessableEntityException;
 import br.com.fiap.gastrosphere.core.application.service.MenuItemServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

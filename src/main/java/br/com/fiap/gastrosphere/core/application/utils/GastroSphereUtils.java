@@ -5,9 +5,9 @@ import static br.com.fiap.gastrosphere.core.application.utils.GastroSphereConsta
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-import br.com.fiap.gastrosphere.core.domain.entity.RestaurantBodyRequest;
+import br.com.fiap.gastrosphere.core.application.dto.request.RestaurantBodyRequest;
 import br.com.fiap.gastrosphere.core.domain.entity.RestaurantType;
-import br.com.fiap.gastrosphere.core.domain.entity.RestaurantTypeBodyRequest;
+import br.com.fiap.gastrosphere.core.application.dto.request.RestaurantTypeBodyRequest;
 import br.com.fiap.gastrosphere.core.infra.model.RestaurantTypeModel;
 import org.modelmapper.ModelMapper;
 
@@ -22,7 +22,7 @@ import br.com.fiap.gastrosphere.core.infra.model.MenuItem;
 import br.com.fiap.gastrosphere.core.infra.model.Restaurant;
 import br.com.fiap.gastrosphere.core.infra.model.UserModel;
 import br.com.fiap.gastrosphere.core.infra.model.UserTypeModel;
-import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
+import br.com.fiap.gastrosphere.core.domain.exception.ResourceNotFoundException;
 
 public final class GastroSphereUtils {
 	

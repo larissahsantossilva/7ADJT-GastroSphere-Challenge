@@ -2,7 +2,7 @@ package br.com.fiap.gastrosphere.core.application.controller;
 
 import br.com.fiap.gastrosphere.core.application.dto.request.AddressBodyRequest;
 import br.com.fiap.gastrosphere.core.infra.model.AddressModel;
-import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
+import br.com.fiap.gastrosphere.core.domain.exception.UnprocessableEntityException;
 import br.com.fiap.gastrosphere.core.application.service.AddressServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

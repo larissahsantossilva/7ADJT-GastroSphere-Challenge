@@ -1,4 +1,4 @@
-package br.com.fiap.gastrosphere.exceptions;
+package br.com.fiap.gastrosphere.core.domain.exception;
 
 public class UnprocessableEntityException extends RuntimeException {
 

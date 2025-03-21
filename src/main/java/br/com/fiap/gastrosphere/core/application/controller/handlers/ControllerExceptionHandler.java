@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import br.com.fiap.gastrosphere.core.application.dto.IllegalArgumentDTO;
 import br.com.fiap.gastrosphere.core.application.dto.UnprocessableEntityDTO;
-import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
+import br.com.fiap.gastrosphere.core.domain.exception.UnprocessableEntityException;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import br.com.fiap.gastrosphere.core.application.dto.ResourceNotFoundDTO;
 import br.com.fiap.gastrosphere.core.application.dto.ValidationErrorDTO;
-import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
+import br.com.fiap.gastrosphere.core.domain.exception.ResourceNotFoundException;
 
 import static org.slf4j.LoggerFactory.getLogger;
 

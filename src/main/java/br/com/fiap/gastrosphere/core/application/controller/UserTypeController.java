@@ -2,8 +2,8 @@ package br.com.fiap.gastrosphere.core.application.controller;
 
 import br.com.fiap.gastrosphere.core.application.dto.request.UserTypeBodyRequest;
 import br.com.fiap.gastrosphere.core.infra.model.UserTypeModel;
-import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
-import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
+import br.com.fiap.gastrosphere.core.domain.exception.ResourceNotFoundException;
+import br.com.fiap.gastrosphere.core.domain.exception.UnprocessableEntityException;
 import br.com.fiap.gastrosphere.core.application.service.UserTypeServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

@@ -4,7 +4,7 @@ import br.com.fiap.gastrosphere.core.application.dto.LoginUserDTO;
 import br.com.fiap.gastrosphere.core.application.dto.request.UserBodyRequest;
 import br.com.fiap.gastrosphere.core.application.dto.response.UserBodyResponse;
 import br.com.fiap.gastrosphere.core.infra.model.UserModel;
-import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
+import br.com.fiap.gastrosphere.core.domain.exception.UnprocessableEntityException;
 import br.com.fiap.gastrosphere.core.application.service.UserServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
