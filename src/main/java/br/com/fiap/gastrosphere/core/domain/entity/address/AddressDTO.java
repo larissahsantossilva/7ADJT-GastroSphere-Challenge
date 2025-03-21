@@ -1,6 +1,5 @@
-package br.com.fiap.gastrosphere.dtos;
+package br.com.fiap.gastrosphere.core.domain.entity.address;
 
-import br.com.fiap.gastrosphere.entities.Address;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +16,7 @@ public class AddressDTO {
     private String number;
     private String complement;
 
-    public AddressDTO(Address address) {
+    public AddressDTO(AddressDTO address) {
         this.street = address.getStreet();
         this.number = address.getNumber();
         this.city = address.getCity();
