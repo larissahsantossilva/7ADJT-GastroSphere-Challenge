@@ -1,7 +1,7 @@
 package br.com.fiap.gastrosphere.core.application.controller;
 
+import br.com.fiap.gastrosphere.core.domain.entity.RestaurantTypeBodyRequest;
 import br.com.fiap.gastrosphere.core.infra.model.RestaurantTypeModel;
-import br.com.fiap.gastrosphere.dtos.requests.RestaurantTypeBodyRequest;
 import br.com.fiap.gastrosphere.core.domain.entity.RestaurantType;
 import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
 import br.com.fiap.gastrosphere.core.application.service.RestaurantTypeServiceImpl;

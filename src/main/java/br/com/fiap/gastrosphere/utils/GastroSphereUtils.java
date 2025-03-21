@@ -6,6 +6,7 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 import br.com.fiap.gastrosphere.core.domain.entity.RestaurantType;
+import br.com.fiap.gastrosphere.core.domain.entity.RestaurantTypeBodyRequest;
 import br.com.fiap.gastrosphere.core.infra.model.RestaurantTypeModel;
 import org.modelmapper.ModelMapper;
 
@@ -13,7 +14,6 @@ import br.com.fiap.gastrosphere.core.application.dto.request.AddressBodyRequest;
 import br.com.fiap.gastrosphere.dtos.requests.MenuBodyRequest;
 import br.com.fiap.gastrosphere.dtos.requests.MenuItemBodyRequest;
 import br.com.fiap.gastrosphere.dtos.requests.RestaurantBodyRequest;
-import br.com.fiap.gastrosphere.dtos.requests.RestaurantTypeBodyRequest;
 import br.com.fiap.gastrosphere.core.application.dto.request.UserBodyRequest;
 import br.com.fiap.gastrosphere.core.application.dto.request.UserTypeBodyRequest;
 import br.com.fiap.gastrosphere.core.infra.model.AddressModel;

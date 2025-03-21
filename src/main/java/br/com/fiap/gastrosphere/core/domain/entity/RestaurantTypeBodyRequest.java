@@ -1,4 +1,4 @@
-package br.com.fiap.gastrosphere.dtos.requests;
+package br.com.fiap.gastrosphere.core.domain.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
