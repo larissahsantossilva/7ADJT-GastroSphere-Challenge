@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import br.com.fiap.gastrosphere.dtos.IllegalArgumentDTO;
-import br.com.fiap.gastrosphere.dtos.UnprocessableEntityDTO;
+import br.com.fiap.gastrosphere.core.application.dto.IllegalArgumentDTO;
+import br.com.fiap.gastrosphere.core.application.dto.UnprocessableEntityDTO;
 import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import br.com.fiap.gastrosphere.dtos.ResourceNotFoundDTO;
-import br.com.fiap.gastrosphere.dtos.ValidationErrorDTO;
+import br.com.fiap.gastrosphere.core.application.dto.ResourceNotFoundDTO;
+import br.com.fiap.gastrosphere.core.application.dto.ValidationErrorDTO;
 import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
 
 import static org.slf4j.LoggerFactory.getLogger;

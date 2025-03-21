@@ -1,4 +1,4 @@
-package br.com.fiap.gastrosphere.dtos.responses;
+package br.com.fiap.gastrosphere.core.application.dto.response;
 
 import java.math.BigDecimal;
 import java.util.UUID;

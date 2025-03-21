@@ -1,4 +1,4 @@
-package br.com.fiap.gastrosphere.services;
+package br.com.fiap.gastrosphere.core.application.service;
 
 import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.ERRO_AO_ALTERAR_MENU;
 import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.ERRO_AO_DELETAR_MENU;
@@ -22,7 +22,7 @@ import br.com.fiap.gastrosphere.core.infra.model.Menu;
 import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
 import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
 import br.com.fiap.gastrosphere.core.infra.repository.MenuItemRepository;
-import br.com.fiap.gastrosphere.repositories.MenuRepository;
+import br.com.fiap.gastrosphere.core.infra.repository.MenuRepository;
 import jakarta.transaction.Transactional;
 
 @Service

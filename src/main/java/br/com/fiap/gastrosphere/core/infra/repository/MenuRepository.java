@@ -1,4 +1,4 @@
-package br.com.fiap.gastrosphere.repositories;
+package br.com.fiap.gastrosphere.core.infra.repository;
 
 import java.util.List;
 import java.util.UUID;

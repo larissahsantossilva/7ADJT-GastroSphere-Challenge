@@ -1,4 +1,4 @@
-package br.com.fiap.gastrosphere.dtos.responses;
+package br.com.fiap.gastrosphere.core.application.dto.response;
 
 import static java.time.LocalDate.now;
 

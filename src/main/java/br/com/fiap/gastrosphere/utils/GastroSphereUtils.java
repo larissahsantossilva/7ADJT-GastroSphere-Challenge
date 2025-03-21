@@ -12,7 +12,7 @@ import br.com.fiap.gastrosphere.core.infra.model.RestaurantTypeModel;
 import org.modelmapper.ModelMapper;
 
 import br.com.fiap.gastrosphere.core.application.dto.request.AddressBodyRequest;
-import br.com.fiap.gastrosphere.dtos.requests.MenuBodyRequest;
+import br.com.fiap.gastrosphere.core.application.dto.request.MenuBodyRequest;
 import br.com.fiap.gastrosphere.core.application.dto.request.MenuItemBodyRequest;
 import br.com.fiap.gastrosphere.core.application.dto.request.UserBodyRequest;
 import br.com.fiap.gastrosphere.core.application.dto.request.UserTypeBodyRequest;

@@ -1,4 +1,4 @@
-package br.com.fiap.gastrosphere.controllers;
+package br.com.fiap.gastrosphere.core.application.controller;
 
 import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.ERRO_AO_ALTERAR_MENU;
 import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.ERRO_AO_CRIAR_MENU;
@@ -34,11 +34,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.fiap.gastrosphere.dtos.requests.MenuBodyRequest;
-import br.com.fiap.gastrosphere.dtos.responses.MenuBodyResponse;
+import br.com.fiap.gastrosphere.core.application.dto.request.MenuBodyRequest;
+import br.com.fiap.gastrosphere.core.application.dto.response.MenuBodyResponse;
 import br.com.fiap.gastrosphere.core.infra.model.Menu;
 import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
-import br.com.fiap.gastrosphere.services.MenuServiceImpl;
+import br.com.fiap.gastrosphere.core.application.service.MenuServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
