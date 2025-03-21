@@ -1,4 +1,4 @@
-package br.com.fiap.gastrosphere.services;
+package br.com.fiap.gastrosphere.core.application.service;
 
 import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.ERRO_AO_ALTERAR_MENU_ITEM;
 import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.ERRO_AO_DELETAR_MENU_ITEM;
@@ -16,10 +16,10 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import br.com.fiap.gastrosphere.entities.MenuItem;
+import br.com.fiap.gastrosphere.core.infra.model.MenuItem;
 import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
 import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
-import br.com.fiap.gastrosphere.repositories.MenuItemRepository;
+import br.com.fiap.gastrosphere.core.infra.repository.MenuItemRepository;
 import jakarta.transaction.Transactional;
 
 @Service

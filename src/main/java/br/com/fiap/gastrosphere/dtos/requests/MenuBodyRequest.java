@@ -3,6 +3,7 @@ package br.com.fiap.gastrosphere.dtos.requests;
 import java.util.List;
 import java.util.UUID;
 
+import br.com.fiap.gastrosphere.core.application.dto.request.MenuItemBodyRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

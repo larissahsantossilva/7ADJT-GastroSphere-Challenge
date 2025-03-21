@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-import br.com.fiap.gastrosphere.entities.Menu;
+import br.com.fiap.gastrosphere.core.infra.model.Menu;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

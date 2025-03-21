@@ -1,4 +1,4 @@
-package br.com.fiap.gastrosphere.entities;
+package br.com.fiap.gastrosphere.core.infra.model;
 
 import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.GenerationType.AUTO;

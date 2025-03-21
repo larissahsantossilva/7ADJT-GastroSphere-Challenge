@@ -3,7 +3,7 @@ package br.com.fiap.gastrosphere.dtos.responses;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import br.com.fiap.gastrosphere.entities.MenuItem;
+import br.com.fiap.gastrosphere.core.infra.model.MenuItem;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

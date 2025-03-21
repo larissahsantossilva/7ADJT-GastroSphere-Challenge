@@ -13,12 +13,12 @@ import org.modelmapper.ModelMapper;
 
 import br.com.fiap.gastrosphere.core.application.dto.request.AddressBodyRequest;
 import br.com.fiap.gastrosphere.dtos.requests.MenuBodyRequest;
-import br.com.fiap.gastrosphere.dtos.requests.MenuItemBodyRequest;
+import br.com.fiap.gastrosphere.core.application.dto.request.MenuItemBodyRequest;
 import br.com.fiap.gastrosphere.core.application.dto.request.UserBodyRequest;
 import br.com.fiap.gastrosphere.core.application.dto.request.UserTypeBodyRequest;
 import br.com.fiap.gastrosphere.core.infra.model.AddressModel;
-import br.com.fiap.gastrosphere.entities.Menu;
-import br.com.fiap.gastrosphere.entities.MenuItem;
+import br.com.fiap.gastrosphere.core.infra.model.Menu;
+import br.com.fiap.gastrosphere.core.infra.model.MenuItem;
 import br.com.fiap.gastrosphere.entities.Restaurant;
 import br.com.fiap.gastrosphere.core.infra.model.UserModel;
 import br.com.fiap.gastrosphere.core.infra.model.UserTypeModel;

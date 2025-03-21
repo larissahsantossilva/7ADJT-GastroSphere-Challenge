@@ -12,16 +12,16 @@ import static org.springframework.data.domain.PageRequest.of;
 import java.util.List;
 import java.util.UUID;
 
+import br.com.fiap.gastrosphere.core.infra.model.MenuItem;
 import org.slf4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import br.com.fiap.gastrosphere.entities.Menu;
-import br.com.fiap.gastrosphere.entities.MenuItem;
+import br.com.fiap.gastrosphere.core.infra.model.Menu;
 import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
 import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
-import br.com.fiap.gastrosphere.repositories.MenuItemRepository;
+import br.com.fiap.gastrosphere.core.infra.repository.MenuItemRepository;
 import br.com.fiap.gastrosphere.repositories.MenuRepository;
 import jakarta.transaction.Transactional;
 
