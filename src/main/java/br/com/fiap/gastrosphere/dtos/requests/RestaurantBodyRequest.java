@@ -1,5 +1,7 @@
 package br.com.fiap.gastrosphere.dtos.requests;
 
+import br.com.fiap.gastrosphere.core.application.dto.request.AddressBodyRequest;
+import br.com.fiap.gastrosphere.core.application.dto.request.UserBodyRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -7,20 +7,20 @@ import java.util.regex.Pattern;
 
 import org.modelmapper.ModelMapper;
 
-import br.com.fiap.gastrosphere.dtos.requests.AddressBodyRequest;
+import br.com.fiap.gastrosphere.core.application.dto.request.AddressBodyRequest;
 import br.com.fiap.gastrosphere.dtos.requests.MenuBodyRequest;
 import br.com.fiap.gastrosphere.dtos.requests.MenuItemBodyRequest;
 import br.com.fiap.gastrosphere.dtos.requests.RestaurantBodyRequest;
 import br.com.fiap.gastrosphere.dtos.requests.RestaurantTypeBodyRequest;
-import br.com.fiap.gastrosphere.dtos.requests.UserBodyRequest;
-import br.com.fiap.gastrosphere.dtos.requests.UserTypeBodyRequest;
-import br.com.fiap.gastrosphere.entities.Address;
+import br.com.fiap.gastrosphere.core.application.dto.request.UserBodyRequest;
+import br.com.fiap.gastrosphere.core.application.dto.request.UserTypeBodyRequest;
+import br.com.fiap.gastrosphere.core.infra.model.AddressModel;
 import br.com.fiap.gastrosphere.entities.Menu;
 import br.com.fiap.gastrosphere.entities.MenuItem;
 import br.com.fiap.gastrosphere.entities.Restaurant;
 import br.com.fiap.gastrosphere.entities.RestaurantType;
-import br.com.fiap.gastrosphere.entities.User;
-import br.com.fiap.gastrosphere.entities.UserType;
+import br.com.fiap.gastrosphere.core.infra.model.UserModel;
+import br.com.fiap.gastrosphere.core.infra.model.UserTypeModel;
 import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
 
 public final class GastroSphereUtils {
@@ -35,14 +35,14 @@ public final class GastroSphereUtils {
         }
     }
 
-    public static Address convertToAddress(AddressBodyRequest addressDto) {
+    public static AddressModel convertToAddress(AddressBodyRequest addressDto) {
         ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(addressDto, Address.class);
+        return modelMapper.map(addressDto, AddressModel.class);
     }
 
-    public static User convertToUser(UserBodyRequest userRequest) {
+    public static UserModel convertToUser(UserBodyRequest userRequest) {
         ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(userRequest, User.class);
+        return modelMapper.map(userRequest, UserModel.class);
     }
 
     public static Restaurant convertToRestaurant(RestaurantBodyRequest restaurantRequest) {
@@ -50,9 +50,9 @@ public final class GastroSphereUtils {
         return modelMapper.map(restaurantRequest, Restaurant.class);
     }
 
-    public static UserType convertToUserType(UserTypeBodyRequest userTypeDto) {
+    public static UserTypeModel convertToUserType(UserTypeBodyRequest userTypeDto) {
         ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(userTypeDto, UserType.class);
+        return modelMapper.map(userTypeDto, UserTypeModel.class);
     }
 
     public static RestaurantType convertToRestaurantType(RestaurantTypeBodyRequest restaurantTypeBodyResquest) {

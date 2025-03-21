@@ -1,8 +1,8 @@
 package br.com.fiap.gastrosphere.dtos.responses;
 
-import br.com.fiap.gastrosphere.dtos.AddressDTO;
+import br.com.fiap.gastrosphere.core.application.dto.AddressDTO;
 import br.com.fiap.gastrosphere.dtos.RestaurantTypeDTO;
-import br.com.fiap.gastrosphere.dtos.UserDTO;
+import br.com.fiap.gastrosphere.core.application.dto.UserDTO;
 import br.com.fiap.gastrosphere.entities.Restaurant;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

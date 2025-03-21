@@ -1,5 +1,7 @@
 package br.com.fiap.gastrosphere.entities;
 
+import br.com.fiap.gastrosphere.core.infra.model.AddressModel;
+import br.com.fiap.gastrosphere.core.infra.model.UserModel;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,11 +29,11 @@ public class Restaurant {
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_restaurants_users"))
-    private User user;
+    private UserModel user;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", nullable = false, foreignKey = @ForeignKey(name = "fk_restaurants_address"))
-    private Address address;
+    private AddressModel address;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "restaurant_type_id", nullable = false, foreignKey = @ForeignKey(name = "fk_restaurants_restaurant_type"))
