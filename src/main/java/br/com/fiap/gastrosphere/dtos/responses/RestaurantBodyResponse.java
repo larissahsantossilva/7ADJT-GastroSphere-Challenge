@@ -1,7 +1,7 @@
 package br.com.fiap.gastrosphere.dtos.responses;
 
 import br.com.fiap.gastrosphere.core.application.dto.AddressDTO;
-import br.com.fiap.gastrosphere.dtos.RestaurantTypeDTO;
+import br.com.fiap.gastrosphere.core.domain.entity.RestaurantTypeName;
 import br.com.fiap.gastrosphere.core.application.dto.UserDTO;
 import br.com.fiap.gastrosphere.entities.Restaurant;
 import lombok.Getter;
@@ -21,7 +21,7 @@ public class RestaurantBodyResponse {
     private String name;
     private UserDTO user;
     private AddressDTO address;
-    private RestaurantTypeDTO restaurantType;
+    private RestaurantTypeName restaurantType;
     private LocalTime startedAt;
     private LocalTime finishedAt;
     private LocalDate createdAt;
@@ -32,7 +32,7 @@ public class RestaurantBodyResponse {
         this.name = restaurant.getName();
         this.user = restaurant.getUser() != null ? new UserDTO(restaurant.getUser()) : null;
         this.address = restaurant.getAddress() != null ? new AddressDTO(restaurant.getAddress()) : null;
-        this.restaurantType = restaurant.getRestaurantType() != null ? new RestaurantTypeDTO(restaurant.getRestaurantType()) : null;
+        this.restaurantType = restaurant.getRestaurantType() != null ? new RestaurantTypeName(restaurant.getRestaurantType()) : null;
         this.startedAt = restaurant.getStartedAt();
         this.finishedAt = restaurant.getFinishedAt();
         this.createdAt = restaurant.getCreatedAt();

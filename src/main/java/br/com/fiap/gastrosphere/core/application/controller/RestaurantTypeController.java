@@ -1,9 +1,11 @@
-package br.com.fiap.gastrosphere.controllers;
+package br.com.fiap.gastrosphere.core.application.controller;
 
+import br.com.fiap.gastrosphere.core.infra.model.RestaurantTypeModel;
 import br.com.fiap.gastrosphere.dtos.requests.RestaurantTypeBodyRequest;
-import br.com.fiap.gastrosphere.entities.RestaurantType;
+import br.com.fiap.gastrosphere.core.domain.entity.RestaurantType;
 import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
-import br.com.fiap.gastrosphere.services.RestaurantTypeServiceImpl;
+import br.com.fiap.gastrosphere.core.application.service.RestaurantTypeServiceImpl;
+import br.com.fiap.gastrosphere.utils.GastroSphereUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.*;
@@ -49,15 +52,17 @@ public class RestaurantTypeController {
             }
     )
     @GetMapping
-    public ResponseEntity<Page<RestaurantType>> findAllRestaurantTypes(
+    public ResponseEntity<List<RestaurantType>> findAllRestaurantTypes(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size) {
         logger.info("GET | {} | Iniciado findAllRestaurantTypes", V1_RESTAURANT_TYPE);
-        Page<RestaurantType> restaurantTypes = this.restaurantTypeService.findAllRestaurantTypes(page, size);
+        Page<RestaurantTypeModel> restaurantTypesModel = this.restaurantTypeService.findAllRestaurantTypes(page, size);
+        List<RestaurantType> restaurantTypes = restaurantTypesModel.stream()
+                .map(GastroSphereUtils::convertToRestaurantType)
+                .toList();
         logger.info("GET | {} | Finalizado findAllRestaurantTypes", V1_RESTAURANT_TYPE);
         return ok(restaurantTypes);
     }
-
 
     @Operation(
             description = "Busca tipo de restaurante por id.",
@@ -78,10 +83,10 @@ public class RestaurantTypeController {
     @GetMapping("/{id}")
     public ResponseEntity<RestaurantType> findRestaurantTypeById(@PathVariable("id") UUID id) {
         logger.info("GET | {} | Iniciado findRestaurantTypeById | id: {}", V1_RESTAURANT_TYPE, id);
-        var restaurantType = restaurantTypeService.findById(id);
+        var restaurantTypeModel = restaurantTypeService.findById(id);
+        RestaurantType restaurantType = convertToRestaurantType(restaurantTypeModel);
         return restaurantType != null ? ok(restaurantType) : status(HttpStatus.NOT_FOUND).build();
     }
-
 
     @Operation(
             description = "Cria tipo de restaurante.",
@@ -100,13 +105,12 @@ public class RestaurantTypeController {
             }
     )
     @PostMapping
-    public ResponseEntity<UUID> createRestaurantType(@Valid @RequestBody RestaurantTypeBodyRequest restaurantTypeBodyRequest) {
+        public ResponseEntity<UUID> createRestaurantType(@Valid @RequestBody RestaurantTypeBodyRequest restaurantTypeBodyRequest) {
         logger.info("POST | {} | Iniciado createRestaurantType | Restaurant: {}", V1_RESTAURANT_TYPE, restaurantTypeBodyRequest.getName());
-        RestaurantType restaurantType = restaurantTypeService.createRestaurantType(convertToRestaurantType(restaurantTypeBodyRequest));
+        RestaurantTypeModel restaurantType = restaurantTypeService.createRestaurantType(convertToRestaurantType(restaurantTypeBodyRequest));
         logger.info("POST | {} | Finalizado createRestaurantType", V1_RESTAURANT_TYPE);
         return status(201).body(restaurantType.getId());
     }
-
 
     @Operation(
             description = "Atualiza tipo de restaurante por id.",
@@ -136,7 +140,6 @@ public class RestaurantTypeController {
         logger.info("PUT | {} | Finalizado updateRestaurantType", V1_RESTAURANT_TYPE);
         return ok("Tipo de restaurante atualizado com sucesso");
     }
-
 
     @Operation(
             description = "Exclui tipo de restaurante por id.",

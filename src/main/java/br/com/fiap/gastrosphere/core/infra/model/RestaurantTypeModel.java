@@ -1,4 +1,4 @@
-package br.com.fiap.gastrosphere.entities;
+package br.com.fiap.gastrosphere.core.infra.model;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,7 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Table(name = "restaurant_type", schema = "gastrosphere")
-public class RestaurantType {
+public class RestaurantTypeModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

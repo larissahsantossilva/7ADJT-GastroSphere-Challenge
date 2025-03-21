@@ -1,9 +1,9 @@
-package br.com.fiap.gastrosphere.services;
+package br.com.fiap.gastrosphere.core.application.service;
 
-import br.com.fiap.gastrosphere.entities.RestaurantType;
+import br.com.fiap.gastrosphere.core.infra.model.RestaurantTypeModel;
 import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
 import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
-import br.com.fiap.gastrosphere.repositories.RestaurantTypeRepository;
+import br.com.fiap.gastrosphere.core.infra.repository.RestaurantTypeRepository;
 import org.slf4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -22,22 +22,21 @@ public class RestaurantTypeServiceImpl {
     private static final Logger logger = getLogger(RestaurantTypeServiceImpl.class);
     private final RestaurantTypeRepository restaurantTypeRepository;
 
-
     public RestaurantTypeServiceImpl(RestaurantTypeRepository restaurantTypeRepository) {
         this.restaurantTypeRepository = restaurantTypeRepository;
     }
 
-    public Page<RestaurantType> findAllRestaurantTypes(int page, int size) {
+    public Page<RestaurantTypeModel> findAllRestaurantTypes(int page, int size) {
         return restaurantTypeRepository.findAll(PageRequest.of(page, size));
     }
 
-    public RestaurantType findById(UUID id) {
+    public RestaurantTypeModel findById(UUID id) {
         uuidValidator(id);
         return restaurantTypeRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException(ID_NAO_ENCONTRADO));
     }
 
-    public RestaurantType createRestaurantType(RestaurantType restaurantType) {
+    public RestaurantTypeModel createRestaurantType(RestaurantTypeModel restaurantType) {
         try {
             return restaurantTypeRepository.save(restaurantType);
         } catch (DataAccessException e) {
@@ -46,8 +45,8 @@ public class RestaurantTypeServiceImpl {
         }
     }
 
-    public RestaurantType updateRestaurantType(RestaurantType restaurantType, UUID id) {
-        RestaurantType existingRestaurantType = restaurantTypeRepository.findById(id)
+    public RestaurantTypeModel updateRestaurantType(RestaurantTypeModel restaurantType, UUID id) {
+        RestaurantTypeModel existingRestaurantType = restaurantTypeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(TIPO_RESTAURANTE_NAO_ENCONTRADO));
 
         if (restaurantType.getName() != null) existingRestaurantType.setName(restaurantType.getName());

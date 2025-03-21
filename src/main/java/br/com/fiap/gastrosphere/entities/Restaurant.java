@@ -1,6 +1,8 @@
 package br.com.fiap.gastrosphere.entities;
 
+import br.com.fiap.gastrosphere.core.domain.entity.RestaurantType;
 import br.com.fiap.gastrosphere.core.infra.model.AddressModel;
+import br.com.fiap.gastrosphere.core.infra.model.RestaurantTypeModel;
 import br.com.fiap.gastrosphere.core.infra.model.UserModel;
 import jakarta.persistence.*;
 import lombok.*;
@@ -37,7 +39,7 @@ public class Restaurant {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "restaurant_type_id", nullable = false, foreignKey = @ForeignKey(name = "fk_restaurants_restaurant_type"))
-    private RestaurantType restaurantType;
+    private RestaurantTypeModel restaurantType;
 
     @Column(name = "startedAt", nullable = false)
     private LocalTime startedAt;

@@ -5,6 +5,8 @@ import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.ID_INVALIDO;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+import br.com.fiap.gastrosphere.core.domain.entity.RestaurantType;
+import br.com.fiap.gastrosphere.core.infra.model.RestaurantTypeModel;
 import org.modelmapper.ModelMapper;
 
 import br.com.fiap.gastrosphere.core.application.dto.request.AddressBodyRequest;
@@ -18,7 +20,6 @@ import br.com.fiap.gastrosphere.core.infra.model.AddressModel;
 import br.com.fiap.gastrosphere.entities.Menu;
 import br.com.fiap.gastrosphere.entities.MenuItem;
 import br.com.fiap.gastrosphere.entities.Restaurant;
-import br.com.fiap.gastrosphere.entities.RestaurantType;
 import br.com.fiap.gastrosphere.core.infra.model.UserModel;
 import br.com.fiap.gastrosphere.core.infra.model.UserTypeModel;
 import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
@@ -55,9 +56,9 @@ public final class GastroSphereUtils {
         return modelMapper.map(userTypeDto, UserTypeModel.class);
     }
 
-    public static RestaurantType convertToRestaurantType(RestaurantTypeBodyRequest restaurantTypeBodyResquest) {
+    public static RestaurantTypeModel convertToRestaurantType(RestaurantTypeBodyRequest restaurantTypeBodyResquest) {
         ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(restaurantTypeBodyResquest, RestaurantType.class);
+        return modelMapper.map(restaurantTypeBodyResquest, RestaurantTypeModel.class);
     }
     
     public static MenuItem convertToMenuItem(MenuItemBodyRequest menuItemRequest) {
@@ -88,5 +89,13 @@ public final class GastroSphereUtils {
             );
         }
     	return menu;
+    }
+    public static RestaurantType convertToRestaurantType(RestaurantTypeModel model) {
+        RestaurantType restaurantType = new RestaurantType();
+        restaurantType.setId(model.getId());
+        restaurantType.setName(model.getName());
+        restaurantType.setCreatedAt(model.getCreatedAt());
+        restaurantType.setLastModifiedAt(model.getLastModifiedAt());
+        return restaurantType;
     }
 }
