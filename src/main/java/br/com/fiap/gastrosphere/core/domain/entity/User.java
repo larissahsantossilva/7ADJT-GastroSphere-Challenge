@@ -1,7 +1,5 @@
 package br.com.fiap.gastrosphere.core.domain.entity;
 
-import br.com.fiap.gastrosphere.core.infra.model.AddressModel;
-import br.com.fiap.gastrosphere.core.infra.model.UserTypeModel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,11 +22,11 @@ public class User {
 
     private String password;
 
-    private UserTypeModel userType;
+    private UserType userType;
 
     private String document;
 
-    private AddressModel address;
+    private Address address;
 
     private LocalDate createdAt;
 
@@ -38,9 +36,9 @@ public class User {
                 String email,
                 String login,
                 String password,
-                UserTypeModel userType,
+                UserType userType,
                 String document,
-                AddressModel address,
+                Address address,
                 LocalDate createdAt,
                 LocalDate lastModifiedAt) {
         this.name = name;

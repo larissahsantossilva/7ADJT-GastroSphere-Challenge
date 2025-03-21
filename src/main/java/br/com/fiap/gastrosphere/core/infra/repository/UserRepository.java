@@ -18,7 +18,7 @@ public interface UserRepository extends JpaRepository<UserModel, UUID> {
     boolean existsByUserType_Id(UUID userTypeId);
 
     @Modifying
-    @Query("UPDATE User u " +
+    @Query("UPDATE UserModel u " +
             "SET u.password = :newPassword, u.lastModifiedAt = :lastModifiedAt " +
             "WHERE u.id = :id AND u.password = :oldPassword")
     Integer updatePassword(@Param("id") UUID id,

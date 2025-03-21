@@ -15,6 +15,7 @@ public class SearchAddressUseCase {
     private final AddressInterface addressInterface;
 
     public List<Address> execute() throws AddressNotFoundException {
+
         List<Address> addresses = addressInterface.findAll();
 
         if (addresses.isEmpty()) {
