@@ -1,9 +1,9 @@
-package br.com.fiap.gastrosphere.services;
+package br.com.fiap.gastrosphere.core.application.service;
 
 import br.com.fiap.gastrosphere.entities.Restaurant;
 import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
 import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
-import br.com.fiap.gastrosphere.repositories.RestaurantRepository;
+import br.com.fiap.gastrosphere.core.infra.repository.RestaurantRepository;
 import org.slf4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;

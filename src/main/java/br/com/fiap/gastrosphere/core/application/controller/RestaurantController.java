@@ -1,10 +1,10 @@
-package br.com.fiap.gastrosphere.controllers;
+package br.com.fiap.gastrosphere.core.application.controller;
 
-import br.com.fiap.gastrosphere.dtos.requests.RestaurantBodyRequest;
-import br.com.fiap.gastrosphere.dtos.responses.RestaurantBodyResponse;
+import br.com.fiap.gastrosphere.core.application.service.RestaurantServiceImpl;
+import br.com.fiap.gastrosphere.core.domain.entity.RestaurantBodyRequest;
+import br.com.fiap.gastrosphere.core.domain.entity.RestaurantBodyResponse;
 import br.com.fiap.gastrosphere.entities.Restaurant;
 import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
-import br.com.fiap.gastrosphere.services.RestaurantServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

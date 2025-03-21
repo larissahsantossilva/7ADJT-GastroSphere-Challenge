@@ -1,4 +1,4 @@
-package br.com.fiap.gastrosphere.repositories;
+package br.com.fiap.gastrosphere.core.infra.repository;
 
 import br.com.fiap.gastrosphere.entities.Restaurant;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,5 +11,4 @@ import java.util.UUID;
 public interface RestaurantRepository extends JpaRepository<Restaurant, UUID> {
 
     Optional<Restaurant> findByAddressId(UUID id);
-
 }

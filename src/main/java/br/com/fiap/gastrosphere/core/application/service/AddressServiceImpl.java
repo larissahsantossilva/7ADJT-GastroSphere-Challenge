@@ -4,7 +4,7 @@ import br.com.fiap.gastrosphere.core.infra.model.AddressModel;
 import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
 import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
 import br.com.fiap.gastrosphere.core.infra.repository.AddressRepository;
-import br.com.fiap.gastrosphere.repositories.RestaurantRepository;
+import br.com.fiap.gastrosphere.core.infra.repository.RestaurantRepository;
 import br.com.fiap.gastrosphere.core.infra.repository.UserRepository;
 import org.slf4j.Logger;
 import org.springframework.dao.DataAccessException;
