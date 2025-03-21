@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.*;
-import static br.com.fiap.gastrosphere.utils.GastroSphereUtils.convertToAddress;
+import static br.com.fiap.gastrosphere.core.application.utils.GastroSphereConstants.*;
+import static br.com.fiap.gastrosphere.core.application.utils.GastroSphereUtils.convertToAddress;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.http.ResponseEntity.status;

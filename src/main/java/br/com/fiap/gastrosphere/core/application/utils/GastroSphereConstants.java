@@ -1,4 +1,4 @@
-package br.com.fiap.gastrosphere.utils;
+package br.com.fiap.gastrosphere.core.application.utils;
 
 public final class GastroSphereConstants {
 	

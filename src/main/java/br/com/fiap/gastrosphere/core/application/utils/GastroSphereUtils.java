@@ -1,6 +1,6 @@
-package br.com.fiap.gastrosphere.utils;
+package br.com.fiap.gastrosphere.core.application.utils;
 
-import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.ID_INVALIDO;
+import static br.com.fiap.gastrosphere.core.application.utils.GastroSphereConstants.ID_INVALIDO;
 
 import java.util.UUID;
 import java.util.regex.Pattern;

@@ -1,10 +1,10 @@
 package br.com.fiap.gastrosphere.core.application.service;
 
-import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.ERRO_AO_ALTERAR_MENU_ITEM;
-import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.ERRO_AO_DELETAR_MENU_ITEM;
-import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.ID_NAO_ENCONTRADO;
-import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.ITEM_MENU_NAO_ENCONTRADO;
-import static br.com.fiap.gastrosphere.utils.GastroSphereUtils.uuidValidator;
+import static br.com.fiap.gastrosphere.core.application.utils.GastroSphereConstants.ERRO_AO_ALTERAR_MENU_ITEM;
+import static br.com.fiap.gastrosphere.core.application.utils.GastroSphereConstants.ERRO_AO_DELETAR_MENU_ITEM;
+import static br.com.fiap.gastrosphere.core.application.utils.GastroSphereConstants.ID_NAO_ENCONTRADO;
+import static br.com.fiap.gastrosphere.core.application.utils.GastroSphereConstants.ITEM_MENU_NAO_ENCONTRADO;
+import static br.com.fiap.gastrosphere.core.application.utils.GastroSphereUtils.uuidValidator;
 import static java.time.LocalDate.now;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.data.domain.PageRequest.of;

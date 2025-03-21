@@ -17,8 +17,8 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.UUID;
 
-import static br.com.fiap.gastrosphere.utils.GastroSphereConstants.*;
-import static br.com.fiap.gastrosphere.utils.GastroSphereUtils.uuidValidator;
+import static br.com.fiap.gastrosphere.core.application.utils.GastroSphereConstants.*;
+import static br.com.fiap.gastrosphere.core.application.utils.GastroSphereUtils.uuidValidator;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @Service
