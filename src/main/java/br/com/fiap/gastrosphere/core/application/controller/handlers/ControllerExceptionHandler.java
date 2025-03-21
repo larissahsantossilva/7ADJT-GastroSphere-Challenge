@@ -1,4 +1,4 @@
-package br.com.fiap.gastrosphere.controllers.handlers;
+package br.com.fiap.gastrosphere.core.application.controller.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
