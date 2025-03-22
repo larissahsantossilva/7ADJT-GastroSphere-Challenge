@@ -1,6 +1,6 @@
 package br.com.fiap.gastrosphere.core.application.service;
 
-import br.com.fiap.gastrosphere.core.infra.model.Restaurant;
+import br.com.fiap.gastrosphere.core.infra.model.RestaurantModel;
 import br.com.fiap.gastrosphere.core.domain.exception.ResourceNotFoundException;
 import br.com.fiap.gastrosphere.core.domain.exception.UnprocessableEntityException;
 import br.com.fiap.gastrosphere.core.infra.repository.RestaurantRepository;
@@ -26,17 +26,17 @@ public class RestaurantServiceImpl {
         this.restaurantRepository = restaurantRepository;
     }
 
-    public Page<Restaurant> findAllRestaurants(int page, int size) {
+    public Page<RestaurantModel> findAllRestaurants(int page, int size) {
         return restaurantRepository.findAll(PageRequest.of(page, size));
     }
 
-    public Restaurant findById(UUID id) {
+    public RestaurantModel findById(UUID id) {
         uuidValidator(id);
         return restaurantRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException(ID_NAO_ENCONTRADO));
     }
 
-    public Restaurant createRestaurant(Restaurant restaurant) {
+    public RestaurantModel createRestaurant(RestaurantModel restaurant) {
         try {
             return restaurantRepository.save(restaurant);
         } catch (DataAccessException e) {
@@ -45,8 +45,8 @@ public class RestaurantServiceImpl {
         }
     }
 
-    public Restaurant updateRestaurant(Restaurant restaurant, UUID id) {
-        Restaurant existingRestaurant = restaurantRepository.findById(id)
+    public RestaurantModel updateRestaurant(RestaurantModel restaurant, UUID id) {
+        RestaurantModel existingRestaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(RESTAURANTE_NAO_ENCONTRADO));
 
         if (restaurant.getUser() != null) existingRestaurant.setUser(restaurant.getUser());

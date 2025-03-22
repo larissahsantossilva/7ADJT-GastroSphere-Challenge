@@ -3,7 +3,7 @@ package br.com.fiap.gastrosphere.core.application.dto.response;
 import br.com.fiap.gastrosphere.core.application.dto.AddressDTO;
 import br.com.fiap.gastrosphere.core.application.dto.UserDTO;
 import br.com.fiap.gastrosphere.core.domain.entity.RestaurantTypeName;
-import br.com.fiap.gastrosphere.core.infra.model.Restaurant;
+import br.com.fiap.gastrosphere.core.infra.model.RestaurantModel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,7 +27,7 @@ public class RestaurantBodyResponse {
     private LocalDate createdAt;
     private LocalDate lastModifiedAt;
 
-    public RestaurantBodyResponse(Restaurant restaurant) {
+    public RestaurantBodyResponse(RestaurantModel restaurant) {
         this.id = restaurant.getId();
         this.name = restaurant.getName();
         this.user = restaurant.getUser() != null ? new UserDTO(restaurant.getUser()) : null;

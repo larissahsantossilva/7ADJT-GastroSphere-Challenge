@@ -3,7 +3,7 @@ package br.com.fiap.gastrosphere.core.application.controller;
 import br.com.fiap.gastrosphere.core.application.service.RestaurantServiceImpl;
 import br.com.fiap.gastrosphere.core.application.dto.request.RestaurantBodyRequest;
 import br.com.fiap.gastrosphere.core.application.dto.response.RestaurantBodyResponse;
-import br.com.fiap.gastrosphere.core.infra.model.Restaurant;
+import br.com.fiap.gastrosphere.core.infra.model.RestaurantModel;
 import br.com.fiap.gastrosphere.core.domain.exception.UnprocessableEntityException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -46,7 +46,7 @@ public class RestaurantController {
                     @ApiResponse(
                             description = OK,
                             responseCode = HTTP_STATUS_CODE_200,
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Restaurant.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestaurantModel.class))
                     )
             }
     )
@@ -55,7 +55,7 @@ public class RestaurantController {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size) {
         logger.info("GET | {} | Iniciado findAllRestaurants", V1_RESTAURANT);
-        Page<Restaurant> restaurants = this.restaurantService.findAllRestaurants(page, size);
+        Page<RestaurantModel> restaurants = this.restaurantService.findAllRestaurants(page, size);
         List<RestaurantBodyResponse> restaurantResponses = restaurants.stream()
                 .map(RestaurantBodyResponse::new)
                 .toList();
@@ -71,7 +71,7 @@ public class RestaurantController {
                     @ApiResponse(
                             description = OK,
                             responseCode = HTTP_STATUS_CODE_200,
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Restaurant.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestaurantModel.class))
                     ),
                     @ApiResponse(
                             description = NOT_FOUND,
@@ -112,7 +112,7 @@ public class RestaurantController {
     @PostMapping
     public ResponseEntity<UUID> createRestaurant(@Valid @RequestBody RestaurantBodyRequest restaurantBodyRequest) {
         logger.info("POST | {} | Iniciado createRestaurant | Restaurant: {}", V1_RESTAURANT, restaurantBodyRequest.getName());
-        Restaurant restaurant = restaurantService.createRestaurant(convertToRestaurant(restaurantBodyRequest));
+        RestaurantModel restaurant = restaurantService.createRestaurant(convertToRestaurant(restaurantBodyRequest));
         logger.info("POST | {} | Finalizado createRestaurant", V1_RESTAURANT);
         return status(201).body(restaurant.getId());
     }

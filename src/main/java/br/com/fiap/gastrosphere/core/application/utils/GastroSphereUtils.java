@@ -19,7 +19,7 @@ import br.com.fiap.gastrosphere.core.application.dto.request.UserTypeBodyRequest
 import br.com.fiap.gastrosphere.core.infra.model.AddressModel;
 import br.com.fiap.gastrosphere.core.infra.model.Menu;
 import br.com.fiap.gastrosphere.core.infra.model.MenuItem;
-import br.com.fiap.gastrosphere.core.infra.model.Restaurant;
+import br.com.fiap.gastrosphere.core.infra.model.RestaurantModel;
 import br.com.fiap.gastrosphere.core.infra.model.UserModel;
 import br.com.fiap.gastrosphere.core.infra.model.UserTypeModel;
 import br.com.fiap.gastrosphere.core.domain.exception.ResourceNotFoundException;
@@ -46,9 +46,9 @@ public final class GastroSphereUtils {
         return modelMapper.map(userRequest, UserModel.class);
     }
 
-    public static Restaurant convertToRestaurant(RestaurantBodyRequest restaurantRequest) {
+    public static RestaurantModel convertToRestaurant(RestaurantBodyRequest restaurantRequest) {
         ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(restaurantRequest, Restaurant.class);
+        return modelMapper.map(restaurantRequest, RestaurantModel.class);
     }
 
     public static UserTypeModel convertToUserType(UserTypeBodyRequest userTypeDto) {

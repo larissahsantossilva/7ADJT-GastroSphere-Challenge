@@ -15,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Table(name = "restaurants", schema = "gastrosphere")
-public class Restaurant {
+public class RestaurantModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
