@@ -7,8 +7,11 @@ import br.com.fiap.gastrosphere.core.domain.generic.output.OutputStatus;
 import br.com.fiap.gastrosphere.core.domain.output.restauranttype.SearchRestaurantTypeOutput;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
 
 import java.util.List;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 @Getter
 @RequiredArgsConstructor
@@ -18,10 +21,6 @@ public class SearchRestaurantTypeUseCase {
 
     public List<RestaurantType> execute(int page, int size) {
         List<RestaurantType> restaurantTypesEntity = searchRestaurant.findAll(page, size);
-        /*this.searchRestaurantOutput = new SearchRestaurantTypeOutput(
-            restaurantTypesEntity,
-            new OutputStatus(200, "Ok", "RestaurantType encontrado")
-        );*/
         return restaurantTypesEntity;
     }
 }

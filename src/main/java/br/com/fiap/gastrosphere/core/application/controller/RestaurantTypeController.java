@@ -3,6 +3,7 @@ package br.com.fiap.gastrosphere.core.application.controller;
 import br.com.fiap.gastrosphere.core.application.dto.request.RestaurantTypeBodyRequest;
 import br.com.fiap.gastrosphere.core.domain.gateway.restauranttype.SearchRestaurantTypeInterface;
 import br.com.fiap.gastrosphere.core.domain.generic.output.OutputInterface;
+import br.com.fiap.gastrosphere.core.domain.usecase.restauranttype.DeleteByIdRestaurantTypeUseCase;
 import br.com.fiap.gastrosphere.core.domain.usecase.restauranttype.SearchByIdRestaurantTypeUseCase;
 import br.com.fiap.gastrosphere.core.domain.usecase.restauranttype.SearchRestaurantTypeUseCase;
 import br.com.fiap.gastrosphere.core.infra.model.RestaurantTypeModel;
@@ -11,6 +12,7 @@ import br.com.fiap.gastrosphere.core.domain.exception.UnprocessableEntityExcepti
 import br.com.fiap.gastrosphere.core.application.service.RestaurantTypeServiceImpl;
 import br.com.fiap.gastrosphere.core.application.utils.GastroSphereUtils;
 import br.com.fiap.gastrosphere.core.infra.repository.RestaurantTypeRepository;
+import br.com.fiap.gastrosphere.core.infra.repository.restauranttype.DeleteRestaurantTypeRepository;
 import br.com.fiap.gastrosphere.core.infra.repository.restauranttype.SearchRestaurantTypeRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -168,7 +170,7 @@ public class RestaurantTypeController {
     public ResponseEntity<String> deleteRestaurantType(@PathVariable("id") UUID id) {
         logger.info("DELETE | {} | Iniciado deleteRestaurantType | id: {}", V1_RESTAURANT_TYPE, id);
         try {
-            restaurantTypeService.deleteRestaurantTypeById(id);
+            new DeleteByIdRestaurantTypeUseCase(new DeleteRestaurantTypeRepository(restaurantTypeRepository)).execute(id);
             logger.info("DELETE | {} | Tipo de restaurante deletado com sucesso | Id: {}", V1_RESTAURANT_TYPE, id);
             return ResponseEntity.noContent().build();
         } catch (UnprocessableEntityException e) {

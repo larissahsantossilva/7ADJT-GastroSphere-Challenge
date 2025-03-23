@@ -29,6 +29,6 @@ public class SearchRestaurantTypeRepository implements SearchRestaurantTypeInter
     public RestaurantType findById(UUID id) {
         return restaurantTypeRepository.findById(id)
                 .map(GastroSphereUtils::convertToRestaurantType)
-                .orElseThrow(() -> new RuntimeException("Restaurant type not found"));
+                .orElse(null);
     }
 }
