@@ -1,12 +1,19 @@
 package br.com.fiap.gastrosphere.services;
 
-import br.com.fiap.gastrosphere.entities.Address;
-import br.com.fiap.gastrosphere.entities.User;
-import br.com.fiap.gastrosphere.entities.UserType;
-import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
-import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
-import br.com.fiap.gastrosphere.repositories.UserRepository;
-import br.com.fiap.gastrosphere.repositories.UserTypeRepository;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -16,12 +23,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import br.com.fiap.gastrosphere.core.application.service.UserServiceImpl;
+import br.com.fiap.gastrosphere.core.domain.exception.ResourceNotFoundException;
+import br.com.fiap.gastrosphere.core.domain.exception.UnprocessableEntityException;
+import br.com.fiap.gastrosphere.core.infra.model.AddressModel;
+import br.com.fiap.gastrosphere.core.infra.model.UserModel;
+import br.com.fiap.gastrosphere.core.infra.model.UserTypeModel;
+import br.com.fiap.gastrosphere.core.infra.repository.UserRepository;
+import br.com.fiap.gastrosphere.core.infra.repository.UserTypeRepository;
 
 class UserServiceImplTest {
 
@@ -42,9 +51,9 @@ class UserServiceImplTest {
     @Test
     void findAllUsers_shouldReturnPageOfUsers() {
         when(userRepository.findAll(any(Pageable.class)))
-                .thenReturn(new PageImpl<>(List.of(new User())));
+                .thenReturn(new PageImpl<>(List.of(new UserModel())));
 
-        Page<User> result = userService.findAllUsers(0, 10);
+        Page<UserModel> result = userService.findAllUsers(0, 10);
 
         assertThat(result.getContent()).hasSize(1);
         verify(userRepository).findAll(any(org.springframework.data.domain.Pageable.class));
@@ -54,9 +63,9 @@ class UserServiceImplTest {
     @Test
     void findById_shouldReturnUser() {
         UUID id = UUID.randomUUID();
-        when(userRepository.findById(id)).thenReturn(Optional.of(new User()));
+        when(userRepository.findById(id)).thenReturn(Optional.of(new UserModel()));
 
-        User result = userService.findById(id);
+        UserModel result = userService.findById(id);
 
         assertThat(result).isNotNull();
     }
@@ -72,20 +81,20 @@ class UserServiceImplTest {
 
     @Test
     void createUser_shouldPersistUser() {
-        User user = new User();
-        user.setUserType(new UserType());
-        when(userTypeRepository.findByName(any())).thenReturn(new UserType());
+    	UserModel user = new UserModel();
+        user.setUserType(new UserTypeModel());
+        when(userTypeRepository.findByName(any())).thenReturn(new UserTypeModel());
         when(userRepository.save(user)).thenReturn(user);
 
-        User result = userService.createUser(user);
+        UserModel result = userService.createUser(user);
 
         assertThat(result).isEqualTo(user);
     }
 
     @Test
     void createUser_shouldThrowIfUserTypeNotFound() {
-        User user = new User();
-        UserType userType = new UserType();
+    	UserModel user = new UserModel();
+        UserTypeModel userType = new UserTypeModel();
         userType.setName("ADMIN");
         user.setUserType(userType);
 
@@ -97,7 +106,7 @@ class UserServiceImplTest {
 
     @Test
     void createUser_shouldThrowOnDataAccessException() {
-        User user = new User();
+    	UserModel user = new UserModel();
         when(userRepository.save(any())).thenThrow(mock(DataAccessException.class));
 
         assertThatThrownBy(() -> userService.createUser(user))
@@ -107,16 +116,16 @@ class UserServiceImplTest {
     @Test
     void updateUser_shouldUpdateFields() {
         UUID id = UUID.randomUUID();
-        User user = new User();
+        UserModel user = new UserModel();
         user.setName("New Name");
-        user.setUserType(new UserType());
+        user.setUserType(new UserTypeModel());
 
-        User existing = new User();
+        UserModel existing = new UserModel();
         when(userRepository.findById(id)).thenReturn(Optional.of(existing));
-        when(userTypeRepository.findByName(any())).thenReturn(new UserType());
+        when(userTypeRepository.findByName(any())).thenReturn(new UserTypeModel());
         when(userRepository.save(any())).thenReturn(existing);
 
-        User result = userService.updateUser(user, id);
+        UserModel result = userService.updateUser(user, id);
 
         assertThat(result.getName()).isEqualTo("New Name");
     }
@@ -124,12 +133,12 @@ class UserServiceImplTest {
     @Test
     void updateUser_shouldThrowIfUserTypeNotFound() {
         UUID id = UUID.randomUUID();
-        User user = new User();
-        UserType userType = new UserType();
+        UserModel user = new UserModel();
+        UserTypeModel userType = new UserTypeModel();
         userType.setName("ADMIN");
         user.setUserType(userType);
 
-        when(userRepository.findById(id)).thenReturn(Optional.of(new User()));
+        when(userRepository.findById(id)).thenReturn(Optional.of(new UserModel()));
         when(userTypeRepository.findByName("ADMIN")).thenReturn(null);
 
         assertThatThrownBy(() -> userService.updateUser(user, id))
@@ -139,8 +148,8 @@ class UserServiceImplTest {
     @Test
     void updateUser_shouldThrowOnDataAccessException() {
         UUID id = UUID.randomUUID();
-        User user = new User();
-        when(userRepository.findById(id)).thenReturn(Optional.of(new User()));
+        UserModel user = new UserModel();
+        when(userRepository.findById(id)).thenReturn(Optional.of(new UserModel()));
         when(userRepository.save(any())).thenThrow(mock(DataAccessException.class));
 
         assertThatThrownBy(() -> userService.updateUser(user, id))
@@ -150,7 +159,7 @@ class UserServiceImplTest {
     @Test
     void updatePassword_shouldUpdateSuccessfully() {
         UUID id = UUID.randomUUID();
-        User user = new User();
+        UserModel user = new UserModel();
         user.setPassword("old");
 
         when(userRepository.findById(id)).thenReturn(Optional.of(user));
@@ -164,7 +173,7 @@ class UserServiceImplTest {
     @Test
     void updatePassword_shouldThrowIfOldPasswordInvalid() {
         UUID id = UUID.randomUUID();
-        User user = new User();
+        UserModel user = new UserModel();
         user.setPassword("correct");
 
         when(userRepository.findById(id)).thenReturn(Optional.of(user));
@@ -176,7 +185,7 @@ class UserServiceImplTest {
     @Test
     void updatePassword_shouldThrowIfNewPasswordSame() {
         UUID id = UUID.randomUUID();
-        User user = new User();
+        UserModel user = new UserModel();
         user.setPassword("same");
 
         when(userRepository.findById(id)).thenReturn(Optional.of(user));
@@ -188,7 +197,7 @@ class UserServiceImplTest {
     @Test
     void updatePassword_shouldThrowIfRepositoryReturnsZero() {
         UUID id = UUID.randomUUID();
-        User user = new User();
+        UserModel user = new UserModel();
         user.setPassword("old");
 
         when(userRepository.findById(id)).thenReturn(Optional.of(user));
@@ -217,11 +226,11 @@ class UserServiceImplTest {
 
     @Test
     void updateUser_shouldUpdateOnlyName() {
-        User update = new User();
+    	UserModel update = new UserModel();
         update.setName("Novo Nome");
         UUID userId = new UUID(0, 0);
-        when(userRepository.findById(userId)).thenReturn(Optional.of(new User()));
-        when(userRepository.save(any(User.class))).thenReturn(update);
+        when(userRepository.findById(userId)).thenReturn(Optional.of(new UserModel()));
+        when(userRepository.save(any(UserModel.class))).thenReturn(update);
 
         var result = userService.updateUser(update, userId);
 
@@ -230,11 +239,11 @@ class UserServiceImplTest {
 
     @Test
     void updateUser_shouldUpdateOnlyEmail() {
-        User update = new User();
+    	UserModel update = new UserModel();
         update.setEmail("novo@email.com");
         UUID userId = new UUID(0, 0);
-        when(userRepository.findById(userId)).thenReturn(Optional.of(new User()));
-        when(userRepository.save(any(User.class))).thenReturn(update);
+        when(userRepository.findById(userId)).thenReturn(Optional.of(new UserModel()));
+        when(userRepository.save(any(UserModel.class))).thenReturn(update);
 
         var result = userService.updateUser(update, userId);
 
@@ -243,11 +252,11 @@ class UserServiceImplTest {
 
     @Test
     void updateUser_shouldUpdateOnlyLogin() {
-        User update = new User();
+    	UserModel update = new UserModel();
         update.setLogin("novologin");
         UUID userId = new UUID(0, 0);
-        when(userRepository.findById(userId)).thenReturn(Optional.of(new User()));
-        when(userRepository.save(any(User.class))).thenReturn(update);
+        when(userRepository.findById(userId)).thenReturn(Optional.of(new UserModel()));
+        when(userRepository.save(any(UserModel.class))).thenReturn(update);
 
         var result = userService.updateUser(update, userId);
 
@@ -256,11 +265,11 @@ class UserServiceImplTest {
 
     @Test
     void updateUser_shouldUpdateOnlyPassword() {
-        User update = new User();
+    	UserModel update = new UserModel();
         update.setPassword("novasenha");
         UUID userId = new UUID(0, 0);
-        when(userRepository.findById(userId)).thenReturn(Optional.of(new User()));
-        when(userRepository.save(any(User.class))).thenReturn(update);
+        when(userRepository.findById(userId)).thenReturn(Optional.of(new UserModel()));
+        when(userRepository.save(any(UserModel.class))).thenReturn(update);
 
         var result = userService.updateUser(update, userId);
 
@@ -269,11 +278,11 @@ class UserServiceImplTest {
 
     @Test
     void updateUser_shouldUpdateOnlyDocument() {
-        User update = new User();
+    	UserModel update = new UserModel();
         update.setDocument("99999999999");
         UUID userId = new UUID(0, 0);
-        when(userRepository.findById(userId)).thenReturn(Optional.of(new User()));
-        when(userRepository.save(any(User.class))).thenReturn(update);
+        when(userRepository.findById(userId)).thenReturn(Optional.of(new UserModel()));
+        when(userRepository.save(any(UserModel.class))).thenReturn(update);
 
         var result = userService.updateUser(update, userId);
 
@@ -282,12 +291,12 @@ class UserServiceImplTest {
 
     @Test
     void updateUser_shouldUpdateOnlyAddress() {
-        User update = new User();
-        update.setAddress(mock(Address.class));
+    	UserModel update = new UserModel();
+        update.setAddress(mock(AddressModel.class));
 
         UUID userId = new UUID(0, 0);
-        when(userRepository.findById(userId)).thenReturn(Optional.of(new User()));
-        when(userRepository.save(any(User.class))).thenReturn(update);
+        when(userRepository.findById(userId)).thenReturn(Optional.of(new UserModel()));
+        when(userRepository.save(any(UserModel.class))).thenReturn(update);
 
         var result = userService.updateUser(update, userId);
 
