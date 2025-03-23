@@ -1,11 +1,16 @@
 package br.com.fiap.gastrosphere.core.application.controller;
 
 import br.com.fiap.gastrosphere.core.application.dto.request.RestaurantTypeBodyRequest;
+import br.com.fiap.gastrosphere.core.domain.gateway.restauranttype.SearchRestaurantTypeInterface;
+import br.com.fiap.gastrosphere.core.domain.generic.output.OutputInterface;
+import br.com.fiap.gastrosphere.core.domain.usecase.restauranttype.SearchRestaurantTypeUseCase;
 import br.com.fiap.gastrosphere.core.infra.model.RestaurantTypeModel;
 import br.com.fiap.gastrosphere.core.domain.entity.RestaurantType;
 import br.com.fiap.gastrosphere.core.domain.exception.UnprocessableEntityException;
 import br.com.fiap.gastrosphere.core.application.service.RestaurantTypeServiceImpl;
 import br.com.fiap.gastrosphere.core.application.utils.GastroSphereUtils;
+import br.com.fiap.gastrosphere.core.infra.repository.RestaurantTypeRepository;
+import br.com.fiap.gastrosphere.core.infra.repository.restauranttype.SearchRestaurantTypeRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -35,9 +40,12 @@ public class RestaurantTypeController {
     public static final String V1_RESTAURANT_TYPE = "/api/v1/restaurant-types";
     private static final Logger logger = getLogger(RestaurantTypeController.class);
     private final RestaurantTypeServiceImpl restaurantTypeService;
+    private final RestaurantTypeRepository restaurantTypeRepository;
 
-    public RestaurantTypeController(RestaurantTypeServiceImpl restaurantTypeService) {
+    public RestaurantTypeController(RestaurantTypeServiceImpl restaurantTypeService,
+                                    RestaurantTypeRepository restaurantTypeRepository) {
         this.restaurantTypeService = restaurantTypeService;
+        this.restaurantTypeRepository = restaurantTypeRepository;
     }
 
     @Operation(
@@ -56,12 +64,10 @@ public class RestaurantTypeController {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size) {
         logger.info("GET | {} | Iniciado findAllRestaurantTypes", V1_RESTAURANT_TYPE);
-        Page<RestaurantTypeModel> restaurantTypesModel = this.restaurantTypeService.findAllRestaurantTypes(page, size);
-        List<RestaurantType> restaurantTypes = restaurantTypesModel.stream()
-                .map(GastroSphereUtils::convertToRestaurantType)
-                .toList();
+        SearchRestaurantTypeUseCase useCase = new SearchRestaurantTypeUseCase(new SearchRestaurantTypeRepository(restaurantTypeRepository));
+        List<RestaurantType> restaurantTypeModels = useCase.execute(page, size);
         logger.info("GET | {} | Finalizado findAllRestaurantTypes", V1_RESTAURANT_TYPE);
-        return ok(restaurantTypes);
+        return ok(restaurantTypeModels);
     }
 
     @Operation(

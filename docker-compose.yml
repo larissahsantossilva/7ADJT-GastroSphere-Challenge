@@ -28,7 +28,11 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      _JAVA_OPTIONS: > 
+        -Xdebug
+        -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
     ports:
       - 8080:8080
+      - 5005:5005
 volumes:
   postgres-data:
