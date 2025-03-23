@@ -4,8 +4,8 @@ import static br.com.fiap.gastrosphere.core.application.utils.GastroSphereConsta
 import static br.com.fiap.gastrosphere.core.application.utils.GastroSphereConstants.ERRO_AO_DELETAR_MENU_ITEM;
 import static br.com.fiap.gastrosphere.core.application.utils.GastroSphereConstants.ID_NAO_ENCONTRADO;
 import static br.com.fiap.gastrosphere.core.application.utils.GastroSphereConstants.ITEM_MENU_NAO_ENCONTRADO;
-import static br.com.fiap.gastrosphere.core.application.utils.GastroSphereConstants.MENU_ITEM_NÃO_ENCONTRADO;
-import static br.com.fiap.gastrosphere.core.application.utils.GastroSphereConstants.MENU_NÃO_ENCONTRADO_ID;
+import static br.com.fiap.gastrosphere.core.application.utils.GastroSphereConstants.MENU_ITEM_NAO_ENCONTRADO;
+import static br.com.fiap.gastrosphere.core.application.utils.GastroSphereConstants.MENU_NAO_ENCONTRADO_ID;
 import static br.com.fiap.gastrosphere.core.application.utils.GastroSphereUtils.uuidValidator;
 import static java.time.LocalDate.now;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -55,7 +55,7 @@ public class MenuItemServiceImpl {
     public MenuItemModel createMenu(MenuItemModel item, UUID menuId) {
     	uuidValidator(menuId);
         MenuModel menu = menuRepository.findById(menuId)
-                .orElseThrow(() -> new ResourceNotFoundException(MENU_NÃO_ENCONTRADO_ID + menuId));
+                .orElseThrow(() -> new ResourceNotFoundException(MENU_NAO_ENCONTRADO_ID + menuId));
         item.setMenu(menu);
         return menuItemRepository.save(item);
     }
@@ -81,7 +81,7 @@ public class MenuItemServiceImpl {
         try {
             var existingItem = menuItemRepository.findByIdAndMenuId(menuItemId, menuId)
                     .orElseThrow(() -> new ResourceNotFoundException(
-                            MENU_ITEM_NÃO_ENCONTRADO + menuItemId));
+                            MENU_ITEM_NAO_ENCONTRADO + menuItemId));
             menuItemRepository.deleteById(existingItem.getId());
         } catch (DataAccessException e) {
             logger.error(ERRO_AO_DELETAR_MENU_ITEM, e);
