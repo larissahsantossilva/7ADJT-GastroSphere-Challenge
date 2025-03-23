@@ -1,11 +1,17 @@
 package br.com.fiap.gastrosphere.controllers;
 
-import br.com.fiap.gastrosphere.dtos.LoginUserDTO;
-import br.com.fiap.gastrosphere.dtos.requests.UserBodyRequest;
-import br.com.fiap.gastrosphere.dtos.responses.UserBodyResponse;
-import br.com.fiap.gastrosphere.entities.User;
-import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
-import br.com.fiap.gastrosphere.services.UserServiceImpl;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.UUID;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageImpl;
@@ -13,11 +19,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.List;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import br.com.fiap.gastrosphere.core.application.controller.UserController;
+import br.com.fiap.gastrosphere.core.application.dto.LoginUserDTO;
+import br.com.fiap.gastrosphere.core.application.dto.request.UserBodyRequest;
+import br.com.fiap.gastrosphere.core.application.dto.response.UserBodyResponse;
+import br.com.fiap.gastrosphere.core.application.service.UserServiceImpl;
+import br.com.fiap.gastrosphere.core.domain.exception.UnprocessableEntityException;
+import br.com.fiap.gastrosphere.core.infra.model.UserModel;
 
 class UserControllerTest {
 
@@ -32,7 +40,7 @@ class UserControllerTest {
 
     @Test
     void findAllUsers_shouldReturnListOfUsers() {
-        User user = new User();
+        UserModel user = new UserModel();
         when(userService.findAllUsers(0, 10))
                 .thenReturn(new PageImpl<>(List.of(user), PageRequest.of(0, 10), 1));
 
@@ -46,7 +54,7 @@ class UserControllerTest {
     @Test
     void findUserById_shouldReturnUserWhenExists() {
         UUID id = UUID.randomUUID();
-        User user = new User();
+        UserModel user = new UserModel();
         user.setId(id);
 
         when(userService.findById(id)).thenReturn(user);
@@ -73,10 +81,10 @@ class UserControllerTest {
     void createUser_shouldReturnCreatedUserId() {
         UUID id = UUID.randomUUID();
         UserBodyRequest request = new UserBodyRequest();
-        User user = new User();
+        UserModel user = new UserModel();
         user.setId(id);
 
-        when(userService.createUser(any(User.class))).thenReturn(user);
+        when(userService.createUser(any(UserModel.class))).thenReturn(user);
 
         ResponseEntity<UUID> response = userController.createUser(request);
 
@@ -88,10 +96,10 @@ class UserControllerTest {
     void updateUser_shouldReturnSuccessMessage() {
         UUID id = UUID.randomUUID();
         UserBodyRequest request = new UserBodyRequest();
-        User user = new User();
+        UserModel user = new UserModel();
         user.setId(id);
 
-        when(userService.updateUser(any(User.class), eq(id))).thenReturn(user);
+        when(userService.updateUser(any(UserModel.class), eq(id))).thenReturn(user);
 
         ResponseEntity<String> response = userController.updateUser(id, request);
 

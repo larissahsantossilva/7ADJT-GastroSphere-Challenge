@@ -1,8 +1,14 @@
 package br.com.fiap.gastrosphere.integration.controllers;
 
-import br.com.fiap.gastrosphere.entities.Address;
-import br.com.fiap.gastrosphere.repositories.AddressRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.UUID;
+
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +19,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.UUID;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import br.com.fiap.gastrosphere.core.infra.model.AddressModel;
+import br.com.fiap.gastrosphere.core.infra.repository.AddressRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -35,8 +41,8 @@ public class AddressIntegrationTest {
 
     private static UUID createdId;
 
-    private Address createMockAddress() {
-        Address address = new Address();
+    private AddressModel createMockAddress() {
+    	AddressModel address = new AddressModel();
         address.setCountry("Brasil");
         address.setState("SP");
         address.setCity("São Paulo");

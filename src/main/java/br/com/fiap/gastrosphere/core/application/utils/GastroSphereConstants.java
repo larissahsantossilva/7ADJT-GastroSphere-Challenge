@@ -67,4 +67,7 @@ public final class GastroSphereConstants {
     public static final String ERRO_AO_DELETAR_MENU_ITEM = "Erro ao deletar Item doMenu.";
     public static final String ERRO_AO_ALTERAR_MENU_ITEM = "Erro ao alterar Menu ITEM.";
     public static final String ITEM_MENU_NAO_ENCONTRADO = "Item do menu não encontrado.";
+    public static final String MENU_NAO_ENCONTRADO_ID = "Menu não encontrado para o ID: ";
+	public static final String MENU_ITEM_NAO_ENCONTRADO = "Menu Item não encontrado para o ID: ";
+
 }

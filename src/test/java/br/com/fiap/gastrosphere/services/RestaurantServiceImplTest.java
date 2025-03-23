@@ -1,25 +1,37 @@
 package br.com.fiap.gastrosphere.services;
 
-import br.com.fiap.gastrosphere.entities.Address;
-import br.com.fiap.gastrosphere.entities.Restaurant;
-import br.com.fiap.gastrosphere.entities.RestaurantType;
-import br.com.fiap.gastrosphere.entities.User;
-import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
-import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
-import br.com.fiap.gastrosphere.repositories.RestaurantRepository;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
-import java.time.LocalTime;
-import java.util.*;
-
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import br.com.fiap.gastrosphere.core.application.service.RestaurantServiceImpl;
+import br.com.fiap.gastrosphere.core.domain.exception.ResourceNotFoundException;
+import br.com.fiap.gastrosphere.core.domain.exception.UnprocessableEntityException;
+import br.com.fiap.gastrosphere.core.infra.model.AddressModel;
+import br.com.fiap.gastrosphere.core.infra.model.RestaurantModel;
+import br.com.fiap.gastrosphere.core.infra.model.RestaurantTypeModel;
+import br.com.fiap.gastrosphere.core.infra.model.UserModel;
+import br.com.fiap.gastrosphere.core.infra.repository.RestaurantRepository;
 
 class RestaurantServiceImplTest {
 
@@ -29,13 +41,13 @@ class RestaurantServiceImplTest {
     private RestaurantServiceImpl restaurantService;
 
     private UUID id;
-    private Restaurant restaurant;
+    private RestaurantModel restaurant;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         id = UUID.randomUUID();
-        restaurant = new Restaurant();
+        restaurant = new RestaurantModel();
         restaurant.setId(id);
         restaurant.setName("Restaurante Teste");
         restaurant.setStartedAt(LocalTime.of(8, 0));
@@ -47,14 +59,14 @@ class RestaurantServiceImplTest {
         when(restaurantRepository.findAll(PageRequest.of(0, 10)))
                 .thenReturn(new PageImpl<>(List.of(restaurant)));
 
-        Page<Restaurant> result = restaurantService.findAllRestaurants(0, 10);
+        Page<RestaurantModel> result = restaurantService.findAllRestaurants(0, 10);
         assertThat(result).isNotEmpty();
     }
 
     @Test
     void shouldFindRestaurantById() {
         when(restaurantRepository.findById(id)).thenReturn(Optional.of(restaurant));
-        Restaurant found = restaurantService.findById(id);
+        RestaurantModel found = restaurantService.findById(id);
         assertThat(found).isEqualTo(restaurant);
     }
 
@@ -68,7 +80,7 @@ class RestaurantServiceImplTest {
     @Test
     void shouldCreateRestaurant() {
         when(restaurantRepository.save(restaurant)).thenReturn(restaurant);
-        Restaurant result = restaurantService.createRestaurant(restaurant);
+        RestaurantModel result = restaurantService.createRestaurant(restaurant);
         assertThat(result).isEqualTo(restaurant);
     }
 
@@ -81,13 +93,13 @@ class RestaurantServiceImplTest {
 
     @Test
     void shouldUpdateRestaurant() {
-        Restaurant update = new Restaurant();
+    	RestaurantModel update = new RestaurantModel();
         update.setName("Novo Nome");
 
         when(restaurantRepository.findById(id)).thenReturn(Optional.of(restaurant));
         when(restaurantRepository.save(any())).thenReturn(restaurant);
 
-        Restaurant result = restaurantService.updateRestaurant(update, id);
+        RestaurantModel result = restaurantService.updateRestaurant(update, id);
         assertThat(result).isNotNull();
     }
 
@@ -115,73 +127,73 @@ class RestaurantServiceImplTest {
 
     @Test
     void shouldUpdateUserWhenPresent() {
-        Restaurant update = new Restaurant();
-        update.setUser(mock(User.class));
+    	RestaurantModel update = new RestaurantModel();
+        update.setUser(mock(UserModel.class));
 
         when(restaurantRepository.findById(id)).thenReturn(Optional.of(restaurant));
         when(restaurantRepository.save(any())).thenReturn(restaurant);
 
-        Restaurant result = restaurantService.updateRestaurant(update, id);
+        RestaurantModel result = restaurantService.updateRestaurant(update, id);
         assertThat(result).isNotNull();
     }
 
     @Test
     void shouldUpdateNameWhenPresent() {
-        Restaurant update = new Restaurant();
+    	RestaurantModel update = new RestaurantModel();
         update.setName("Atualizado");
 
         when(restaurantRepository.findById(id)).thenReturn(Optional.of(restaurant));
         when(restaurantRepository.save(any())).thenReturn(restaurant);
 
-        Restaurant result = restaurantService.updateRestaurant(update, id);
+        RestaurantModel result = restaurantService.updateRestaurant(update, id);
         assertThat(result).isNotNull();
     }
 
     @Test
     void shouldUpdateAddressWhenPresent() {
-        Restaurant update = new Restaurant();
-        update.setAddress(mock(Address.class));
+    	RestaurantModel update = new RestaurantModel();
+        update.setAddress(mock(AddressModel.class));
 
         when(restaurantRepository.findById(id)).thenReturn(Optional.of(restaurant));
         when(restaurantRepository.save(any())).thenReturn(restaurant);
 
-        Restaurant result = restaurantService.updateRestaurant(update, id);
+        RestaurantModel result = restaurantService.updateRestaurant(update, id);
         assertThat(result).isNotNull();
     }
 
     @Test
     void shouldUpdateRestaurantTypeWhenPresent() {
-        Restaurant update = new Restaurant();
-        update.setRestaurantType(mock(RestaurantType.class));
+    	RestaurantModel update = new RestaurantModel();
+        update.setRestaurantType(mock(RestaurantTypeModel.class));
 
         when(restaurantRepository.findById(id)).thenReturn(Optional.of(restaurant));
         when(restaurantRepository.save(any())).thenReturn(restaurant);
 
-        Restaurant result = restaurantService.updateRestaurant(update, id);
+        RestaurantModel result = restaurantService.updateRestaurant(update, id);
         assertThat(result).isNotNull();
     }
 
     @Test
     void shouldUpdateStartedAtWhenPresent() {
-        Restaurant update = new Restaurant();
+    	RestaurantModel update = new RestaurantModel();
         update.setStartedAt(LocalTime.of(10, 0));
 
         when(restaurantRepository.findById(id)).thenReturn(Optional.of(restaurant));
         when(restaurantRepository.save(any())).thenReturn(restaurant);
 
-        Restaurant result = restaurantService.updateRestaurant(update, id);
+        RestaurantModel result = restaurantService.updateRestaurant(update, id);
         assertThat(result).isNotNull();
     }
 
     @Test
     void shouldUpdateFinishedAtWhenPresent() {
-        Restaurant update = new Restaurant();
+    	RestaurantModel update = new RestaurantModel();
         update.setFinishedAt(LocalTime.of(22, 0));
 
         when(restaurantRepository.findById(id)).thenReturn(Optional.of(restaurant));
         when(restaurantRepository.save(any())).thenReturn(restaurant);
 
-        Restaurant result = restaurantService.updateRestaurant(update, id);
+        RestaurantModel result = restaurantService.updateRestaurant(update, id);
         assertThat(result).isNotNull();
     }
 

@@ -1,10 +1,15 @@
 package br.com.fiap.gastrosphere.integration.controllers;
 
-import br.com.fiap.gastrosphere.entities.RestaurantType;
-import br.com.fiap.gastrosphere.repositories.RestaurantTypeRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.UUID;
+
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +20,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.UUID;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import br.com.fiap.gastrosphere.core.infra.model.RestaurantTypeModel;
+import br.com.fiap.gastrosphere.core.infra.repository.RestaurantTypeRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -41,8 +47,8 @@ public class RestaurantTypeIntegrationTest {
 
     private static UUID createdId;
 
-    private RestaurantType createMockRestaurantType() {
-        RestaurantType type = new RestaurantType();
+    private RestaurantTypeModel createMockRestaurantType() {
+        RestaurantTypeModel type = new RestaurantTypeModel();
         type.setName("Churrascaria");
         return restaurantTypeRepository.save(type);
     }
@@ -112,7 +118,7 @@ public class RestaurantTypeIntegrationTest {
                         .content(json))
                 .andExpect(status().isOk());
 
-        assertThat(restaurantTypeRepository.findById(createdId)).get().extracting(RestaurantType::getName).isEqualTo("Japonesa");
+        assertThat(restaurantTypeRepository.findById(createdId)).get().extracting(RestaurantTypeModel::getName).isEqualTo("Japonesa");
     }
 
     @Test

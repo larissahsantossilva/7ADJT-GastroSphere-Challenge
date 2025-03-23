@@ -1,15 +1,21 @@
 package br.com.fiap.gastrosphere.integration.controllers;
 
-import br.com.fiap.gastrosphere.entities.Address;
-import br.com.fiap.gastrosphere.entities.Restaurant;
-import br.com.fiap.gastrosphere.entities.RestaurantType;
-import br.com.fiap.gastrosphere.entities.User;
-import br.com.fiap.gastrosphere.repositories.AddressRepository;
-import br.com.fiap.gastrosphere.repositories.RestaurantRepository;
-import br.com.fiap.gastrosphere.repositories.RestaurantTypeRepository;
-import br.com.fiap.gastrosphere.repositories.UserRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.UUID;
+
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,13 +24,16 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.UUID;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import br.com.fiap.gastrosphere.core.infra.model.AddressModel;
+import br.com.fiap.gastrosphere.core.infra.model.RestaurantModel;
+import br.com.fiap.gastrosphere.core.infra.model.RestaurantTypeModel;
+import br.com.fiap.gastrosphere.core.infra.model.UserModel;
+import br.com.fiap.gastrosphere.core.infra.repository.AddressRepository;
+import br.com.fiap.gastrosphere.core.infra.repository.RestaurantRepository;
+import br.com.fiap.gastrosphere.core.infra.repository.RestaurantTypeRepository;
+import br.com.fiap.gastrosphere.core.infra.repository.UserRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -53,8 +62,8 @@ public class RestaurantIntegrationTest {
 
     private static UUID createdId;
 
-    private Restaurant createMockRestaurant() {
-        Address address = new Address();
+    private RestaurantModel createMockRestaurant() {
+        AddressModel address = new AddressModel();
         address.setCountry("Brasil");
         address.setZipCode("00000-000");
         address.setStreet("Rua Teste");
@@ -62,12 +71,12 @@ public class RestaurantIntegrationTest {
         address.setCreatedAt(LocalDate.now());
         address.setLastModifiedAt(LocalDate.now());
 
-        RestaurantType type = new RestaurantType();
+        RestaurantTypeModel type = new RestaurantTypeModel();
         type.setName("Italiana");
         type.setCreatedAt(LocalDate.now());
         type.setLastModifiedAt(LocalDate.now());
 
-        User user = new User();
+        UserModel user = new UserModel();
         user.setName("João");
         user.setEmail("joao@example.com");
         user.setLogin("joao123");
@@ -78,7 +87,7 @@ public class RestaurantIntegrationTest {
         user.setCreatedAt(LocalDate.now());
         user.setLastModifiedAt(LocalDate.now());
 
-        Restaurant restaurant = new Restaurant();
+        RestaurantModel restaurant = new RestaurantModel();
         restaurant.setName("Spoleto");
         restaurant.setAddress(address);
         restaurant.setRestaurantType(type);
@@ -95,7 +104,7 @@ public class RestaurantIntegrationTest {
     @Test
     @Order(1)
     void shouldCreateRestaurant() throws Exception {
-        Restaurant restaurant = createMockRestaurant();
+        RestaurantModel restaurant = createMockRestaurant();
         String json = objectMapper.writeValueAsString(restaurant);
 
         var result = mockMvc.perform(post("/api/v1/restaurants")
@@ -150,7 +159,7 @@ public class RestaurantIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json));
 
-        assertThat(restaurantRepository.findById(createdId)).get().extracting(Restaurant::getName).isEqualTo("Spoleto");
+        assertThat(restaurantRepository.findById(createdId)).get().extracting(RestaurantModel::getName).isEqualTo("Spoleto");
     }
 
     @Test

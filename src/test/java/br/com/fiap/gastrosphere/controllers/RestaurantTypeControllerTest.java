@@ -1,19 +1,26 @@
 package br.com.fiap.gastrosphere.controllers;
 
-import br.com.fiap.gastrosphere.dtos.requests.RestaurantTypeBodyRequest;
-import br.com.fiap.gastrosphere.entities.RestaurantType;
-import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
-import br.com.fiap.gastrosphere.services.RestaurantTypeServiceImpl;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.UUID;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 
-import java.util.*;
-
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import br.com.fiap.gastrosphere.core.application.controller.RestaurantTypeController;
+import br.com.fiap.gastrosphere.core.application.dto.request.RestaurantTypeBodyRequest;
+import br.com.fiap.gastrosphere.core.application.service.RestaurantTypeServiceImpl;
+import br.com.fiap.gastrosphere.core.domain.exception.UnprocessableEntityException;
+import br.com.fiap.gastrosphere.core.infra.model.RestaurantTypeModel;
 
 class RestaurantTypeControllerTest {
 
@@ -23,13 +30,13 @@ class RestaurantTypeControllerTest {
     private RestaurantTypeController controller;
 
     private UUID id;
-    private RestaurantType type;
+    private RestaurantTypeModel type;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         id = UUID.randomUUID();
-        type = new RestaurantType();
+        type = new RestaurantTypeModel();
         type.setId(id);
         type.setName("Brasileira");
     }

@@ -1,10 +1,19 @@
 package br.com.fiap.gastrosphere.services;
 
-import br.com.fiap.gastrosphere.entities.UserType;
-import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
-import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
-import br.com.fiap.gastrosphere.repositories.UserRepository;
-import br.com.fiap.gastrosphere.repositories.UserTypeRepository;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -14,13 +23,12 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import br.com.fiap.gastrosphere.core.application.service.UserTypeServiceImpl;
+import br.com.fiap.gastrosphere.core.domain.exception.ResourceNotFoundException;
+import br.com.fiap.gastrosphere.core.domain.exception.UnprocessableEntityException;
+import br.com.fiap.gastrosphere.core.infra.model.UserTypeModel;
+import br.com.fiap.gastrosphere.core.infra.repository.UserRepository;
+import br.com.fiap.gastrosphere.core.infra.repository.UserTypeRepository;
 
 public class UserTypeServiceImplTest {
 
@@ -33,14 +41,14 @@ public class UserTypeServiceImplTest {
     private UserTypeServiceImpl userTypeService;
 
     private UUID userTypeId;
-    private UserType userType;
+    private UserTypeModel userType;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
         userTypeId = UUID.randomUUID();
-        userType = new UserType(userTypeId, "ADMIN", LocalDate.now(), LocalDate.now());
+        userType = new UserTypeModel(userTypeId, "ADMIN", LocalDate.now(), LocalDate.now());
     }
 
     @Test
@@ -89,10 +97,10 @@ public class UserTypeServiceImplTest {
 
     @Test
     void updateUserType_successfullyUpdatesUserType() {
-        UserType updatedType = new UserType(null, "NEW_NAME", null, null);
+    	UserTypeModel updatedType = new UserTypeModel(null, "NEW_NAME", null, null);
 
         when(userTypeRepository.findById(userTypeId)).thenReturn(Optional.of(userType));
-        when(userTypeRepository.save(any(UserType.class))).thenReturn(userType);
+        when(userTypeRepository.save(any(UserTypeModel.class))).thenReturn(userType);
 
         var result = userTypeService.updateUserType(userTypeId, updatedType);
 
@@ -156,10 +164,10 @@ public class UserTypeServiceImplTest {
 
     @Test
     void updateUserType_shouldNotUpdateName_whenNull() {
-        UserType updated = new UserType(null, null, null, null);
+    	UserTypeModel updated = new UserTypeModel(null, null, null, null);
 
         when(userTypeRepository.findById(userTypeId)).thenReturn(Optional.of(userType));
-        when(userTypeRepository.save(any(UserType.class))).thenReturn(userType);
+        when(userTypeRepository.save(any(UserTypeModel.class))).thenReturn(userType);
 
         var result = userTypeService.updateUserType(userTypeId, updated);
 

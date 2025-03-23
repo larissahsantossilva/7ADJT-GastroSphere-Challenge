@@ -73,12 +73,13 @@ public class MenuItemController {
                     )
             }
     )
-    @GetMapping("/items")
+    @GetMapping("{menu_id}/items")
     public ResponseEntity<List<MenuItemResponse>> findAllMenuItems(
+    		@PathVariable("menu_id") UUID menuId,
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size) {
         logger.info("GET | {} | Iniciado findAllMenuItems", V1_MENU_ITEMS);
-        Page<MenuItemModel> items = this.menuItemService.findAllMenuItems(page, size);
+        Page<MenuItemModel> items = this.menuItemService.findAllMenuItems(page, size, menuId);
         List<MenuItemResponse> itemsResponse = items.stream()
                 .map(MenuItemResponse::new)
                 .toList();
@@ -102,15 +103,17 @@ public class MenuItemController {
                     )
             }
     )
-    @GetMapping("/{id}/items")
-    public ResponseEntity<MenuItemResponse> findMenuItemById(@PathVariable("id") UUID id) {
-        logger.info("GET | {} | Iniciado findMenuItemById | id: {}", V1_MENU_ITEMS, id);
-        var item = menuItemService.findById(id);
+    @GetMapping("/{menu_id}/items/{menu_item_id}")
+    public ResponseEntity<MenuItemResponse> findMenuItemById(
+    		@PathVariable("menu_item_id") UUID menuItemId,
+    		@PathVariable("menu_id") UUID menuId) {
+        logger.info("GET | {} | Iniciado findMenuItemById | id: {}", V1_MENU_ITEMS, menuItemId);
+        var item = menuItemService.findByIdAndMenuId(menuItemId, menuId);
         if (item != null) {
-            logger.info("GET | {} | Finalizado findMenuItemById | id: {}", V1_MENU_ITEMS, id);
+            logger.info("GET | {} | Finalizado findMenuItemById | id: {}", V1_MENU_ITEMS, menuItemId);
             return ok(new MenuItemResponse(item));
         }
-        logger.info("GET | {} | Finalizado √ No Content | id: {}", V1_MENU_ITEMS, id);
+        logger.info("GET | {} | Finalizado √ No Content | id: {}", V1_MENU_ITEMS, menuItemId);
         return status(HttpStatus.NOT_FOUND).build();
     }
 
@@ -131,10 +134,12 @@ public class MenuItemController {
                     ),
             }
     )
-    @PostMapping("/items")
-    public ResponseEntity<UUID> createMenuItem(@Valid @RequestBody MenuItemBodyRequest menuItemBodyRequest) {
+    @PostMapping("{menu_id}/items")
+    public ResponseEntity<UUID> createMenuItem(
+    		@PathVariable("menu_id") UUID menuId,
+    		@Valid @RequestBody MenuItemBodyRequest menuItemBodyRequest) {
         logger.info("POST | {} | Iniciado createMenu | Menu: {}", V1_MENU_ITEMS, menuItemBodyRequest.getDescription());
-        MenuItemModel item = menuItemService.createMenu(convertToMenuItem(menuItemBodyRequest));
+        MenuItemModel item = menuItemService.createMenu(convertToMenuItem(menuItemBodyRequest), menuId);
         logger.info("POST | {} | Finalizado createMenu", V1_MENU_ITEMS);
         return status(201).body(item.getId());
     }
@@ -160,10 +165,13 @@ public class MenuItemController {
                     )
             }
     )
-    @PutMapping("/{id}/items")
-    public ResponseEntity<String> updateMenuItem(@PathVariable("id") UUID id, @Valid @RequestBody MenuItemBodyRequest menuItemBodyRequest) {
-        logger.info("PUT | {} | Iniciado updateMenuItem | id: {}", V1_MENU_ITEMS, id);
-        menuItemService.updateMenuItem(convertToMenuItem(menuItemBodyRequest), id);
+    @PutMapping("{menu_id}/items/{menu_item_id}")
+    public ResponseEntity<String> updateMenuItem(
+    		@PathVariable("menu_id") UUID menuId,
+    		@PathVariable("menu_item_id") UUID menuItemId,
+    		@Valid @RequestBody MenuItemBodyRequest menuItemBodyRequest) {
+        logger.info("PUT | {} | Iniciado updateMenuItem | id: {}", V1_MENU_ITEMS, menuItemId);
+        menuItemService.updateMenuItem(convertToMenuItem(menuItemBodyRequest), menuId, menuItemId);
         logger.info("PUT | {} | Finalizado updateMenuItem", V1_MENU_ITEMS);
         return ok("Item do Menu atualizado com sucesso");
     }
@@ -185,15 +193,18 @@ public class MenuItemController {
                     )
             }
     )
-    @DeleteMapping("/{id}/items")
-    public ResponseEntity<String> deleteMenuItem(@PathVariable("id") UUID id) {
-        logger.info("DELETE | {} | Iniciado deleteMenuItem | id: {}", V1_MENU_ITEMS, id);
+    @DeleteMapping("/{menu_id}/items/{menu_item_id}")
+    public ResponseEntity<String> deleteMenuItem(
+    		@PathVariable("menu_id") UUID menuId,
+    		@PathVariable("menu_item_id") UUID menuItemId
+    		) {
+        logger.info("DELETE | {} | Iniciado deleteMenuItem | id: {}", V1_MENU_ITEMS, menuItemId);
         try {
-            menuItemService.deleteMenuById(id);
-            logger.info("DELETE | {} | Menu Item deletado com sucesso | Id: {}", V1_MENU_ITEMS, id);
+            menuItemService.deleteMenuById(menuId, menuItemId);
+            logger.info("DELETE | {} | Menu Item deletado com sucesso | Id: {}", V1_MENU_ITEMS, menuItemId);
             return noContent().build();
         } catch (UnprocessableEntityException e) {
-            logger.error("DELETE | {} | Erro ao deletar Menu Item | Id: {} | Erro: {}", V1_MENU_ITEMS, id, e.getMessage());
+            logger.error("DELETE | {} | Erro ao deletar Menu Item | Id: {} | Erro: {}", V1_MENU_ITEMS, menuItemId, e.getMessage());
             return status(HttpStatus.NOT_FOUND).body("Item do Menu não encontrado");
         }
     }

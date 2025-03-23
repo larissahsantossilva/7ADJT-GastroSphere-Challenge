@@ -1,21 +1,33 @@
 package br.com.fiap.gastrosphere.services;
 
-import br.com.fiap.gastrosphere.entities.RestaurantType;
-import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
-import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
-import br.com.fiap.gastrosphere.repositories.RestaurantTypeRepository;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
-import java.util.*;
-
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import br.com.fiap.gastrosphere.core.application.service.RestaurantTypeServiceImpl;
+import br.com.fiap.gastrosphere.core.domain.exception.ResourceNotFoundException;
+import br.com.fiap.gastrosphere.core.domain.exception.UnprocessableEntityException;
+import br.com.fiap.gastrosphere.core.infra.model.RestaurantTypeModel;
+import br.com.fiap.gastrosphere.core.infra.repository.RestaurantTypeRepository;
 
 class RestaurantTypeServiceImplTest {
 
@@ -26,13 +38,13 @@ class RestaurantTypeServiceImplTest {
     private RestaurantTypeServiceImpl service;
 
     private UUID id;
-    private RestaurantType type;
+    private RestaurantTypeModel type;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         id = UUID.randomUUID();
-        type = new RestaurantType();
+        type = new RestaurantTypeModel();
         type.setId(id);
         type.setName("Fast Food");
     }
@@ -40,14 +52,14 @@ class RestaurantTypeServiceImplTest {
     @Test
     void shouldFindAllTypes() {
         when(repository.findAll(PageRequest.of(0, 10))).thenReturn(new PageImpl<>(List.of(type)));
-        Page<RestaurantType> result = service.findAllRestaurantTypes(0, 10);
+        Page<RestaurantTypeModel> result = service.findAllRestaurantTypes(0, 10);
         assertThat(result).isNotEmpty();
     }
 
     @Test
     void shouldFindTypeById() {
         when(repository.findById(id)).thenReturn(Optional.of(type));
-        RestaurantType result = service.findById(id);
+        RestaurantTypeModel result = service.findById(id);
         assertThat(result).isEqualTo(type);
     }
 
@@ -61,7 +73,7 @@ class RestaurantTypeServiceImplTest {
     @Test
     void shouldCreateType() {
         when(repository.save(type)).thenReturn(type);
-        RestaurantType result = service.createRestaurantType(type);
+        RestaurantTypeModel result = service.createRestaurantType(type);
         assertThat(result).isEqualTo(type);
     }
 
@@ -74,32 +86,32 @@ class RestaurantTypeServiceImplTest {
 
     @Test
     void shouldUpdateTypeWhenNamePresent() {
-        RestaurantType update = new RestaurantType();
+    	RestaurantTypeModel update = new RestaurantTypeModel();
         update.setName("Novo Nome");
 
         when(repository.findById(id)).thenReturn(Optional.of(type));
         when(repository.save(any())).thenReturn(type);
 
-        RestaurantType result = service.updateRestaurantType(update, id);
+        RestaurantTypeModel result = service.updateRestaurantType(update, id);
         assertThat(result).isNotNull();
         verify(repository).save(type);
     }
 
     @Test
     void shouldUpdateTypeWhenNameIsNull() {
-        RestaurantType update = new RestaurantType(); // name == null
+    	RestaurantTypeModel update = new RestaurantTypeModel(); // name == null
 
         when(repository.findById(id)).thenReturn(Optional.of(type));
         when(repository.save(any())).thenReturn(type);
 
-        RestaurantType result = service.updateRestaurantType(update, id);
+        RestaurantTypeModel result = service.updateRestaurantType(update, id);
         assertThat(result).isNotNull();
         verify(repository).save(type);
     }
 
     @Test
     void shouldThrowWhenUpdateFails() {
-        RestaurantType update = new RestaurantType();
+    	RestaurantTypeModel update = new RestaurantTypeModel();
         update.setName("Novo Nome");
 
         when(repository.findById(id)).thenReturn(Optional.of(type));

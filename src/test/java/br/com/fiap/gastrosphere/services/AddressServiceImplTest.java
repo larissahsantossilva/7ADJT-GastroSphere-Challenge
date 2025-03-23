@@ -1,25 +1,36 @@
 package br.com.fiap.gastrosphere.services;
 
-import br.com.fiap.gastrosphere.entities.Address;
-import br.com.fiap.gastrosphere.entities.Restaurant;
-import br.com.fiap.gastrosphere.entities.User;
-import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
-import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
-import br.com.fiap.gastrosphere.repositories.AddressRepository;
-import br.com.fiap.gastrosphere.repositories.RestaurantRepository;
-import br.com.fiap.gastrosphere.repositories.UserRepository;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
-import java.util.*;
-
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import br.com.fiap.gastrosphere.core.application.service.AddressServiceImpl;
+import br.com.fiap.gastrosphere.core.domain.exception.ResourceNotFoundException;
+import br.com.fiap.gastrosphere.core.domain.exception.UnprocessableEntityException;
+import br.com.fiap.gastrosphere.core.infra.model.AddressModel;
+import br.com.fiap.gastrosphere.core.infra.model.RestaurantModel;
+import br.com.fiap.gastrosphere.core.infra.model.UserModel;
+import br.com.fiap.gastrosphere.core.infra.repository.AddressRepository;
+import br.com.fiap.gastrosphere.core.infra.repository.RestaurantRepository;
+import br.com.fiap.gastrosphere.core.infra.repository.UserRepository;
 
 class AddressServiceImplTest {
 
@@ -34,13 +45,13 @@ class AddressServiceImplTest {
     private AddressServiceImpl service;
 
     private UUID id;
-    private Address address;
+    private AddressModel address;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         id = UUID.randomUUID();
-        address = new Address();
+        address = new AddressModel();
         address.setId(id);
         address.setCountry("Brasil");
         address.setState("SP");
@@ -56,14 +67,14 @@ class AddressServiceImplTest {
         when(addressRepository.findAll(PageRequest.of(0, 10)))
                 .thenReturn(new PageImpl<>(List.of(address)));
 
-        Page<Address> result = service.findAllAddresses(0, 10);
+        Page<AddressModel> result = service.findAllAddresses(0, 10);
         assertThat(result).isNotEmpty();
     }
 
     @Test
     void shouldFindAddressById() {
         when(addressRepository.findById(id)).thenReturn(Optional.of(address));
-        Address result = service.findById(id);
+        AddressModel result = service.findById(id);
         assertThat(result).isEqualTo(address);
     }
 
@@ -79,14 +90,14 @@ class AddressServiceImplTest {
         when(addressRepository.findByZipCode("12345-678", PageRequest.of(0, 10)))
                 .thenReturn(new PageImpl<>(List.of(address)));
 
-        Page<Address> result = service.findAddressByZipCode("12345-678", 0, 10);
+        Page<AddressModel> result = service.findAddressByZipCode("12345-678", 0, 10);
         assertThat(result).isNotEmpty();
     }
 
     @Test
     void shouldCreateAddress() {
         when(addressRepository.save(address)).thenReturn(address);
-        Address result = service.createAddress(address);
+        AddressModel result = service.createAddress(address);
         assertThat(result).isEqualTo(address);
     }
 
@@ -99,16 +110,16 @@ class AddressServiceImplTest {
 
     @Test
     void shouldUpdateAddressWithAllFields() {
-        when(addressRepository.findById(id)).thenReturn(Optional.of(new Address()));
+        when(addressRepository.findById(id)).thenReturn(Optional.of(new AddressModel()));
         when(addressRepository.save(any())).thenReturn(address);
 
-        Address result = service.updateAddress(id, address);
+        AddressModel result = service.updateAddress(id, address);
         assertThat(result).isNotNull();
     }
 
     @Test
     void shouldThrowWhenUpdateFails() {
-        when(addressRepository.findById(id)).thenReturn(Optional.of(new Address()));
+        when(addressRepository.findById(id)).thenReturn(Optional.of(new AddressModel()));
         when(addressRepository.save(any())).thenThrow(mock(DataAccessException.class));
 
         assertThatThrownBy(() -> service.updateAddress(id, address))
@@ -134,7 +145,7 @@ class AddressServiceImplTest {
 
     @Test
     void shouldThrowWhenAddressAssociatedToUser() {
-        when(userRepository.findByAddressId(id)).thenReturn(Optional.of(mock(User.class)));
+        when(userRepository.findByAddressId(id)).thenReturn(Optional.of(mock(UserModel.class)));
 
         assertThatThrownBy(() -> service.deleteAddressById(id))
                 .isInstanceOf(UnprocessableEntityException.class);
@@ -143,7 +154,7 @@ class AddressServiceImplTest {
     @Test
     void shouldLogWhenAddressAssociatedToRestaurant() {
         when(userRepository.findByAddressId(id)).thenReturn(Optional.empty());
-        when(restaurantRepository.findByAddressId(id)).thenReturn(Optional.of(mock(Restaurant.class)));
+        when(restaurantRepository.findByAddressId(id)).thenReturn(Optional.of(mock(RestaurantModel.class)));
 
         service.deleteAddressById(id);
 
@@ -162,11 +173,11 @@ class AddressServiceImplTest {
 
     @Test
     void shouldUpdateAddressWithNullFields() {
-        Address incoming = new Address(); // all fields null
-        when(addressRepository.findById(id)).thenReturn(Optional.of(new Address()));
+    	AddressModel incoming = new AddressModel(); // all fields null
+        when(addressRepository.findById(id)).thenReturn(Optional.of(new AddressModel()));
         when(addressRepository.save(any())).thenReturn(address);
 
-        Address result = service.updateAddress(id, incoming);
+        AddressModel result = service.updateAddress(id, incoming);
         assertThat(result).isNotNull();
     }
 }

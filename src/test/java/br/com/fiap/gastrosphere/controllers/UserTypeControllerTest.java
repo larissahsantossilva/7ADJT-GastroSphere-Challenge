@@ -1,10 +1,16 @@
 package br.com.fiap.gastrosphere.controllers;
 
-import br.com.fiap.gastrosphere.dtos.requests.UserTypeBodyRequest;
-import br.com.fiap.gastrosphere.entities.UserType;
-import br.com.fiap.gastrosphere.exceptions.ResourceNotFoundException;
-import br.com.fiap.gastrosphere.exceptions.UnprocessableEntityException;
-import br.com.fiap.gastrosphere.services.UserTypeServiceImpl;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -12,12 +18,13 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.PageImpl;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import br.com.fiap.gastrosphere.core.application.controller.UserTypeController;
+import br.com.fiap.gastrosphere.core.application.dto.request.UserTypeBodyRequest;
+import br.com.fiap.gastrosphere.core.application.service.UserTypeServiceImpl;
+import br.com.fiap.gastrosphere.core.domain.entity.UserType;
+import br.com.fiap.gastrosphere.core.domain.exception.ResourceNotFoundException;
+import br.com.fiap.gastrosphere.core.domain.exception.UnprocessableEntityException;
+import br.com.fiap.gastrosphere.core.infra.model.UserTypeModel;
 
 public class UserTypeControllerTest {
 
@@ -26,14 +33,14 @@ public class UserTypeControllerTest {
     @InjectMocks private UserTypeController controller;
 
     private UUID userTypeId;
-    private UserType userType;
+    private UserTypeModel userType;
     private UserTypeBodyRequest dto;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         userTypeId = UUID.randomUUID();
-        userType = new UserType(userTypeId, "ADMIN", LocalDate.now(), LocalDate.now());
+        userType = new UserTypeModel(userTypeId, "ADMIN", LocalDate.now(), LocalDate.now());
         dto = new UserTypeBodyRequest("ADMIN");
     }
 
