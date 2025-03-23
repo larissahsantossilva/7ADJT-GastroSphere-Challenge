@@ -1,5 +1,15 @@
 package br.com.fiap.gastrosphere.dtos;
 
-public record ResourceNotFoundDTO(String errorMessage, int statusCode) {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class ResourceNotFoundDTO {
+    private String errorMessage;
+    private int statusCode;
 }

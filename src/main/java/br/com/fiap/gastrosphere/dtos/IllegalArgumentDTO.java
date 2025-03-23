@@ -1,5 +1,15 @@
 package br.com.fiap.gastrosphere.dtos;
 
-public record IllegalArgumentDTO(int statusCode, String errorMessage) {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+public class IllegalArgumentDTO {
+    private int statusCode;
+    private String errorMessage;
 }
