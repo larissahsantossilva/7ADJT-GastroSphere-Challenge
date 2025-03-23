@@ -5,9 +5,9 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import br.com.fiap.gastrosphere.core.infra.model.MenuItem;
+import br.com.fiap.gastrosphere.core.infra.model.MenuItemModel;
 
 @Repository
-public interface MenuItemRepository extends JpaRepository<MenuItem, UUID> {
+public interface MenuItemRepository extends JpaRepository<MenuItemModel, UUID> {
 
 }

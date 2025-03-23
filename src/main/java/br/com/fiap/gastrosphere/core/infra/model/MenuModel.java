@@ -30,7 +30,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "menus", schema = "gastrosphere")
-public class Menu {
+public class MenuModel {
 	
     @Id
     @GeneratedValue(strategy = AUTO)
@@ -50,5 +50,5 @@ public class Menu {
     private LocalDate lastModifiedAt = now();
 
     @OneToMany(mappedBy = "menu", cascade = ALL, orphanRemoval = true)
-    private List<MenuItem> itemsMenu = new ArrayList<>();
+    private List<MenuItemModel> itemsMenu = new ArrayList<>();
 }
