@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 public class SearchRestaurantTypeRepository implements SearchRestaurantTypeInterface {
@@ -22,5 +23,12 @@ public class SearchRestaurantTypeRepository implements SearchRestaurantTypeInter
         return restaurantTypeModels.stream()
                 .map(GastroSphereUtils::convertToRestaurantType)
                 .toList();
+    }
+
+    @Override
+    public RestaurantType findById(UUID id) {
+        return restaurantTypeRepository.findById(id)
+                .map(GastroSphereUtils::convertToRestaurantType)
+                .orElseThrow(() -> new RuntimeException("Restaurant type not found"));
     }
 }

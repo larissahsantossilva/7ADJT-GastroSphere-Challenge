@@ -3,6 +3,7 @@ package br.com.fiap.gastrosphere.core.application.controller;
 import br.com.fiap.gastrosphere.core.application.dto.request.RestaurantTypeBodyRequest;
 import br.com.fiap.gastrosphere.core.domain.gateway.restauranttype.SearchRestaurantTypeInterface;
 import br.com.fiap.gastrosphere.core.domain.generic.output.OutputInterface;
+import br.com.fiap.gastrosphere.core.domain.usecase.restauranttype.SearchByIdRestaurantTypeUseCase;
 import br.com.fiap.gastrosphere.core.domain.usecase.restauranttype.SearchRestaurantTypeUseCase;
 import br.com.fiap.gastrosphere.core.infra.model.RestaurantTypeModel;
 import br.com.fiap.gastrosphere.core.domain.entity.RestaurantType;
@@ -89,8 +90,8 @@ public class RestaurantTypeController {
     @GetMapping("/{id}")
     public ResponseEntity<RestaurantType> findRestaurantTypeById(@PathVariable("id") UUID id) {
         logger.info("GET | {} | Iniciado findRestaurantTypeById | id: {}", V1_RESTAURANT_TYPE, id);
-        var restaurantTypeModel = restaurantTypeService.findById(id);
-        RestaurantType restaurantType = convertToRestaurantType(restaurantTypeModel);
+        var useCase = new SearchByIdRestaurantTypeUseCase(new SearchRestaurantTypeRepository(restaurantTypeRepository));
+        RestaurantType restaurantType = useCase.execute(id);
         return restaurantType != null ? ok(restaurantType) : status(HttpStatus.NOT_FOUND).build();
     }
 
