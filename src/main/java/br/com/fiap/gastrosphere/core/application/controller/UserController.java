@@ -185,7 +185,7 @@ public class UserController {
     public ResponseEntity<String> updatePassword(@PathVariable("id") UUID id,
                                                  @Valid @RequestBody LoginUserDTO user) {
         logger.info("PUT | {} | Iniciado updatePassword | id: {}", V1_USER, id);
-        userService.updatePassword(id, user.oldPassword(), user.newPassword());
+        userService.updatePassword(id, user.getOldPassword(), user.getNewPassword());
         logger.info("PUT | {} | Finalizado updatePassword | id: {}", V1_USER, id);
         return ok("Senha atualizada com sucesso");
     }
