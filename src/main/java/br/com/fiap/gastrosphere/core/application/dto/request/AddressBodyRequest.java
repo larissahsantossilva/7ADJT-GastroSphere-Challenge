@@ -53,4 +53,5 @@ public class AddressBodyRequest {
     @Schema(description = "Complemento do endereço do usuário.")
     @Size(max = 255)
     private String complement;
+
 }
