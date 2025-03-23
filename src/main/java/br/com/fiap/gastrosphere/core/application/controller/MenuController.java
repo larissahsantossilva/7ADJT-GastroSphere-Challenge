@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.gastrosphere.core.application.dto.request.MenuBodyRequest;
 import br.com.fiap.gastrosphere.core.application.dto.response.MenuBodyResponse;
-import br.com.fiap.gastrosphere.core.infra.model.Menu;
+import br.com.fiap.gastrosphere.core.infra.model.MenuModel;
 import br.com.fiap.gastrosphere.core.domain.exception.UnprocessableEntityException;
 import br.com.fiap.gastrosphere.core.application.service.MenuServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -68,7 +68,7 @@ public class MenuController {
                     @ApiResponse(
                             description = OK,
                             responseCode = HTTP_STATUS_CODE_200,
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Menu.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MenuModel.class))
                     )
             }
     )
@@ -77,7 +77,7 @@ public class MenuController {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size) {
         logger.info("GET | {} | Iniciado findAllMenus", V1_MENU);
-        Page<Menu> menus = this.menuService.findAllMenus(page, size);
+        Page<MenuModel> menus = this.menuService.findAllMenus(page, size);
         List<MenuBodyResponse> menuResponses = menus.stream()
                 .map(MenuBodyResponse::new)
                 .toList();
@@ -92,7 +92,7 @@ public class MenuController {
                     @ApiResponse(
                             description = OK,
                             responseCode = HTTP_STATUS_CODE_200,
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Menu.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MenuModel.class))
                     ),
                     @ApiResponse(
                             description = NOT_FOUND,
@@ -133,7 +133,7 @@ public class MenuController {
     @PostMapping
     public ResponseEntity<UUID> createMenu(@Valid @RequestBody MenuBodyRequest menuBodyRequest) {
         logger.info("POST | {} | Iniciado createMenu | Menu: {}", V1_MENU, menuBodyRequest.getName());
-        Menu menu = menuService.createMenu(convertToMenu(menuBodyRequest));
+        MenuModel menu = menuService.createMenu(convertToMenu(menuBodyRequest));
         logger.info("POST | {} | Finalizado createMenu", V1_MENU);
         return status(201).body(menu.getId());
     }

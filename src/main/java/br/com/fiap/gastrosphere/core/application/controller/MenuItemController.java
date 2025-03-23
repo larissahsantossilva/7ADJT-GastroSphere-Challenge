@@ -21,7 +21,7 @@ import static org.springframework.http.ResponseEntity.status;
 import java.util.List;
 import java.util.UUID;
 
-import br.com.fiap.gastrosphere.core.infra.model.MenuItem;
+import br.com.fiap.gastrosphere.core.infra.model.MenuItemModel;
 import org.slf4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -69,7 +69,7 @@ public class MenuItemController {
                     @ApiResponse(
                             description = OK,
                             responseCode = HTTP_STATUS_CODE_200,
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MenuItem.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MenuItemModel.class))
                     )
             }
     )
@@ -78,7 +78,7 @@ public class MenuItemController {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size) {
         logger.info("GET | {} | Iniciado findAllMenuItems", V1_MENU_ITEMS);
-        Page<MenuItem> items = this.menuItemService.findAllMenuItems(page, size);
+        Page<MenuItemModel> items = this.menuItemService.findAllMenuItems(page, size);
         List<MenuItemResponse> itemsResponse = items.stream()
                 .map(MenuItemResponse::new)
                 .toList();
@@ -93,7 +93,7 @@ public class MenuItemController {
                     @ApiResponse(
                             description = OK,
                             responseCode = HTTP_STATUS_CODE_200,
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MenuItem.class))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = MenuItemModel.class))
                     ),
                     @ApiResponse(
                             description = NOT_FOUND,
@@ -134,7 +134,7 @@ public class MenuItemController {
     @PostMapping("/items")
     public ResponseEntity<UUID> createMenuItem(@Valid @RequestBody MenuItemBodyRequest menuItemBodyRequest) {
         logger.info("POST | {} | Iniciado createMenu | Menu: {}", V1_MENU_ITEMS, menuItemBodyRequest.getDescription());
-        MenuItem item = menuItemService.createMenu(convertToMenuItem(menuItemBodyRequest));
+        MenuItemModel item = menuItemService.createMenu(convertToMenuItem(menuItemBodyRequest));
         logger.info("POST | {} | Finalizado createMenu", V1_MENU_ITEMS);
         return status(201).body(item.getId());
     }

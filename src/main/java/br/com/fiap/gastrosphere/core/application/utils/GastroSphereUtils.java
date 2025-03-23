@@ -17,8 +17,8 @@ import br.com.fiap.gastrosphere.core.application.dto.request.MenuItemBodyRequest
 import br.com.fiap.gastrosphere.core.application.dto.request.UserBodyRequest;
 import br.com.fiap.gastrosphere.core.application.dto.request.UserTypeBodyRequest;
 import br.com.fiap.gastrosphere.core.infra.model.AddressModel;
-import br.com.fiap.gastrosphere.core.infra.model.Menu;
-import br.com.fiap.gastrosphere.core.infra.model.MenuItem;
+import br.com.fiap.gastrosphere.core.infra.model.MenuModel;
+import br.com.fiap.gastrosphere.core.infra.model.MenuItemModel;
 import br.com.fiap.gastrosphere.core.infra.model.RestaurantModel;
 import br.com.fiap.gastrosphere.core.infra.model.UserModel;
 import br.com.fiap.gastrosphere.core.infra.model.UserTypeModel;
@@ -61,20 +61,20 @@ public final class GastroSphereUtils {
         return modelMapper.map(restaurantTypeBodyResquest, RestaurantTypeModel.class);
     }
     
-    public static MenuItem convertToMenuItem(MenuItemBodyRequest menuItemRequest) {
+    public static MenuItemModel convertToMenuItem(MenuItemBodyRequest menuItemRequest) {
     	ModelMapper modelMapper = new ModelMapper();
-    	return modelMapper.map(menuItemRequest, MenuItem.class);
+    	return modelMapper.map(menuItemRequest, MenuItemModel.class);
     }
 
-    public static Menu convertToMenu(MenuBodyRequest menuRequest) {
-    	Menu menu = new Menu();
+    public static MenuModel convertToMenu(MenuBodyRequest menuRequest) {
+    	MenuModel menu = new MenuModel();
         menu.setRestaurantId(menuRequest.getRestaurantId());
         menu.setName(menuRequest.getName());
         if (menuRequest.getItemsMenu() != null) {
             menu.setItemsMenu(
                 menuRequest.getItemsMenu().stream()
                     .map(itemRequest -> {
-                        MenuItem menuItem = new MenuItem();
+                        MenuItemModel menuItem = new MenuItemModel();
                         menuItem.setDescription(itemRequest.getDescription());
                         menuItem.setPrice(itemRequest.getPrice());
                         menuItem.setIsAvailable(itemRequest.getIsAvailable());

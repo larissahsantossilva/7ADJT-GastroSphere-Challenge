@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-import br.com.fiap.gastrosphere.core.infra.model.Menu;
+import br.com.fiap.gastrosphere.core.infra.model.MenuModel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,7 +23,7 @@ public class MenuBodyResponse {
     private LocalDate lastModifiedAt = now();
     private List<MenuItemResponse> itemsMenu;
 
-	public MenuBodyResponse(Menu menu) {
+	public MenuBodyResponse(MenuModel menu) {
 		this.id = menu.getId();
 		this.restaurantId = menu.getRestaurantId();
 		this.name = menu.getName();

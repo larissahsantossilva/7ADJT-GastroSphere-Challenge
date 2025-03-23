@@ -30,7 +30,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "menu_items", schema = "gastrosphere")
-public class MenuItem {
+public class MenuItemModel {
 
 	@Id
     @GeneratedValue(strategy = AUTO)
@@ -38,7 +38,7 @@ public class MenuItem {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "menu_id", nullable = false)
-    private Menu menu;
+    private MenuModel menu;
     
     @Column(nullable = false)
     private String description;

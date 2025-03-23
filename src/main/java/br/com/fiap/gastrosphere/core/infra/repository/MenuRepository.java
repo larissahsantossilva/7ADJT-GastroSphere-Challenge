@@ -7,11 +7,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import br.com.fiap.gastrosphere.core.infra.model.Menu;
+import br.com.fiap.gastrosphere.core.infra.model.MenuModel;
 
 @Repository
-public interface MenuRepository extends JpaRepository<Menu, UUID> {
+public interface MenuRepository extends JpaRepository<MenuModel, UUID> {
 	
-	@Query("SELECT DISTINCT m FROM Menu m LEFT JOIN FETCH m.itemsMenu")
-	List<Menu> findAllWithItemsMenu();
+	@Query("SELECT DISTINCT m FROM MenuModel m LEFT JOIN FETCH m.itemsMenu")
+	List<MenuModel> findAllWithItemsMenu();
 }

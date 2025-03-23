@@ -16,7 +16,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import br.com.fiap.gastrosphere.core.infra.model.MenuItem;
+import br.com.fiap.gastrosphere.core.infra.model.MenuItemModel;
 import br.com.fiap.gastrosphere.core.domain.exception.ResourceNotFoundException;
 import br.com.fiap.gastrosphere.core.domain.exception.UnprocessableEntityException;
 import br.com.fiap.gastrosphere.core.infra.repository.MenuItemRepository;
@@ -34,22 +34,22 @@ public class MenuItemServiceImpl {
         this.menuItemRepository = menuItemRepository;
     }
 
-    public Page<MenuItem> findAllMenuItems(int page, int size) {
+    public Page<MenuItemModel> findAllMenuItems(int page, int size) {
         return menuItemRepository.findAll(of(page, size));
     }
     
-    public MenuItem findById(UUID id) {
+    public MenuItemModel findById(UUID id) {
         uuidValidator(id);
         return menuItemRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException(ID_NAO_ENCONTRADO));
     }
 
-    public MenuItem createMenu(MenuItem item) {
+    public MenuItemModel createMenu(MenuItemModel item) {
         return menuItemRepository.save(item);
     }
     
-    public MenuItem updateMenuItem(MenuItem item, UUID id) {
-        MenuItem existingMenuItem = menuItemRepository.findById(id)
+    public MenuItemModel updateMenuItem(MenuItemModel item, UUID id) {
+        MenuItemModel existingMenuItem = menuItemRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(ITEM_MENU_NAO_ENCONTRADO));
         if (item.getIsAvailable() != null) existingMenuItem.setIsAvailable(item.getIsAvailable());
         if (item.getDescription() != null) existingMenuItem.setDescription(item.getDescription());
