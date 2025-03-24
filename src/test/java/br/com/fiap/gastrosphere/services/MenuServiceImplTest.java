@@ -6,6 +6,7 @@ import static java.util.Optional.of;
 import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
@@ -156,5 +157,16 @@ class MenuServiceImplTest {
         assertThat(updatedMenu.getItemsMenu()).contains(item);
         verify(menuItemRepository, times(1)).findById(item.getId());
         verify(menuRepo, times(1)).save(existingMenu);
+    }
+
+    @Test
+    void deveGerarExcecaoSalvarMenu() {
+        var menu = gerarMenu();
+
+        when(menuRepo.save(any())).thenThrow(new DataAccessException("Erro ao salvar") {});
+
+        assertThrows(UnprocessableEntityException.class, () -> {
+            service.createMenu(menu);
+        });
     }
 }
