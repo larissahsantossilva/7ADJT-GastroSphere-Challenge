@@ -36,44 +36,44 @@ A comunicação é baseada em **HTTP/REST**, e o banco de dados é gerenciado co
 
 Abaixo estão descritos os endpoints disponíveis:
 
-| Endpoint                        | Método | Descrição                                                 |
-|---------------------------------|--------|-----------------------------------------------------------|
-| `/api/v1/users`                 | GET    | Retorna uma lista paginada de usuários                    |
-| `/api/v1/users/{id}`            | GET    | Retorna os detalhes de um usuário pelo ID                 |
-| `/api/v1/users`                 | POST   | Cria um novo usuário                                      |
-| `/api/v1/users/{id}`            | PUT    | Atualiza completamente os dados de um usuário             |
-| `/api/v1/users/{id}`            | DELETE | Deleta um usuário específico pelo ID                      |
-| `/api/v1/users/{id}/password`   | PUT    | Atualiza a senha de um usuário                            |
-| `/api/v1/addresses`             | GET    | Retorna uma lista paginada de endereços                   |
-| `/api/v1/addresses/{id}`        | GET    | Retorna os detalhes de um endereço pelo ID                |
-| `/api/v1/addresses`             | POST   | Cria um novo endereço                                     |
-| `/api/v1/addresses/{id}`        | PUT    | Atualiza completamente os dados de um endereço            |
-| `/api/v1/addresses/{id}`        | DELETE | Deleta um endereço específico pelo ID                     |
-| `/api/v1/user-types`            | GET    | Retorna uma lista paginada de tipos de usuário            |
-| `/api/v1/user-types/{id}`       | GET    | Retorna os detalhes de um tipo de usuário pelo ID         |
-| `/api/v1/user-types`            | POST   | Cria um novo tipo de usuário                              |
-| `/api/v1/user-types/{id}`       | PUT    | Atualiza completamente os dados de um tipo de usuário     |
-| `/api/v1/user-types/{id}`       | DELETE | Deleta um tipo de usuário específico pelo ID              |
-| `/api/v1/restaurant-types`      | GET    | Retorna uma lista paginada de tipos de restaurante        |
-| `/api/v1/restaurant-types/{id}` | GET    | Retorna os detalhes de um tipo de restaurante pelo ID     |
-| `/api/v1/restaurant-types`      | POST   | Cria um novo tipo de restaurante                          |
-| `/api/v1/restaurant-types/{id}` | PUT    | Atualiza completamente os dados de um tipo de restaurante |
-| `/api/v1/restaurant-types/{id}` | DELETE | Deleta um tipo de restaurante específico pelo ID          |
-| `/api/v1/restaurants`           | GET    | Retorna uma lista paginada de restaurantes                |
-| `/api/v1/restaurants/{id}`      | GET    | Retorna os detalhes de um restaurante pelo ID             |
-| `/api/v1/restaurants`           | POST   | Cria um novo restaurante                                  |
-| `/api/v1/restaurants/{id}`      | PUT    | Atualiza completamente os dados de um restaurante         |
-| `/api/v1/restaurants/{id}`      | DELETE | Deleta um restaurante específico pelo ID                  |
-| `/api/v1/menus`                 | GET    | Retorna uma lista paginada de menus                       |
-| `/api/v1/menus/{id}`            | GET    | Retorna os detalhes de um menu pelo ID                    |
-| `/api/v1/menus`                 | POST   | Cria um novo menu                                         |
-| `/api/v1/menus/{id}`            | PUT    | Atualiza completamente os dados de um menu                |
-| `/api/v1/menus/{id}`            | DELETE | Deleta um menu específico pelo ID                         |
-| `/api/v1/menu/items`            | GET    | Retorna uma lista paginada de itens menu                  |
-| `/api/v1/menu/{id}/items`       | GET    | Retorna os detalhes de um item menu pelo ID               |
-| `/api/v1/menu/items`            | POST   | Cria um novo item menu                                    |
-| `/api/v1/menu/{id}/items`       | PUT    | Atualiza completamente os dados de um item menu           |
-| `/api/v1/menu/{id}/items`       | DELETE | Deleta um item menu específico pelo ID                    |
+| Endpoint                                       | Método | Descrição                                                 |
+|------------------------------------------------|--------|-----------------------------------------------------------|
+| `/api/v1/users`                                | GET    | Retorna uma lista paginada de usuários                    |
+| `/api/v1/users/{id}`                           | GET    | Retorna os detalhes de um usuário pelo ID                 |
+| `/api/v1/users`                                | POST   | Cria um novo usuário                                      |
+| `/api/v1/users/{id}`                           | PUT    | Atualiza completamente os dados de um usuário             |
+| `/api/v1/users/{id}`                           | DELETE | Deleta um usuário específico pelo ID                      |
+| `/api/v1/users/{id}/password`                  | PUT    | Atualiza a senha de um usuário                            |
+| `/api/v1/addresses`                            | GET    | Retorna uma lista paginada de endereços                   |
+| `/api/v1/addresses/{id}`                       | GET    | Retorna os detalhes de um endereço pelo ID                |
+| `/api/v1/addresses`                            | POST   | Cria um novo endereço                                     |
+| `/api/v1/addresses/{id}`                       | PUT    | Atualiza completamente os dados de um endereço            |
+| `/api/v1/addresses/{id}`                       | DELETE | Deleta um endereço específico pelo ID                     |
+| `/api/v1/user-types`                           | GET    | Retorna uma lista paginada de tipos de usuário            |
+| `/api/v1/user-types/{id}`                      | GET    | Retorna os detalhes de um tipo de usuário pelo ID         |
+| `/api/v1/user-types`                           | POST   | Cria um novo tipo de usuário                              |
+| `/api/v1/user-types/{id}`                      | PUT    | Atualiza completamente os dados de um tipo de usuário     |
+| `/api/v1/user-types/{id}`                      | DELETE | Deleta um tipo de usuário específico pelo ID              |
+| `/api/v1/restaurant-types`                     | GET    | Retorna uma lista paginada de tipos de restaurante        |
+| `/api/v1/restaurant-types/{id}`                | GET    | Retorna os detalhes de um tipo de restaurante pelo ID     |
+| `/api/v1/restaurant-types`                     | POST   | Cria um novo tipo de restaurante                          |
+| `/api/v1/restaurant-types/{id}`                | PUT    | Atualiza completamente os dados de um tipo de restaurante |
+| `/api/v1/restaurant-types/{id}`                | DELETE | Deleta um tipo de restaurante específico pelo ID          |
+| `/api/v1/restaurants`                          | GET    | Retorna uma lista paginada de restaurantes                |
+| `/api/v1/restaurants/{id}`                     | GET    | Retorna os detalhes de um restaurante pelo ID             |
+| `/api/v1/restaurants`                          | POST   | Cria um novo restaurante                                  |
+| `/api/v1/restaurants/{id}`                     | PUT    | Atualiza completamente os dados de um restaurante         |
+| `/api/v1/restaurants/{id}`                     | DELETE | Deleta um restaurante específico pelo ID                  |
+| `/api/v1/menus`                                | GET    | Retorna uma lista paginada de menus                       |
+| `/api/v1/menus/{id}`                           | GET    | Retorna os detalhes de um menu pelo ID                    |
+| `/api/v1/menus`                                | POST   | Cria um novo menu                                         |
+| `/api/v1/menus/{id}`                           | PUT    | Atualiza completamente os dados de um menu                |
+| `/api/v1/menus/{id}`                           | DELETE | Deleta um menu específico pelo ID                         |
+| `/api/v1/menus/{menu_id}/items`                | GET    | Retorna uma lista paginada de itens menu                  |
+| `/api/v1/menus/{menu_id}/items/{menu_item_id}` | GET    | Retorna os detalhes de um item menu pelo ID               |
+| `/api/v1/menus/{menu_id}/items`                | POST   | Cria um novo item menu                                    |
+| `/api/v1/menus/{menu_id}/items/{menu_item_id}` | PUT    | Atualiza completamente os dados de um item menu           |
+| `/api/v1/menus/{menu_id}/items/{menu_item_id}` | DELETE | Deleta um item menu específico pelo ID                    |
 
 A documentação completa da API está disponível via Swagger em: `http://localhost:8080/swagger-ui/index.html`.
 
