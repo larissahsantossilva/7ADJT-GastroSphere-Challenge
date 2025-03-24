@@ -91,11 +91,14 @@ public final class GastroSphereUtils {
     	return menu;
     }
     public static RestaurantType convertToRestaurantType(RestaurantTypeModel model) {
-        RestaurantType restaurantType = new RestaurantType();
-        restaurantType.setId(model.getId());
-        restaurantType.setName(model.getName());
-        restaurantType.setCreatedAt(model.getCreatedAt());
-        restaurantType.setLastModifiedAt(model.getLastModifiedAt());
-        return restaurantType;
+        if(model != null) {
+            RestaurantType restaurantType = new RestaurantType();
+            restaurantType.setId(model.getId());
+            restaurantType.setName(model.getName());
+            restaurantType.setCreatedAt(model.getCreatedAt());
+            restaurantType.setLastModifiedAt(model.getLastModifiedAt());
+            return restaurantType;
+        }
+        return null;
     }
 }
