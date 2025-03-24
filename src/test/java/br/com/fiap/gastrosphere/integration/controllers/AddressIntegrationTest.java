@@ -19,16 +19,13 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import br.com.fiap.gastrosphere.core.infra.model.AddressModel;
 import br.com.fiap.gastrosphere.core.infra.repository.AddressRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @TestPropertySource(locations = "classpath:application-test.properties")
 @AutoConfigureMockMvc
-public class AddressIntegrationTest {
+class AddressIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -36,22 +33,7 @@ public class AddressIntegrationTest {
     @Autowired
     private AddressRepository addressRepository;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     private static UUID createdId;
-
-    private AddressModel createMockAddress() {
-    	AddressModel address = new AddressModel();
-        address.setCountry("Brasil");
-        address.setState("SP");
-        address.setCity("São Paulo");
-        address.setZipCode("12345-678");
-        address.setStreet("Rua Teste");
-        address.setNumber("100");
-        address.setComplement("Ap 202");
-        return addressRepository.save(address);
-    }
 
     @Test
     @Order(1)

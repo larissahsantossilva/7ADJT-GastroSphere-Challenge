@@ -6,7 +6,6 @@ import static br.com.fiap.gastrosphere.core.application.utils.GastroSphereConsta
 import static br.com.fiap.gastrosphere.core.application.utils.GastroSphereConstants.ITEM_MENU_NAO_ENCONTRADO;
 import static br.com.fiap.gastrosphere.core.application.utils.GastroSphereConstants.MENU_ITEM_NAO_ENCONTRADO;
 import static br.com.fiap.gastrosphere.core.application.utils.GastroSphereConstants.MENU_NAO_ENCONTRADO_ID;
-import static br.com.fiap.gastrosphere.core.application.utils.GastroSphereUtils.uuidValidator;
 import static java.time.LocalDate.now;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.data.domain.PageRequest.of;
@@ -46,14 +45,11 @@ public class MenuItemServiceImpl {
     }
     
     public MenuItemModel findByIdAndMenuId(UUID id, UUID menuId) {
-    	uuidValidator(id);
-    	uuidValidator(menuId);
         return menuItemRepository.findByIdAndMenuId(id, menuId).orElseThrow(() ->
         new ResourceNotFoundException(ID_NAO_ENCONTRADO));
     }
 
     public MenuItemModel createMenu(MenuItemModel item, UUID menuId) {
-    	uuidValidator(menuId);
         MenuModel menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new ResourceNotFoundException(MENU_NAO_ENCONTRADO_ID + menuId));
         item.setMenu(menu);
