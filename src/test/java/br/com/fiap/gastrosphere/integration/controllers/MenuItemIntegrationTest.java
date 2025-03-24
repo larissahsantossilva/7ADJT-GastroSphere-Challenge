@@ -54,7 +54,7 @@ class MenuItemIntegrationTest {
         """;
         System.out.println("Menu ID usado: " + menuId);
 
-        var result = mockMvc.perform(post("/api/v1/menu/{menu_id}/items", menuId)
+        var result = mockMvc.perform(post("/api/v1/menus/{menu_id}/items", menuId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isCreated())
@@ -68,7 +68,7 @@ class MenuItemIntegrationTest {
     @Test
     @Order(2)
     void shouldGetMenuItemById() throws Exception {
-        mockMvc.perform(get("/api/v1/menu/{menu_id}/items/{menu_item_id}", menuId, createdMenuItemId))
+        mockMvc.perform(get("/api/v1/menus/{menu_id}/items/{menu_item_id}", menuId, createdMenuItemId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(createdMenuItemId.toString()));
     }
@@ -77,14 +77,14 @@ class MenuItemIntegrationTest {
     @Order(3)
     void shouldReturnNotFoundWhenMenuItemDoesNotExist() throws Exception {
         UUID fakeId = UUID.randomUUID();
-        mockMvc.perform(get("/api/v1/menu/{menu_id}/items/{menu_item_id}", menuId, fakeId))
+        mockMvc.perform(get("/api/v1/menus/{menu_id}/items/{menu_item_id}", menuId, fakeId))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     @Order(4)
     void shouldListAllMenuItemsByMenuId() throws Exception {
-        mockMvc.perform(get("/api/v1/menu/{menu_id}/items", menuId))
+        mockMvc.perform(get("/api/v1/menus/{menu_id}/items", menuId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray());
     }
@@ -101,7 +101,7 @@ class MenuItemIntegrationTest {
         }
         """;
 
-        mockMvc.perform(put("/api/v1/menu/{menu_id}/items/{menu_item_id}", menuId, createdMenuItemId)
+        mockMvc.perform(put("/api/v1/menus/{menu_id}/items/{menu_item_id}", menuId, createdMenuItemId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk());
@@ -110,7 +110,7 @@ class MenuItemIntegrationTest {
     @Test
     @Order(6)
     void shouldDeleteMenuItem() throws Exception {
-        mockMvc.perform(delete("/api/v1/menu/{menu_id}/items/{menu_item_id}", menuId, createdMenuItemId))
+        mockMvc.perform(delete("/api/v1/menus/{menu_id}/items/{menu_item_id}", menuId, createdMenuItemId))
                 .andExpect(status().isNoContent());
     }
 
@@ -123,7 +123,7 @@ class MenuItemIntegrationTest {
             nonExistentId = UUID.randomUUID();
         }
 
-        mockMvc.perform(delete("/api/v1/menu/{menu_id}/items/{menu_item_id}", menuId, nonExistentId))
+        mockMvc.perform(delete("/api/v1/menus/{menu_id}/items/{menu_item_id}", menuId, nonExistentId))
                 .andExpect(status().isNotFound());
     }
 }
