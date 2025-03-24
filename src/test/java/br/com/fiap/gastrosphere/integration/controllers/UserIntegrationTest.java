@@ -1,17 +1,19 @@
-/*
-package br.com.fiap.gastrosphere.integration;
+package br.com.fiap.gastrosphere.integration.controllers;
 
-import br.com.fiap.gastrosphere.dtos.LoginUserDTO;
-import br.com.fiap.gastrosphere.dtos.requests.AddressBodyRequest;
-import br.com.fiap.gastrosphere.dtos.requests.UserBodyRequest;
-import br.com.fiap.gastrosphere.dtos.requests.UserTypeBodyRequest;
-import br.com.fiap.gastrosphere.entities.Address;
-import br.com.fiap.gastrosphere.entities.User;
-import br.com.fiap.gastrosphere.entities.UserType;
-import br.com.fiap.gastrosphere.repositories.UserRepository;
-import br.com.fiap.gastrosphere.repositories.UserTypeRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.UUID;
+
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,165 +22,134 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
-@TestPropertySource(locations = "classpath:application-test.properties")
 @AutoConfigureMockMvc
-public class UserIntegrationTest {
+@ActiveProfiles("test")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestPropertySource(locations = "classpath:application-test.properties")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class UserIntegrationTest {
 
     @Autowired
-    MockMvc mockMvc;
-    @Autowired
-    ObjectMapper objectMapper;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    UserTypeRepository userTypeRepository;
+    private MockMvc mockMvc;
 
-    private UserType userType;
-    private User user;
-    private Address address;
-
-    @BeforeEach
-    void setup() {
-        userRepository.deleteAll();
-        userTypeRepository.deleteAll();
-
-        userType = new UserType(null, "ADMIN", null, null);
-        userType = userTypeRepository.save(userType);
-
-        address = new Address();
-        address.setStreet("Rua Teste");
-        address.setNumber("123");
-
-        user = new User();
-        user.setName("João da Silva");
-        user.setEmail("joao@email.com");
-        user.setLogin("joaosilva");
-        user.setPassword("senha123");
-        user.setDocument("12345678901");
-        user.setAddress(address);
-        user.setUserType(userType);
-
-        user = userRepository.save(user);
-    }
-
-    private UserTypeBodyRequest mapToUserTypeDTO(UserType userType) {
-        return new UserTypeBodyRequest(userType.getName());
-    }
-
-    private AddressBodyRequest mapToAddressDTO(Address address) {
-        AddressBodyRequest dto = new AddressBodyRequest();
-        dto.setStreet(address.getStreet());
-        dto.setNumber(address.getNumber());
-        return dto;
-    }
+    private static UUID createdUserId;
 
     @Test
     @Order(1)
-    void shouldFindUserById() throws Exception {
-        mockMvc.perform(get("/api/v1/users/" + user.getId()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("João da Silva"));
+    void shouldCreateUser() throws Exception {
+    	String json = """
+    			{
+    			  "name": "João Teste",
+    			  "email": "joao.teste@example.com",
+    			  "login": "joaoteste",
+    			  "password": "senha123",
+    			  "document": "12345678900",
+    			  "address": {
+				  "country": "Brasil",
+				  "state": "SP",
+				  "city": "São Paulo",
+				  "zipCode": "01001-000",
+				  "street": "Av. Paulista",
+				  "number": "1000"
+				  },
+    			  "userType": {
+    			  	"name": "Administrador"
+    			  }
+    			}
+    			""";
+        var result = mockMvc.perform(post("/api/v1/users")
+                        .contentType(APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$").isNotEmpty())
+                .andReturn();
+        String id = result.getResponse().getContentAsString().replace("\"", "");
+        createdUserId = UUID.fromString(id);
     }
 
     @Test
     @Order(2)
-    void shouldReturnNotFound_whenUserDoesNotExist() throws Exception {
-        mockMvc.perform(get("/api/v1/users/" + UUID.randomUUID()))
-                .andExpect(status().isNotFound());
+    void shouldGetUserById() throws Exception {
+        mockMvc.perform(get("/api/v1/users/{id}", createdUserId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(createdUserId.toString()));
     }
 
     @Test
     @Order(3)
-    void shouldCreateUser() throws Exception {
-        UserBodyRequest request = new UserBodyRequest();
-        request.setName("Maria");
-        request.setEmail("maria@email.com");
-        request.setLogin("maria123");
-        request.setPassword("senha456");
-        request.setDocument("99988877766");
-        request.setUserType(mapToUserTypeDTO(userType));
-        request.setAddress(mapToAddressDTO(address));
-
-        mockMvc.perform(post("/api/v1/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$").isNotEmpty());
+    void shouldReturnNotFoundWhenUserIdDoesNotExist() throws Exception {
+        UUID fakeId = UUID.randomUUID();
+        mockMvc.perform(get("/api/v1/users/{id}", fakeId))
+                .andExpect(status().isNotFound());
     }
 
     @Test
     @Order(4)
-    void shouldUpdateUser() throws Exception {
-        UserBodyRequest request = new UserBodyRequest();
-        request.setName("Novo Nome");
-        request.setEmail(user.getEmail());
-        request.setLogin(user.getLogin());
-        request.setPassword(user.getPassword());
-        request.setDocument(user.getDocument());
-        request.setUserType(mapToUserTypeDTO(user.getUserType()));
-        request.setAddress(mapToAddressDTO(user.getAddress()));
-
-        mockMvc.perform(put("/api/v1/users/" + user.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+    void shouldGetAllUsers() throws Exception {
+        mockMvc.perform(get("/api/v1/users")
+                        .param("page", "0")
+                        .param("size", "10"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Usuário atualizado com sucesso"));
-
-        var updated = userRepository.findById(user.getId()).orElseThrow();
-        assertThat(updated.getName()).isEqualTo("Novo Nome");
+                .andExpect(jsonPath("$").isArray());
     }
 
     @Test
     @Order(5)
-    void shouldChangeUserPassword() throws Exception {
-        LoginUserDTO dto = new LoginUserDTO();
-        dto.setOldPassword("senha123");
-        dto.setNewPassword("novaSenha");
-
-        mockMvc.perform(put("/api/v1/users/" + user.getId() + "/password")
+    void shouldUpdateUser() throws Exception {
+        String json = """
+        		{
+    			  "name": "João Teste Atualizado",
+    			  "email": "joao.teste@example.com",
+    			  "login": "joaoteste",
+    			  "password": "senha123",
+    			  "document": "12345678900",
+    			  "address": {
+				  "country": "Brasil",
+				  "state": "SP",
+				  "city": "São Paulo",
+				  "zipCode": "01001-000",
+				  "street": "Av. Paulista",
+				  "number": "1000"
+				  },
+    			  "userType": {
+    			  	"name": "Administrador"
+    			  }
+    			}
+        """;
+        mockMvc.perform(put("/api/v1/users/{id}", createdUserId)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Senha atualizada com sucesso"));
+                        .content(json))
+                .andExpect(status().isOk());
     }
 
     @Test
     @Order(6)
-    void shouldReturnBadRequest_whenOldPasswordIsWrong() throws Exception {
-        LoginUserDTO dto = new LoginUserDTO();
-        dto.setOldPassword("senhaErrada");
-        dto.setNewPassword("novaSenha");
+    void shouldUpdatePassword() throws Exception {
+        String json = """
+        {
+          "oldPassword": "senha123",
+          "newPassword": "novaSenha123"
+        }
+        """;
 
-        mockMvc.perform(put("/api/v1/users/" + user.getId() + "/password")
+        mockMvc.perform(put("/api/v1/users/{id}/password", createdUserId)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("Senha antiga incorreta"));
+                        .content(json))
+                .andExpect(status().isOk());
     }
 
     @Test
     @Order(7)
     void shouldDeleteUser() throws Exception {
-        mockMvc.perform(delete("/api/v1/users/" + user.getId()))
+        mockMvc.perform(delete("/api/v1/users/{id}", createdUserId))
                 .andExpect(status().isNoContent());
-
-        assertThat(userRepository.findById(user.getId())).isEmpty();
     }
 
     @Test
     @Order(8)
-    void shouldReturnNotFound_whenDeletingNonexistentUser() throws Exception {
-        mockMvc.perform(delete("/api/v1/users/" + UUID.randomUUID()))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("Usuário não encontrado"));
+    void shouldReturnNotFoundOnDeleteWhenUserIdDoesNotExist() throws Exception {
+        String nonExistentId = "1223";
+        mockMvc.perform(delete("/api/v1/users/{id}", nonExistentId))
+                .andExpect(status().isNotFound());
     }
 }
-*/

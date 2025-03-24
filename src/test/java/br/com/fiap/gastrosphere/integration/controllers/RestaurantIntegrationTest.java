@@ -30,17 +30,14 @@ import br.com.fiap.gastrosphere.core.infra.model.AddressModel;
 import br.com.fiap.gastrosphere.core.infra.model.RestaurantModel;
 import br.com.fiap.gastrosphere.core.infra.model.RestaurantTypeModel;
 import br.com.fiap.gastrosphere.core.infra.model.UserModel;
-import br.com.fiap.gastrosphere.core.infra.repository.AddressRepository;
 import br.com.fiap.gastrosphere.core.infra.repository.RestaurantRepository;
-import br.com.fiap.gastrosphere.core.infra.repository.RestaurantTypeRepository;
-import br.com.fiap.gastrosphere.core.infra.repository.UserRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @TestPropertySource(locations = "classpath:application-test.properties")
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class RestaurantIntegrationTest {
+class RestaurantIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -50,15 +47,6 @@ public class RestaurantIntegrationTest {
 
     @Autowired
     private RestaurantRepository restaurantRepository;
-
-    @Autowired
-    private RestaurantTypeRepository restaurantTypeRepository;
-
-    @Autowired
-    private AddressRepository addressRepository;
-
-    @Autowired
-    private UserRepository userRepository;
 
     private static UUID createdId;
 
