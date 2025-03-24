@@ -1,6 +1,5 @@
 package br.com.fiap.gastrosphere.integration.controllers;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -22,101 +21,79 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
-@AutoConfigureMockMvc
-@ActiveProfiles("test")
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@TestPropertySource(locations = "classpath:application-test.properties")
+import br.com.fiap.gastrosphere.core.infra.repository.UserTypeRepository;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class UserIntegrationTest {
+@ActiveProfiles("test")
+@TestPropertySource(locations = "classpath:application-test.properties")
+@AutoConfigureMockMvc
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+class UserTypeIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    private static UUID createdUserId;
+    @Autowired
+    private UserTypeRepository userTypeRepository;
+
+    private static UUID createdUserTypeId;
 
     @Test
     @Order(1)
-    void shouldCreateUser() throws Exception {
+    void shouldCreateUserType() throws Exception {
         String json = """
-    			{
-    			  "name": "João Teste",
-    			  "email": "joao.teste@example.com",
-    			  "login": "joaoteste",
-    			  "password": "senha123",
-    			  "document": "12345678900",
-    			  "address": {
-				  "country": "Brasil",
-				  "state": "SP",
-				  "city": "São Paulo",
-				  "zipCode": "01001-000",
-				  "street": "Av. Paulista",
-				  "number": "1000"
-				  },
-    			  "userType": {
-    			  	"name": "Administrador"
-    			  }
-    			}
-    			""";
-        var result = mockMvc.perform(post("/api/v1/users")
-                        .contentType(APPLICATION_JSON)
+        {
+          "name": "Administrador"
+        }
+        """;
+
+        var result = mockMvc.perform(post("/api/v1/user-types")
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$").isNotEmpty())
                 .andReturn();
+
         String id = result.getResponse().getContentAsString().replace("\"", "");
-        createdUserId = UUID.fromString(id);
+        createdUserTypeId = UUID.fromString(id);
     }
 
     @Test
     @Order(2)
-    void shouldGetUserById() throws Exception {
-        mockMvc.perform(get("/api/v1/users/{id}", createdUserId))
+    void shouldGetUserTypeById() throws Exception {
+        mockMvc.perform(get("/api/v1/user-types/{id}", createdUserTypeId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(createdUserId.toString()));
+                .andExpect(jsonPath("$.id").value(createdUserTypeId.toString()));
     }
 
     @Test
     @Order(3)
-    void shouldReturnNotFoundWhenUserIdDoesNotExist() throws Exception {
+    void shouldReturnNotFoundWhenUserTypeDoesNotExist() throws Exception {
         UUID fakeId = UUID.randomUUID();
-        mockMvc.perform(get("/api/v1/users/{id}", fakeId))
+        mockMvc.perform(get("/api/v1/user-types/{id}", fakeId))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     @Order(4)
-    void shouldGetAllUsers() throws Exception {
-        mockMvc.perform(get("/api/v1/users")
+    void shouldListAllUserTypes() throws Exception {
+        mockMvc.perform(get("/api/v1/user-types")
                         .param("page", "0")
                         .param("size", "10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray());
+                .andExpect(jsonPath("$.content").isArray());
     }
 
     @Test
     @Order(5)
-    void shouldUpdateUser() throws Exception {
+    void shouldUpdateUserType() throws Exception {
         String json = """
-        		{
-    			  "name": "João Teste Atualizado",
-    			  "email": "joao.teste@example.com",
-    			  "login": "joaoteste",
-    			  "password": "senha123",
-    			  "document": "12345678900",
-    			  "address": {
-				  "country": "Brasil",
-				  "state": "SP",
-				  "city": "São Paulo",
-				  "zipCode": "01001-000",
-				  "street": "Av. Paulista",
-				  "number": "1000"
-				  },
-    			  "userType": {
-    			  	"name": "Administrador"
-    			  }
-    			}
+        {
+          "name": "Administrador Atualizado"
+        }
         """;
-        mockMvc.perform(put("/api/v1/users/{id}", createdUserId)
+
+        mockMvc.perform(put("/api/v1/user-types/{id}", createdUserTypeId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk());
@@ -124,32 +101,21 @@ class UserIntegrationTest {
 
     @Test
     @Order(6)
-    void shouldUpdatePassword() throws Exception {
-        String json = """
-        {
-          "oldPassword": "senha123",
-          "newPassword": "novaSenha123"
-        }
-        """;
-
-        mockMvc.perform(put("/api/v1/users/{id}/password", createdUserId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @Order(7)
-    void shouldDeleteUser() throws Exception {
-        mockMvc.perform(delete("/api/v1/users/{id}", createdUserId))
+    void shouldDeleteUserType() throws Exception {
+        mockMvc.perform(delete("/api/v1/user-types/{id}", createdUserTypeId))
                 .andExpect(status().isNoContent());
     }
 
     @Test
-    @Order(8)
-    void shouldReturnNotFoundOnDeleteWhenUserIdDoesNotExist() throws Exception {
-        String nonExistentId = "1223";
-        mockMvc.perform(delete("/api/v1/users/{id}", nonExistentId))
+    @Order(7)
+    void shouldReturnNotFoundOnDeleteWhenUserTypeDoesNotExist() throws Exception {
+        UUID nonExistentId = UUID.randomUUID();
+
+        while (userTypeRepository.existsById(nonExistentId)) {
+            nonExistentId = UUID.randomUUID();
+        }
+
+        mockMvc.perform(delete("/api/v1/user-types/{id}", nonExistentId))
                 .andExpect(status().isNotFound());
     }
 }

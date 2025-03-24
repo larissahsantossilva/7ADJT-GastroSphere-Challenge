@@ -36,7 +36,7 @@ class MenuItemServiceImplTest {
 
     @Mock
     private MenuRepository menuRepo;
-
+    
     private MenuItemServiceImpl service;
 
     private AutoCloseable mock;
@@ -69,7 +69,7 @@ class MenuItemServiceImplTest {
         assertThat(items.getTotalElements()).isEqualTo(1);
         verify(menuItemRepo, times(1)).findAllByMenuId(any(Pageable.class), eq(menuId));
     }
-
+    
     @Test
     void deveBuscarMenuItemPorIdEMenuId() {
         UUID menuId = UUID.randomUUID();

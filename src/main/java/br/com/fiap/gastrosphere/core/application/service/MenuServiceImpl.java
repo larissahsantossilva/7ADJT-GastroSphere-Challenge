@@ -72,7 +72,7 @@ public class MenuServiceImpl {
         }
     }
 
-    private void updateOrAddItem(List<MenuItemModel> menuItems, MenuModel existingMenu) {
+    public void updateOrAddItem(List<MenuItemModel> menuItems, MenuModel existingMenu) {
          menuItems.stream().forEach(item -> {
         	 if (item.getId() != null) {
                  menuItemRepository.findById(item.getId()).ifPresentOrElse(
@@ -95,7 +95,7 @@ public class MenuServiceImpl {
         existingMenu.setLastModifiedAt(now());
     }
 
-    private void updateMenuItem(MenuItemModel existingItem, MenuItemModel incomingItem) {
+    public void updateMenuItem(MenuItemModel existingItem, MenuItemModel incomingItem) {
         if (incomingItem.getDescription() != null) existingItem.setDescription(incomingItem.getDescription());
         if (incomingItem.getPrice() != null) existingItem.setPrice(incomingItem.getPrice());
         if (incomingItem.getIsAvailable() != null) existingItem.setIsAvailable(incomingItem.getIsAvailable());
@@ -104,7 +104,7 @@ public class MenuServiceImpl {
         menuItemRepository.save(existingItem);
     }
     
-    private void addNewMenuItem(MenuItemModel newItem, MenuModel existingMenu) {
+    public void addNewMenuItem(MenuItemModel newItem, MenuModel existingMenu) {
         newItem.setMenu(existingMenu);
         menuItemRepository.save(newItem);
     }
