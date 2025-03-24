@@ -11,7 +11,6 @@ import java.util.UUID;
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "restaurant_type", schema = "gastrosphere")
 public class RestaurantTypeModel {
