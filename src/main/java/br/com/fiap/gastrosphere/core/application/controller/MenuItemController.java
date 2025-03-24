@@ -52,7 +52,7 @@ import jakarta.validation.Valid;
 @Tag(name = "MenuItemController", description = "Controller para CRUD de Itens do Menu.")
 public class MenuItemController {
 
-    public static final String V1_MENU_ITEMS = "/api/v1/menu";
+    public static final String V1_MENU_ITEMS = "/api/v1/menus";
     
     private static final Logger logger = getLogger(MenuItemController.class);
     
@@ -73,7 +73,7 @@ public class MenuItemController {
                     )
             }
     )
-    @GetMapping("{menu_id}/items")
+    @GetMapping("/{menu_id}/items")
     public ResponseEntity<List<MenuItemResponse>> findAllMenuItems(
     		@PathVariable("menu_id") UUID menuId,
             @RequestParam(value = "page", defaultValue = "0") int page,
@@ -134,7 +134,7 @@ public class MenuItemController {
                     ),
             }
     )
-    @PostMapping("{menu_id}/items")
+    @PostMapping("/{menu_id}/items")
     public ResponseEntity<UUID> createMenuItem(
     		@PathVariable("menu_id") UUID menuId,
     		@Valid @RequestBody MenuItemBodyRequest menuItemBodyRequest) {
@@ -165,7 +165,7 @@ public class MenuItemController {
                     )
             }
     )
-    @PutMapping("{menu_id}/items/{menu_item_id}")
+    @PutMapping("/{menu_id}/items/{menu_item_id}")
     public ResponseEntity<String> updateMenuItem(
     		@PathVariable("menu_id") UUID menuId,
     		@PathVariable("menu_item_id") UUID menuItemId,
