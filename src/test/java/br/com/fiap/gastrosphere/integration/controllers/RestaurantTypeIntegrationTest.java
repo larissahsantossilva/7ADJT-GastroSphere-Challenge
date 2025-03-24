@@ -99,7 +99,7 @@ public class RestaurantTypeIntegrationTest {
 
         mockMvc.perform(get("/api/v1/restaurant-types"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content[0].id").exists());
+                .andExpect(jsonPath("$[0].id").exists());
     }
 
     @Test
