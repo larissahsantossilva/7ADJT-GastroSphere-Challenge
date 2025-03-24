@@ -21,7 +21,6 @@ import org.springframework.data.domain.PageImpl;
 import br.com.fiap.gastrosphere.core.application.controller.UserTypeController;
 import br.com.fiap.gastrosphere.core.application.dto.request.UserTypeBodyRequest;
 import br.com.fiap.gastrosphere.core.application.service.UserTypeServiceImpl;
-import br.com.fiap.gastrosphere.core.domain.entity.UserType;
 import br.com.fiap.gastrosphere.core.domain.exception.ResourceNotFoundException;
 import br.com.fiap.gastrosphere.core.domain.exception.UnprocessableEntityException;
 import br.com.fiap.gastrosphere.core.infra.model.UserTypeModel;
